@@ -277,14 +277,13 @@ public class SchoolCourseEnrolmentSystem {
                             instructor.updateCourseInfo(courseCode, courses, newSchedule, newDescription, instructors,
                                     newPassword, newEmail, newPhone, newAddress);
                             break;
-                        default:
-                            System.out.println("Invalid choice.");
+                       default:
+                System.out.println("No instructor record was found with the ID and password provided.");
+                break;
                     }
                     instructor.logout();
                 }
-            default:
-                System.out.println("No instructor record was found with the ID and password provided.");
-                break;
+            
 
             case "admin":
                 // Login first
