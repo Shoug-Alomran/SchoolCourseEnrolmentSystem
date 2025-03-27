@@ -533,7 +533,7 @@ public class SchoolCourseEnrolmentSystem {
                                     newPassword = input.nextLine();
                                     studentToUpdate.setPassword(newPassword);
                                 } else if (passwordChoice == 2) {
-                                    System.out.println("Phone number remains unchanged.");
+                                    System.out.println("Password number remains unchanged.");
                                 }
                                 // Option to update role
                                 System.out.println(
@@ -542,11 +542,11 @@ public class SchoolCourseEnrolmentSystem {
                                 System.out.println("2. No");
                                 int roleChoice = input.nextInt();
                                 if (roleChoice == 1) {
-                                    System.out.print("Enter new phone number: ");
+                                    System.out.print("Enter new role: ");
                                     newRole = input.nextLine();
                                     studentToUpdate.setRole(newRole);
                                 } else if (roleChoice == 2) {
-                                    System.out.println("Phone number remains unchanged.");
+                                    System.out.println("Role remains unchanged.");
                                 }
                                 // Option to update address
                                 System.out.println("Do you want to change" + studentToUpdate.getName() + "'s address?");

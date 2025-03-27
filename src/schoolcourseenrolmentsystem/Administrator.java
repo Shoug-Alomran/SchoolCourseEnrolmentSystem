@@ -69,9 +69,9 @@ public class Administrator extends User {
     public void addInstructor(Instructor i, List<Instructor> instructors) {
         if (!instructors.contains(i)) {
             instructors.add(i);
-            System.out.println("User added: " + ((User) instructors).getName());
+            System.out.println("User added: " + i.getName());
         } else {
-            System.out.println("User already exists: " + ((User) instructors).getName());
+            System.out.println("User already exists: " + i.getName());
         }
     }
 
