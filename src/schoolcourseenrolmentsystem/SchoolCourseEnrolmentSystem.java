@@ -522,14 +522,14 @@ public class SchoolCourseEnrolmentSystem {
                                 } else if (phoneNumberChoice == 2) {
                                     System.out.println("Phone number remains unchanged.");
                                 }
-                                // Option to update phone number
+                                // Option to update password number
                                 System.out.println(
                                         "Do you want to change " + studentToUpdate.getName() + "'s password?");
                                 System.out.println("1. Yes");
                                 System.out.println("2. No");
                                 int passwordChoice = input.nextInt();
                                 if (passwordChoice == 1) {
-                                    System.out.print("Enter new phone number: ");
+                                    System.out.print("Enter new password: ");
                                     newPassword = input.nextLine();
                                     studentToUpdate.setPassword(newPassword);
                                 } else if (passwordChoice == 2) {
@@ -637,7 +637,7 @@ public class SchoolCourseEnrolmentSystem {
                                 System.out.println("2. No");
                                 int passwordChoice = input.nextInt();
                                 if (passwordChoice == 1) {
-                                    System.out.print("Enter new phone number: ");
+                                    System.out.print("Enter new password number: ");
                                     newPassword = input.nextLine();
                                     instructorToUpdate.setPassword(newPassword);
                                 } else if (passwordChoice == 2) {
