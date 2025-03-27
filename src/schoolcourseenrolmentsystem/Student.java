@@ -107,10 +107,13 @@ public class Student extends User {
             System.out.println(getName() + " is not enrolled in any courses.");
         } else {
             System.out.println(getName() + " is enrolled in: ");
+            int index = 1;
             for (Course c : enrolledCourses) {
-                System.out.println("- (" + c.getCourseName() + ") (" + c.getCourseCode() + ") ( " + c.getCreditHours()
-                        + "). The schedule is: "
-                        + c.getSchedule() + ".");
+                System.out.println(
+                        index + "- (" + c.getCourseName() + ") (" + c.getCourseCode() + ") ( " + c.getCreditHours()
+                                + "). The schedule is: "
+                                + c.getSchedule() + ".");
+                index++;
             }
         }
     }
@@ -137,21 +140,24 @@ public class Student extends User {
     public void updatePersonalInfo(List<Student> students, String targetId, String newPassword, String newEmail,
             String newPhoneNumber,
             String newAddress) {
-        // We must make sure that the students actually even exists.
-        boolean studentFound = false;
-        // This following block is created for when the student actually exists.
+        // Initialize a variable to store the matched student
+        Student studentFound = null;
+        /// Search for the student with the given ID in the list
         for (Student s : students) {
-            if (s.getId().equals(targetId) || s != null) {
-                studentFound = true;
-                s.setPassword(newPassword);
-                s.setEmail(newEmail);
-                s.setPhoneNumber(newPhoneNumber);
-                s.setAddress(newAddress);
-
-                if (!studentFound) {
-                    System.out.println("Student with ID " + targetId + " not found.");
-                }
+            if (s.getId().equals(targetId)) {
+                studentFound = s;
+                break;
             }
+        }
+        // If the student is found, update their information
+        if (studentFound != null) {
+            studentFound.setPassword(newPassword);
+            studentFound.setEmail(newEmail);
+            studentFound.setPhoneNumber(newPhoneNumber);
+            studentFound.setAddress(newAddress);
+            System.out.println("Student found succesfully.");
+        } else {
+            System.out.println("Student with ID " + targetId + " not found.");
         }
     }
 }
