@@ -89,40 +89,52 @@ public class Administrator extends User {
     public void updateStudent(String targetId, List<Student> students, String newName, String newId, String newPassword,
             String newEmail,
             String newPhoneNumber, String newRole, String newAddress) {
+
+        Student updateStudentInfo = null;
         for (Student s : students) {
             if (s.getId().equals(targetId)) {
-                s.setName(newName);
-                s.setId(newId);
-                s.setPassword(newPassword);
-                s.setEmail(newEmail);
-                s.setPhoneNumber(newPhoneNumber);
-                s.setRole(newRole);
-                s.setAddress(newAddress);
-            } else {
-                System.out.println(s.getName() + " not found.");
+                updateStudentInfo = s;
+                break;
+
             }
         }
+        if (updateStudentInfo != null) {
 
+            updateStudentInfo.setName(newName);
+            updateStudentInfo.setId(newId);
+            updateStudentInfo.setPassword(newPassword);
+            updateStudentInfo.setEmail(newEmail);
+            updateStudentInfo.setPhoneNumber(newPhoneNumber);
+            updateStudentInfo.setRole(newRole);
+            updateStudentInfo.setAddress(newAddress);
+        } else {
+            System.out.println("Student with the ID " + targetId + " not found.");
+        }
     }
 
     public void updateInstructor(String targetId, List<Instructor> instructors, String newName, String newId,
             String newPassword,
             String newEmail,
             String newPhoneNumber, String newRole, String newAddress) {
+
+        Instructor updateInstructorInfo = null;
         for (Instructor i : instructors) {
             if (i.getId().equals(targetId)) {
-                i.setName(newName);
-                i.setId(newId);
-                i.setPassword(newPassword);
-                i.setEmail(newEmail);
-                i.setPhoneNumber(newPhoneNumber);
-                i.setRole(newRole);
-                i.setAddress(newAddress);
-            } else {
-                System.out.println(i.getName() + " not found.");
+                updateInstructorInfo = i;
+                break;
             }
         }
-
+        if (updateInstructorInfo != null) {
+            updateInstructorInfo.setName(newName);
+            updateInstructorInfo.setId(newId);
+            updateInstructorInfo.setPassword(newPassword);
+            updateInstructorInfo.setEmail(newEmail);
+            updateInstructorInfo.setPhoneNumber(newPhoneNumber);
+            updateInstructorInfo.setRole(newRole);
+            updateInstructorInfo.setAddress(newAddress);
+        } else {
+            System.out.println("Instructor with the ID " + targetId + " not found.");
+        }
     }
 
     // 2. Create & manage courses.
@@ -157,11 +169,8 @@ public class Administrator extends User {
             }
         } else if (!courses.contains(c)) {
             System.out.println(c.getCourseName() + " not found.");
-        } else if (courses.contains(c)) {
-            if (c.getEnrolledStudents().size() < c.getCapacity()
-                    && c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
-                System.out.println(c.getCourseName() + " still has avaliable capacity.");
-            }
+        } else {
+            System.out.println(c.getCourseName() + " still has avaliable capacity.");
         }
     }
 
