@@ -18,6 +18,9 @@ public class Course {
     private ExamType examType;
     private int creditHours;
 
+    // Fixes java.lang.StackOverflowError 
+    private List<Student> enrolledStudents = new ArrayList<>();
+
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
             EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, ExamType examType,
@@ -69,7 +72,7 @@ public class Course {
     }
 
     public List<Student> getEnrolledStudents() {
-        return getEnrolledStudents();
+        return enrolledStudents;
     }
 
     public String getCourseCode() {
@@ -90,7 +93,7 @@ public class Course {
 
     public void setSchedule(String schedule) {
         if (schedule == null || schedule.isEmpty()) {
-            throw new IllegalArgumentException("Schedule cannot be null or empty.");
+            this.schedule = null;
         } else {
             this.schedule = schedule;
         }
@@ -102,7 +105,7 @@ public class Course {
 
     public void setDescription(String description) {
         if (description == null || description.isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be null or empty.");
+            this.description = null;
         } else {
             this.description = description;
         }
@@ -114,11 +117,10 @@ public class Course {
 
     public void setInstructor(Instructor instructor) {
         if (instructor == null) {
-            throw new IllegalArgumentException("Instructor cannot be null.");
-        } else {
-            this.instructor = instructor;
+            this.instructor = null;
+            return;
         }
-
+        this.instructor = instructor;
     }
 
     public int getCapacity() {
@@ -139,7 +141,7 @@ public class Course {
 
     public void setExamType(ExamType examType) {
         if (examType == null) {
-            throw new IllegalArgumentException("Exam type cannot be null.");
+            this.examType = null;
         } else {
             this.examType = examType;
         }
