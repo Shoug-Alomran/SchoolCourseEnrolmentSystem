@@ -128,8 +128,9 @@ public class Student extends User {
         for (Course c : courses) {
             if (c.isFull() == false && c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
                 avaliableCourses = true;
-                System.out.println("- (" + c.getCourseName() + ") (" + c.getCourseCode()
-                        + ") (" + c.getSchedule() + ") (" + c.getInstructor() + ") (" + c.getCapacity() + ").");
+                System.out.println("- (Course name: " + c.getCourseName() + ") (Course code: " + c.getCourseCode()
+                        + ") (Course schedule: " + c.getSchedule() + ") (Course instructor: " + c.getInstructor()
+                        + ") (Course capacity: " + c.getCapacity() + ").");
             }
         }
         if (!avaliableCourses) {
