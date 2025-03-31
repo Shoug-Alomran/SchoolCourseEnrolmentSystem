@@ -232,6 +232,28 @@ public class SchoolCourseEnrolmentSystem {
                                 instructor.viewEnrolledStudents(instructor, courses);
                                 break;
                             case 2:
+                                System.out.println("\nEnter the students ID you would like to enter their grade for.");
+                                String inputStudentGrade = input.next();
+                                System.out.println(
+                                        "\n Please choose from the menu of what assignment type you would like to grade.");
+                                System.out.println("1. Quizes.");
+                                System.out.println("2. Midterms.");
+                                System.out.println("3. Homework.");
+                                System.out.println("4. Final exam.");
+                                int examChoice = input.nextInt();
+                                input.nextLine(); // Buffer
+                                if (examChoice == 1) {
+
+                                }
+                                if (examChoice == 2) {
+
+                                }
+                                if (examChoice == 3) {
+
+                                }
+                                if (examChoice == 4) {
+
+                                }
 
                                 break;
                             case 3:
@@ -791,7 +813,6 @@ public class SchoolCourseEnrolmentSystem {
                                     if (i.getId().equals(instructorID2)) {
                                         instructorToUpdate2 = i;
                                         break;
-
                                     }
                                 }
                                 if (instructorToUpdate2 != null) {
