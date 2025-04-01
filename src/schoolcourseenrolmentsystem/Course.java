@@ -148,7 +148,7 @@ public class Course {
     }
 
     // Methods
-    public void viewGrades(Grades examType) {
+    public void viewGrades(ExamType examType) {
 
     }
 
