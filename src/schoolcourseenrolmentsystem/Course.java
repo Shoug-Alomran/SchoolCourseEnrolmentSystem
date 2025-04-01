@@ -15,7 +15,7 @@ public class Course {
     public EnrollmentStatusEnum enrollmentStatus;
     private Instructor instructor;
     private int capacity;
-    private ExamType examType;
+    private Grades examType;
     private int creditHours;
 
     // Fixes java.lang.StackOverflowError 
@@ -23,7 +23,7 @@ public class Course {
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
-            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, ExamType examType,
+            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, Grades examType,
             int creditHours) {
         setCourseName(courseName);
         setCourseCode(courseCode);
@@ -135,11 +135,11 @@ public class Course {
         }
     }
 
-    public ExamType getExamType() {
+    public Grades getExamType() {
         return examType;
     }
 
-    public void setExamType(ExamType examType) {
+    public void setExamType(Grades examType) {
         if (examType == null) {
             this.examType = null;
         } else {
@@ -148,7 +148,7 @@ public class Course {
     }
 
     // Methods
-    public void viewGrades(ExamType examType) {
+    public void viewGrades(Grades examType) {
 
     }
 
