@@ -142,19 +142,20 @@ public class Administrator extends User {
     public void addCourse(List<Course> courses, Course c) {
         if (!courses.contains(c)) {
             courses.add(c);
-            System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ")");
+            System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ") succesfully.");
         } else {
             System.out.println("Course already exists: " + c.getCourseName());
         }
     }
 
     public void assignInstructor(Course c, Instructor i) {
-        if (c.getInstructor().equals(i) && c.getInstructor() != null) {
-            System.out.println("Instructor " + i.getName() + " is already assigned to " + c.getCourseName());
-        } else if (!c.getInstructor().equals(i) && c.getInstructor() == null) {
+        if (c.getInstructor() == null) {
             c.setInstructor(i);
-            System.out.println("Instructor:" + i.getName() + " is assigned to " + c.getCourseName());
-
+            System.out.println("Instructor " + i.getName() + " is assigned to " + c.getCourseName());
+        } else if (c.getInstructor().equals(i)) {
+            System.out.println("Instructor " + i.getName() + " is already assigned to " + c.getCourseName());
+        } else {
+            System.out.println("Course already has a different instructor assigned.");
         }
     }
 
