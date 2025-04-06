@@ -3,7 +3,6 @@ package schoolcourseenrolmentsystem;
 
 import java.util.List;
 
-
 public class Grades {
 
     private String studentId;
@@ -70,32 +69,41 @@ public class Grades {
         }
     }
 
-    public void viewTotalGrade(List<Grades> grades, String studentId, String courseCode) {
+    public void viewAverageGrade(List<Grades> grades, String studentId, String courseCode) {
 
         // We will use this to calcualte the average
         double total = 0;
         int count = 0;
 
-        Grades gradeCheck = null;
-
         for (Grades g : grades) {
-            if (g.getCourseCode().equals(courseCode) && g.getStudentId().equals(studentId)) {
-                gradeCheck = g;
+            if (g.getCourseCode().equals(courseCode) && g.getStudentId().equals(studentId)
+                    && g.getExamType().equalsIgnoreCase(examType)) {
+
                 total += g.getScore();
                 count++;
-
+                System.out.println(examType + " score: " + g.getScore());
+                return;
             }
         }
         if (count > 0) {
             double average = total / count;
             System.out.println("Your average in " + courseCode + " is: " + average);
-        }
-        else {
+        } else {
             System.out.println("No grades found for this course.");
         }
-        if (gradeCheck != null) {
-
-        }
     }
+
+    public void viewSpecificGrade(List<Grades> grades, String studentId, String courseCode) {
+boolean found = false;
+        for (Grades g : grades) {
+            if (g.getCourseCode().equals(courseCode) && g.getStudentId().equals(studentId)
+                    && g.getExamType().equalsIgnoreCase(examType)) {
+                found = true;
+                        System.out.println(examType + " score: " + g.getScore());
+                return;
+            }
+        }if (!found) {
+        System.out.println(examType + " grade not found for this course.");
+    }}
 
 }
