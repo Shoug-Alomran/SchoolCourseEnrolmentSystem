@@ -3,7 +3,7 @@ package schoolcourseenrolmentsystem;
 
 import java.util.*;
 
-public class Student extends User {
+public class Student extends User<Student> {
     // Attributes
     private int creditLimit;
     private List<Course> enrolledCourses;
@@ -35,13 +35,26 @@ public class Student extends User {
     }
 
     @Override
-    public void login() {
-        System.out.println("Student " + getName() + " logged in.");
+    public Student login(List<Student> students, String id, String password) {
+        Student student = null;
+       
+        for (Student s : students) {
+
+            if (s.getId().equals(id) && s.getPassword().equals(password)) {
+                student = s;
+                System.out.println("Student " + student.getName() + " logged in.");
+            }
+        }
+        if (student == null) {
+            System.out.println("No student record was found with the ID and password provided.");
+            return null;
+        } 
+        return student;
     }
 
     @Override
-    public void logout() {
-        System.out.println("Student " + getName() + " logged out.");
+    public String logout(Student student) {
+       return("Student " + student.getName() + " logged out.");
     }
 
     // Count the hours of the courses already enrolled
@@ -84,16 +97,6 @@ public class Student extends User {
                     getName() + " has successfully dropped (" + c.getCourseName() + ") (" + c.getCourseCode() + ").");
         }
     }
-
-    // public void enroll_In_Courses(List<Course> enrolledCourses, Student s, String
-    // targetId, String CourseCode) {
-    // if (s.getId().equals(targetId)) {
-    // }
-    // }
-
-    // public void dropCourse(List<Course> enrolledCourses, List<Student>
-    // enrolledStudents) {
-    // }
 
     public void viewCreditLimit(List<Student> students) {
         for (Student s : students) {
