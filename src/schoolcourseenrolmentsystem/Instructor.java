@@ -3,7 +3,7 @@ package schoolcourseenrolmentsystem;
 
 import java.util.List;
 
-public class Instructor extends User {
+public class Instructor extends User<Instructor> {
     // Attributes
     List<Student> enrolledStudents;
 
@@ -21,13 +21,26 @@ public class Instructor extends User {
     }
 
     @Override
-    public void login() {
-        System.out.println("Instructor " + getName() + " logged in.");
+    public Instructor login(List<Instructor> instructors, String id, String password) {
+        Instructor instructor = null;
+        for (Instructor i : instructors) {
+            if (i.getId().equals(id) && i.getPassword().equals(password)) {
+                instructor = i;
+                System.out.println("Instructor " + getName() + " logged in.");
+
+            }
+        }
+        if (instructor == null) {
+            System.out.println("No instructor record was found with the ID and password provided.");
+            return null;
+        }
+        return instructor;
     }
 
     @Override
-    public void logout() {
-        System.out.println("Instructor " + getName() + " logged out.");
+    public String logout(Instructor instructors) {
+        return ("Instructor " + instructors.getName() + " logged out.");
+
     }
 
     public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
@@ -65,9 +78,7 @@ public class Instructor extends User {
 
     }
 
-    public void updateCourseInfo(String courseCode, List<Course> courses, String newSchedule, String newDescription,
-            List<Instructor> instructors, String newPassword, String newEmail, String newPhoneNumber,
-            String newAddress) {
+    public void updateCourseInfo(String courseCode, List<Course> courses, String newSchedule, String newDescription) {
         // We must make sure that the course actually even exists.
         Course courseFound = null;
         // This following block is created for when the course actually exists.
@@ -78,18 +89,14 @@ public class Instructor extends User {
             }
         }
         if (courseFound != null) {
-            courseFound.setSchedule(newSchedule);
-            courseFound.setDescription(newDescription);
-
             // We must validate if the instructor is even assigned to the course they want
             // to update
             Instructor assignedInstructor = courseFound.getInstructor();
 
             if (assignedInstructor != null && assignedInstructor.getId().equals(this.getId())) {
-                assignedInstructor.setPassword(newPassword);
-                assignedInstructor.setEmail(newEmail);
-                assignedInstructor.setPhoneNumber(newPhoneNumber);
-                assignedInstructor.setAddress(newAddress);
+                courseFound.setSchedule(newSchedule);
+                courseFound.setDescription(newDescription);
+
                 System.out.println("Instructor " + assignedInstructor.getName() + "'s"
                         + " course information updated for " + courseFound.getCourseName());
             } // This is just in case if the course is assigned to a different instructor.
@@ -104,6 +111,29 @@ public class Instructor extends User {
             }
         } else {
             System.out.println("Course with code " + courseCode + " not found.");
+        }
+    }
+
+    public void updateInstructorPersonalInfo(List<Instructor> instructors, String targetId, String newPassword, String newEmail,
+            String newPhoneNumber,
+            String newAddress) {
+        Instructor instructorFound = null;
+        for (Instructor i : instructors) {
+            if (i.getId().equals(targetId)) {
+                instructorFound = i;
+                break;
+            }
+        }
+        if (instructorFound == null) {
+            System.out.println("Instructor with ID " + targetId + " not found.");
+            return;
+        }
+        // If the instructor is found, update their information
+        if (instructorFound != null) {
+            instructorFound.setPassword(newPassword);
+            instructorFound.setEmail(newEmail);
+            instructorFound.setPhoneNumber(newPhoneNumber);
+            instructorFound.setAddress(newAddress);
         }
     }
 }
