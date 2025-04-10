@@ -15,11 +15,11 @@ public class Course {
     public EnrollmentStatusEnum enrollmentStatus;
     private Instructor instructor;
     private int capacity;
-    private Grades examType;
+    private List<Grades> assessments;
     private int creditHours;
 
     // Fixes java.lang.StackOverflowError 
-    private List<Student> enrolledStudents = new ArrayList<>();
+    private List<Student> enrolledStudents;
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
@@ -51,6 +51,8 @@ public class Course {
     }
 
     public void setCourseName(String courseName) {
+        // how to write the function such that if an error occurs it wont throw an error but return
+        // an indicator to the caller to retry again
         if (courseName == null || courseName.isEmpty()) {
             throw new IllegalArgumentException("Course name cannot be null or empty.");
         } else {
@@ -67,7 +69,7 @@ public class Course {
         if (creditHours > 0) {
             this.creditHours = creditHours;
         } else {
-            System.out.println("Credit hours can not be >= 0");
+            System.out.println("Credit hours can not be <= 0");
         }
     }
 
@@ -131,7 +133,7 @@ public class Course {
         if (capacity > 0) {
             this.capacity = capacity;
         } else {
-            System.out.println("Error: Capacity must be a >0.");
+            System.out.println("Error: Capacity must be > 0.");
         }
     }
 
