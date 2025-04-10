@@ -12,18 +12,18 @@ public class Course {
 
     // Attributes
     private String courseName, courseCode, schedule, description;
-    public EnrollmentStatusEnum enrollmentStatus;
+    private EnrollmentStatusEnum enrollmentStatus;
     private Instructor instructor;
     private int capacity;
-    private List<Grades> assessments;
+    private List<Assesment> grades;
     private int creditHours;
 
-    // Fixes java.lang.StackOverflowError 
+    // Fixes java.lang.StackOverflowError
     private List<Student> enrolledStudents;
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
-            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, Grades examType,
+            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, List<Assesment> grades,
             int creditHours) {
         setCourseName(courseName);
         setCourseCode(courseCode);
@@ -32,9 +32,13 @@ public class Course {
         setEnrollmentStatus(enrollmentStatus);
         setInstructor(instructor);
         setCapacity(capacity);
-        setExamType(examType);
+        setAssesment(grades);
         setCreditHours(creditHours);
 
+    }
+
+    public void setEnrolledStudents(List<Student> enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
     }
 
     // Setters & Getters
@@ -51,14 +55,14 @@ public class Course {
     }
 
     public void setCourseName(String courseName) {
-        // how to write the function such that if an error occurs it wont throw an error but return
+        // how to write the function such that if an error occurs it wont throw an error
+        // but return
         // an indicator to the caller to retry again
         if (courseName == null || courseName.isEmpty()) {
             throw new IllegalArgumentException("Course name cannot be null or empty.");
         } else {
             this.courseName = courseName;
         }
-
     }
 
     public int getCreditHours() {
@@ -137,20 +141,30 @@ public class Course {
         }
     }
 
-    public Grades getExamType() {
-        return examType;
+    public List<Assesment> getGrades() {
+        return grades;
     }
 
-    public void setExamType(Grades examType) {
-        if (examType == null) {
-            this.examType = null;
+    public List<Assesment> setAssesment(List<Assesment> grades) {
+        if (grades == null) {
+            this.grades = null;
+            return null;
         } else {
-            this.examType = examType;
+            this.grades = grades;
+            return grades;
+        }
+    }
+
+    public void setGrades(List<Assesment> grades) {
+        if (grades == null) {
+            this.grades = null;
+        } else {
+            this.grades = grades;
         }
     }
 
     // Methods
-    public void viewGrades(Grades examType) {
+    public void viewGrades(Assesment grades) {
 
     }
 
@@ -162,5 +176,4 @@ public class Course {
             return false;
         }
     }
-
 }
