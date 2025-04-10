@@ -2,10 +2,9 @@
 package schoolcourseenrolmentsystem;
 
 import java.util.*;
-
 import schoolcourseenrolmentsystem.Course.EnrollmentStatusEnum;
 
-public class Administrator extends User {
+public class Administrator extends User<Administrator> {
     // Constructor
     public Administrator(String name, String id, String password, String email, String phoneNumber, String role,
             String address) {
@@ -20,13 +19,26 @@ public class Administrator extends User {
 
     // Login/logout & role
     @Override
-    public void login() {
-        System.out.println("Administrator " + getName() + " logged in.");
+    public Administrator login(List<Administrator> administrators, String id, String password) {
+      
+        Administrator administrator = null;
+
+        for (Administrator a : administrators) {
+            if (a.getId().equals(id) && a.getPassword().equals(password)) {
+                administrator = a;
+                System.out.println("Administrator " + getName() + " logged in.");
+            }
+        }
+        if (administrator == null) {
+            System.out.println("No administrator record was found with the ID and password provided.");
+            return null;
+        }
+        return administrator;
     }
 
     @Override
-    public void logout() {
-        System.out.println("Administrator " + getName() + " logged out.");
+    public String logout(Administrator administrators) {
+        return("Administrator " + administrators.getName() + " logged out.");
     }
 
     @Override
@@ -78,9 +90,9 @@ public class Administrator extends User {
     public void addStudent(Student s, List<Student> students) {
         if (!students.contains(s)) {
             students.add(s);
-            System.out.println("User added: " + ((User) s).getName());
+            System.out.println("User added: " + s.getName());
         } else {
-            System.out.println("User already exists: " + ((User) s).getName());
+            System.out.println("User already exists: " + s.getName());
         }
     }
 
@@ -112,7 +124,7 @@ public class Administrator extends User {
         }
     }
 
-    public void updateInstructor(String targetId, List<Instructor> instructors, String newName, String newId,
+    public void updateInstructor(String targetId, List<Instructor> instructors, String newName,
             String newPassword,
             String newEmail,
             String newPhoneNumber, String newRole, String newAddress) {
@@ -126,7 +138,6 @@ public class Administrator extends User {
         }
         if (updateInstructorInfo != null) {
             updateInstructorInfo.setName(newName);
-            updateInstructorInfo.setId(newId);
             updateInstructorInfo.setPassword(newPassword);
             updateInstructorInfo.setEmail(newEmail);
             updateInstructorInfo.setPhoneNumber(newPhoneNumber);
@@ -186,4 +197,5 @@ public class Administrator extends User {
     public void generateReports() {
 
     }
+    // input.close();
 }
