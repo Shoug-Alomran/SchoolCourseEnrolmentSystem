@@ -1,8 +1,6 @@
 package schoolcourseenrolmentsystem;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Helpers {
 
@@ -62,6 +60,7 @@ public class Helpers {
 
         }
         if (examChoice == 3) {
+            
 
         }
         if (examChoice == 4) {
@@ -151,8 +150,8 @@ public class Helpers {
     public static void instructorCase4(Instructor instructor, List<Course> courses, Scanner input){
         System.out.println("Enter your ID number:");
         input.next();
-        instructor.updateInstructorPersonalInfo(instructors, targetId, newPassword, newEmail,
-        newPhoneNumber, newAddress);
+      //  instructor.updateInstructorPersonalInfo(instructors, targetId, newPassword, newEmail,
+      //  newPhoneNumber, newAddress);
     }
 
     public static void studentCase1(List<Course> courses, Student student, Scanner input) {
