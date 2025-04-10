@@ -19,18 +19,19 @@ public class SchoolCourseEnrolmentSystem {
     public static void main(String[] args) {
         // I'm putting them outside the switch because multiple cases use them so this
         // helps my code be less dense.
-        Course newCourse = null;
+
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
         Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Defualt123", "S.Alomran@gmail.com",
                 "0531110904", "Administrator", "Qirawan district");
         administrators.add(defaultAdmin);
-        Grades gradeManager = new Grades(null, null, null, 0);
+        // Grades gradeManager = new Grades(null, null, null, 0);
 
         System.out.println("\nWelcome to School Course Enrolment System!");
         while (!exit) {
-            System.out.println("Enter your role from the current options: (Student/Instructor/Admin) or exit to finish.");
+            System.out
+                    .println("Enter your role from the current options: (Student/Instructor/Admin) or exit to finish.");
             String role = input.next();
 
             // Menu
@@ -85,11 +86,10 @@ public class SchoolCourseEnrolmentSystem {
                     System.out.print("\nPlease enter your Password: ");
                     String instructorPassword = input.next();
 
-                    Instructor instructor = null;
                     instructor.login(instructors, instructorID, instructorPassword);
-
+                   
                     boolean exitInstructor = false;
-
+                    Instructor instructor = null;
                     while (!exitInstructor) {
                         Helpers.showInstructorMenu();
                         int instructorChoice = input.nextInt();
@@ -107,7 +107,7 @@ public class SchoolCourseEnrolmentSystem {
                                 Helpers.instructorCase3(instructor, courses, input);
                                 break;
                             case 4:
-                                
+
                                 break;
                             case 5:
                                 instructor.logout(instructor);
