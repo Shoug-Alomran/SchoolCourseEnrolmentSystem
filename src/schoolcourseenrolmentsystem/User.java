@@ -1,7 +1,9 @@
 
 package schoolcourseenrolmentsystem;
 
-public abstract class User {
+import java.util.List;
+
+public abstract class User<T> {
     // Attributes
     private String name, id, password, email, phoneNumber;
     private String role, address;
@@ -70,6 +72,7 @@ public abstract class User {
     }
 
     public void setPhoneNumber(String phoneNumber) {
+        // research on how to ensure that phone numbers follow the KSA pattern
         if (phoneNumber.length() < 10) {
             throw new IllegalArgumentException("Length must be >10.");
         } else {
@@ -102,7 +105,6 @@ public abstract class User {
     }
 
     // Methods
-    public abstract void login();
-
-    public abstract void logout();
+    public abstract T login(List<T> list, String id, String password);
+    public abstract String logout(T user);
 }
