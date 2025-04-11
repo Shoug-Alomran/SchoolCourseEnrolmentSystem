@@ -8,10 +8,11 @@ public class Instructor extends User<Instructor> {
     List<Student> enrolledStudents;
 
     // Constructor
+  
     public Instructor(String name, String id, String password, String email, String phoneNumber, String role,
-            String address) {
+            String address, List<Student> enrolledStudents) {
         super(name, id, password, email, phoneNumber, role, address);
-
+        this.enrolledStudents = enrolledStudents;
     }
 
     // Methods
@@ -20,6 +21,7 @@ public class Instructor extends User<Instructor> {
         return "Instructor"; // Return the role for Instructor
     }
 
+
     @Override
     public Instructor login(List<Instructor> instructors, String id, String password) {
         Instructor instructor = null;
@@ -27,7 +29,6 @@ public class Instructor extends User<Instructor> {
             if (i.getId().equals(id) && i.getPassword().equals(password)) {
                 instructor = i;
                 System.out.println("Instructor " + getName() + " logged in.");
-
             }
         }
         if (instructor == null) {
@@ -114,18 +115,18 @@ public class Instructor extends User<Instructor> {
         }
     }
 
-    public void updateInstructorPersonalInfo(List<Instructor> instructors, String targetId, String newPassword, String newEmail,
+    public void updateInstructorPersonalInfo(List<Instructor> instructors, String instructorTargetId, String newPassword, String newEmail,
             String newPhoneNumber,
             String newAddress) {
         Instructor instructorFound = null;
         for (Instructor i : instructors) {
-            if (i.getId().equals(targetId)) {
+            if (i.getId().equals(instructorTargetId)) {
                 instructorFound = i;
                 break;
             }
         }
         if (instructorFound == null) {
-            System.out.println("Instructor with ID " + targetId + " not found.");
+            System.out.println("Instructor with ID " + instructorTargetId + " not found.");
             return;
         }
         // If the instructor is found, update their information
