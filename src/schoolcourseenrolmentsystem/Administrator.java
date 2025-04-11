@@ -107,8 +107,8 @@ public class Administrator extends User<Administrator> {
         if (updateStudentInfo != null) {
 
             updateStudentInfo.setName(newName);
-            updateStudentInfo.setId(newId);
             updateStudentInfo.setPassword(newPassword);
+           // updateStudentInfo.setId(newId);
             updateStudentInfo.setEmail(newEmail);
             updateStudentInfo.setPhoneNumber(newPhoneNumber);
             updateStudentInfo.setRole(newRole);

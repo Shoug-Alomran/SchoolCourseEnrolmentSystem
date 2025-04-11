@@ -700,7 +700,8 @@ public class Helpers {
 
             // Start with default values
             String newName = instructorToUpdate.getName();
-            String newID = instructorToUpdate.getId();
+            // Ruins data persistancy.
+           // String newID = instructorToUpdate.getId();
             String newPassword = instructorToUpdate.getPassword();
             String newEmail = instructorToUpdate.getEmail();
             String newPhone = instructorToUpdate.getPhoneNumber();
@@ -722,18 +723,18 @@ public class Helpers {
                 System.out.println("Name remains unchanged.");
             }
             // Option to update ID
-            System.out.println(
-                    "Do you want to change " + instructorToUpdate.getName() + "'s ID?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int IDChoice = input.nextInt();
-            if (IDChoice == 1) {
-                System.out.print("Enter new ID: ");
-                newID = input.nextLine();
-                instructorToUpdate.setId(newID);
-            } else if (IDChoice == 2) {
-                System.out.println("ID remains unchanged.");
-            }
+            // System.out.println(
+            //         "Do you want to change " + instructorToUpdate.getName() + "'s ID?");
+            // System.out.println("1. Yes");
+            // System.out.println("2. No");
+            // int IDChoice = input.nextInt();
+            // if (IDChoice == 1) {
+            //     System.out.print("Enter new ID: ");
+            //     newID = input.nextLine();
+            //     instructorToUpdate.setId(newID);
+            // } else if (IDChoice == 2) {
+            //     System.out.println("ID remains unchanged.");
+            // }
             // Option to update password
             System.out.println(
                     "Do you want to change " + instructorToUpdate.getName() + "'s password?");
