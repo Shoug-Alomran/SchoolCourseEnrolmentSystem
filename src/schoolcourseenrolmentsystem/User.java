@@ -26,7 +26,8 @@ public abstract class User<T> {
 
     public void setName(String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty.");
+            System.out.println("Name cannot be null or empty.");
+            return;
         } else {
             this.name = name;
         }
@@ -38,7 +39,8 @@ public abstract class User<T> {
 
     public void setId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID cannot be null or empty.");
+            System.out.println("ID cannot be null or empty.");
+            return;
         } else {
             this.id = id;
         }
@@ -49,9 +51,6 @@ public abstract class User<T> {
     }
 
     public void setPassword(String password) {
-        if (password == null || password.length() < 8) {
-            throw new IllegalArgumentException("Password must be at least 8 characters long.");
-        }
         this.password = password;
     }
 
@@ -61,7 +60,8 @@ public abstract class User<T> {
 
     public void setEmail(String email) {
         if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be null or empty.");
+            System.out.println("Email cannot be null or empty.");
+            return;
         } else {
             this.email = email;
         }
@@ -73,11 +73,18 @@ public abstract class User<T> {
 
     public void setPhoneNumber(String phoneNumber) {
         // research on how to ensure that phone numbers follow the KSA pattern
-        if (phoneNumber.length() < 10) {
-            throw new IllegalArgumentException("Length must be >10.");
-        } else {
+        if (phoneNumber.equals("temp")) {
             this.phoneNumber = phoneNumber;
+            return;
         }
+        if (phoneNumber.length() < 10) {
+            System.out.println("Length must be > 10.");
+            return;
+        } else if (phoneNumber.length() > 10) {
+            System.out.println("Length must be < 10.");
+            return;
+        }
+        this.phoneNumber = phoneNumber;
     }
 
     public String getRole() {
@@ -86,7 +93,8 @@ public abstract class User<T> {
 
     public void setRole(String role) {
         if (role == null || role.isEmpty()) {
-            throw new IllegalArgumentException("Role can't be null or empty.");
+            System.out.println("Role can't be null or empty.");
+            return;
         } else {
             this.role = role;
         }
@@ -98,7 +106,8 @@ public abstract class User<T> {
 
     public void setAddress(String address) {
         if (address == null || address.isEmpty()) {
-            throw new IllegalArgumentException("Address can't be null or empty.");
+            System.out.println("Address can't be null or empty.");
+            return;
         } else {
             this.address = address;
         }
@@ -106,5 +115,6 @@ public abstract class User<T> {
 
     // Methods
     public abstract T login(List<T> list, String id, String password);
+
     public abstract String logout(T user);
 }
