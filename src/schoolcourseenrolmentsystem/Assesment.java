@@ -6,10 +6,14 @@ import java.util.List;
 public class Assesment {
     
     public enum ExamType {
-        Quiz,
-        Midterm,
+        Quiz_1,
+        Quiz_2,
+        Quiz_3,
+        Quiz_4,
+        Midterm_1,
+        Midterm_2,
         Final,
-        Homework
+        Project
     }
     // Attributes
     private String studentId;
