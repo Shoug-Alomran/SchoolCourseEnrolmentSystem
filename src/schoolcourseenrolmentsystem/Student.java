@@ -10,7 +10,7 @@ public class Student extends User<Student> {
 
     // Constructor
     public Student(String name, String id, String password, String email, String phoneNumber, String role,
-            String address, int creditLimit, Course enrolledCourses) {
+            String address, int creditLimit, List<Course> enrolledCourses) {
         super(name, id, password, email, phoneNumber, role, address);
         setCreditLimit(creditLimit);
     }
