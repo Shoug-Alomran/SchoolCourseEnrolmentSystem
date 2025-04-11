@@ -2,7 +2,7 @@
 package schoolcourseenrolmentsystem;
 
 import java.util.*;
-import schoolcourseenrolmentsystem.Helpers.*;
+//import schoolcourseenrolmentsystem.Helpers.*;
 
 public class SchoolCourseEnrolmentSystem {
 
@@ -23,7 +23,7 @@ public class SchoolCourseEnrolmentSystem {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
-        Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Defualt123", "S.Alomran@gmail.com",
+        Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Default12345", "S.Alomran@gmail.com",
                 "0531110904", "Administrator", "Qirawan district");
         administrators.add(defaultAdmin);
         // Grades gradeManager = new Grades(null, null, null, 0);
@@ -37,15 +37,24 @@ public class SchoolCourseEnrolmentSystem {
             // Menu
             switch (role.toLowerCase()) {
                 case "student":
-                    boolean studentExit = false;
                     // call login method
-                    Student student = null;
+
                     System.out.print("\nPlease enter your ID: ");
                     String studentID = input.next();
                     System.out.print("\nPlease enter your Password: ");
                     String studentPassword = input.next();
 
-                    student.login(students, studentID, studentPassword);
+                    Student tempStudent = new Student("temp", "temp", "temp", "temp", "temp", "Student", "temp", 0,
+                            null);
+                    Student loggedInStudent = tempStudent.login(students, studentID, studentPassword);
+                    /// Inside the switch the student logged in is the student that will be able to
+                    /// control its own information.
+                    if (loggedInStudent == null) {
+                        break; // Don't continue if login fails
+                    }
+                    Student student = loggedInStudent;
+                    // Needed for logout method later on.
+                    boolean studentExit = false;
                     while (!studentExit) {
                         Helpers.showStudentMenu();
                         int studentChoice = input.nextInt();
@@ -86,10 +95,18 @@ public class SchoolCourseEnrolmentSystem {
                     System.out.print("\nPlease enter your Password: ");
                     String instructorPassword = input.next();
 
-                    instructor.login(instructors, instructorID, instructorPassword);
-                   
+                    // The temporary temp object is only created so you can call the login() method
+                    // defined in the Instructor class (which is inherited from User<Instructor>).
+                    Instructor tempInstructor = new Instructor("temp", "temp", "temp", "temp", "temp", "Instructor",
+                            "temp",
+                            new ArrayList<>());
+                    Instructor loggedInInstructor = tempInstructor.login(instructors, instructorID, instructorPassword);
+                    Instructor instructor = loggedInInstructor;
+                    
+                    if (loggedInInstructor == null) {
+                        break; // Don't continue if login fails
+                    }
                     boolean exitInstructor = false;
-                    Instructor instructor = null;
                     while (!exitInstructor) {
                         Helpers.showInstructorMenu();
                         int instructorChoice = input.nextInt();
@@ -120,16 +137,19 @@ public class SchoolCourseEnrolmentSystem {
                     }
                     break;
                 case "admin":
-                    // Login first
-                    System.out.print("\nPlease enter your ID:");
-                    String adminID = input.next();
-                    System.out.print("\nPlease enter your password:");
-                    String adminPassword = input.next();
-                    Administrator administrator = null;
-                    administrator.login(administrators, adminID, adminPassword);
+                    // Login first.
+                    Administrator temp = new Administrator("temp", "temp",
+                            "temp", "temp", "temp", "Administrator", "temp");
+                    Administrator loggedInAdministrator = Helpers.loginWithRetry(administrators, input, temp);
+                    
+                   
+                    if (loggedInAdministrator == null) {
+                        break; // Don't continue if login fails
+                    }
+                    // If everything is ok, we can now use the loggedInAdministrator object.
+                    Administrator administrator = loggedInAdministrator;
 
                     boolean exitAdmin = false;
-
                     while (!exitAdmin) {
                         Helpers.showAdminMenu();
                         System.out.println();
