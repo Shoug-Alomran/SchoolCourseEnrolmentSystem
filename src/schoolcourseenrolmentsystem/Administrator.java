@@ -20,20 +20,14 @@ public class Administrator extends User<Administrator> {
     // Login/logout & role
     @Override
     public Administrator login(List<Administrator> administrators, String id, String password) {
-      
-        Administrator administrator = null;
-
         for (Administrator a : administrators) {
             if (a.getId().equals(id) && a.getPassword().equals(password)) {
-                administrator = a;
-                System.out.println("Administrator " + getName() + " logged in.");
+                System.out.println("Administrator " + a.getName() + " logged in.");
+                return a;
             }
         }
-        if (administrator == null) {
-            System.out.println("No administrator record was found with the ID and password provided.");
-            return null;
-        }
-        return administrator;
+        return null; // Return null if no match is found
+    
     }
 
     @Override
