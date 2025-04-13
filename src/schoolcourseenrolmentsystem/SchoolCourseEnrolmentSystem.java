@@ -102,7 +102,7 @@ public class SchoolCourseEnrolmentSystem {
                             new ArrayList<>());
                     Instructor loggedInInstructor = tempInstructor.login(instructors, instructorID, instructorPassword);
                     Instructor instructor = loggedInInstructor;
-                    
+                   
                     if (loggedInInstructor == null) {
                         break; // Don't continue if login fails
                     }
