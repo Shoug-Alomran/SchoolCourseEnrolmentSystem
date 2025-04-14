@@ -33,6 +33,7 @@ public class SchoolCourseEnrolmentSystem {
             System.out
                     .println("Enter your role from the current options: (Student/Instructor/Admin) or exit to finish.");
             String role = input.next();
+            input.nextLine(); // Buffer
 
             // Menu
             switch (role.toLowerCase()) {
@@ -41,16 +42,19 @@ public class SchoolCourseEnrolmentSystem {
 
                     System.out.print("\nPlease enter your ID: ");
                     String studentID = input.next();
+                    input.nextLine(); // Buffer
                     System.out.print("\nPlease enter your Password: ");
                     String studentPassword = input.next();
+                    input.nextLine(); // Buffer
 
                     Student tempStudent = new Student("temp", "temp", "temp", "temp", "temp", "Student", "temp", 0,
                             null);
                     Student loggedInStudent = tempStudent.login(students, studentID, studentPassword);
                     /// Inside the switch the student logged in is the student that will be able to
                     /// control its own information.
+                    // If login fails, skip to next loop iteration (try another role).
                     if (loggedInStudent == null) {
-                        break; // Don't continue if login fails
+                        continue;
                     }
                     Student student = loggedInStudent;
                     // Needed for logout method later on.
@@ -71,15 +75,18 @@ public class SchoolCourseEnrolmentSystem {
                                 student.viewEnrolledCourses();
                                 break;
                             case 4:
-                                Helpers.studentCase4(courses, student, input);
+                                student.viewCreditLimit(students);
                                 break;
                             case 5:
-
+                                Helpers.studentCase5(courses, student, input);
                                 break;
                             case 6:
-                                Helpers.studentCase6(student, students, input);
+
                                 break;
                             case 7:
+                                Helpers.studentCase7(student, students, input);
+                                break;
+                            case 8:
                                 student.logout(student);
                                 studentExit = true;
                                 break;
@@ -92,8 +99,10 @@ public class SchoolCourseEnrolmentSystem {
                     // Login first
                     System.out.print("\nPlease enter your ID: ");
                     String instructorID = input.next();
+                    input.nextLine(); // Buffer
                     System.out.print("\nPlease enter your Password: ");
                     String instructorPassword = input.next();
+                    input.nextLine(); // Buffer
 
                     // The temporary temp object is only created so you can call the login() method
                     // defined in the Instructor class (which is inherited from User<Instructor>).
@@ -102,9 +111,10 @@ public class SchoolCourseEnrolmentSystem {
                             new ArrayList<>());
                     Instructor loggedInInstructor = tempInstructor.login(instructors, instructorID, instructorPassword);
                     Instructor instructor = loggedInInstructor;
-                   
+
+                    // If login fails, skip to next loop iteration (try another role).
                     if (loggedInInstructor == null) {
-                        break; // Don't continue if login fails
+                        continue;
                     }
                     boolean exitInstructor = false;
                     while (!exitInstructor) {
@@ -141,10 +151,10 @@ public class SchoolCourseEnrolmentSystem {
                     Administrator temp = new Administrator("temp", "temp",
                             "temp", "temp", "temp", "Administrator", "temp");
                     Administrator loggedInAdministrator = Helpers.loginWithRetry(administrators, input, temp);
-                    
-                   
+
+                    // If login fails, skip to next loop iteration (try another role).
                     if (loggedInAdministrator == null) {
-                        break; // Don't continue if login fails
+                        continue;
                     }
                     // If everything is ok, we can now use the loggedInAdministrator object.
                     Administrator administrator = loggedInAdministrator;
