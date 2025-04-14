@@ -24,7 +24,7 @@ public class SchoolCourseEnrolmentSystem {
         Scanner input = new Scanner(System.in);
 
         Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Default12345", "S.Alomran@gmail.com",
-                "0531110904", "Administrator", "Qirawan district");
+                "0531110904", User.Role.ADMIN, "Qirawan district");
         administrators.add(defaultAdmin);
         // Grades gradeManager = new Grades(null, null, null, 0);
 
@@ -38,18 +38,13 @@ public class SchoolCourseEnrolmentSystem {
             // Menu
             switch (role.toLowerCase()) {
                 case "student":
-                    // call login method
-
-                    System.out.print("\nPlease enter your ID: ");
-                    String studentID = input.next();
-                    input.nextLine(); // Buffer
-                    System.out.print("\nPlease enter your Password: ");
-                    String studentPassword = input.next();
-                    input.nextLine(); // Buffer
-
+                    // We need to let an student log in. To do that, we must call the login
+                    // method from the Student class. But login is not a static method, so we
+                    // can’t call it without an object. So we create a fake (temporary) student
+                    // with dummy info, just to access the login method.
                     Student tempStudent = new Student("temp", "temp", "temp", "temp", "temp", "Student", "temp", 0,
                             null);
-                    Student loggedInStudent = tempStudent.login(students, studentID, studentPassword);
+                    Student loggedInStudent = Helpers.loginWithRetry(students, input, tempStudent);
                     /// Inside the switch the student logged in is the student that will be able to
                     /// control its own information.
                     // If login fails, skip to next loop iteration (try another role).
@@ -95,20 +90,18 @@ public class SchoolCourseEnrolmentSystem {
                     }
                     break;
                 case "instructor":
-                    // Login first
-                    System.out.print("\nPlease enter your ID: ");
-                    String instructorID = input.next();
-                    input.nextLine(); // Buffer
-                    System.out.print("\nPlease enter your Password: ");
-                    String instructorPassword = input.next();
-                    input.nextLine(); // Buffer
-
-                    // The temporary temp object is only created so you can call the login() method
-                    // defined in the Instructor class (which is inherited from User<Instructor>).
-                    Instructor tempInstructor = new Instructor("temp", "temp", "temp", "temp", "temp", "Instructor",
-                            "temp",
-                            new ArrayList<>());
-                    Instructor loggedInInstructor = tempInstructor.login(instructors, instructorID, instructorPassword);
+                    // We need to let an instructor log in. To do that, we must call the login
+                    // method from the Instructor class. But login is not a static method, so we
+                    // can’t call it without an object. So we create a fake (temporary) instructor
+                    // with dummy info, just to access the login method.
+                    Instructor tempInstructor = new Instructor("temp", "temp", "temp", "temp", "temp",
+                            User.Role.INSTRUCTOR,
+                            "temp", new ArrayList<>());
+                    // We now use that temp object to try logging in using the list of real
+                    // instructors.
+                    Instructor loggedInInstructor = Helpers.loginWithRetry(instructors, input, tempInstructor);
+                    // If login works, we store the result (the actual instructor) in a new variable
+                    // to use later.
                     Instructor instructor = loggedInInstructor;
 
                     // If login fails, skip to next loop iteration (try another role).
@@ -146,14 +139,18 @@ public class SchoolCourseEnrolmentSystem {
                     }
                     break;
                 case "admin":
-                    // Login first.
+                    // We need to let an Admin login. To do that, we must call the login
+                    // method from the Admin class. But login is not a static method, so we
+                    // can’t call it without an object. So we create a fake (temporary) admin
+                    // with dummy info, just to access the login method.
                     Administrator temp = new Administrator("temp", "temp",
-                            "temp", "temp", "temp", "Administrator", "temp");
+                            "temp", "temp", "temp", User.Role.ADMIN, "temp");
+                    // We now use that temp object to try logging in using the list of real admins.
                     Administrator loggedInAdministrator = Helpers.loginWithRetry(administrators, input, temp);
 
                     // If login fails, skip to next loop iteration (try another role).
                     if (loggedInAdministrator == null) {
-                        continue; 
+                        continue;
                     }
                     // If everything is ok, we can now use the loggedInAdministrator object.
                     Administrator administrator = loggedInAdministrator;
