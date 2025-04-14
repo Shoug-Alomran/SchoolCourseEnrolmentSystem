@@ -49,6 +49,10 @@ public abstract class User<T> {
     }
 
     public void setPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            System.out.println("Password cannot be null or empty.");
+            return;
+        }
         this.password = password;
     }
 
@@ -74,12 +78,10 @@ public abstract class User<T> {
         this.phoneNumber = phoneNumber;
         return;
         }
-        if (phoneNumber.length() < 10) {
-        System.out.println("Length must be > 10.");
+        if (phoneNumber.length() != 10) {
+        System.out.println("Length must be equal 10.");
         return;
-        } else if (phoneNumber.length() > 10) {
-        System.out.println("Length must be < 10.");
-        return;
+        
         }
         this.phoneNumber = phoneNumber;
     }
