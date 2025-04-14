@@ -13,6 +13,12 @@ public class Student extends User<Student> {
             String address, int creditLimit, List<Course> enrolledCourses) {
         super(name, id, password, email, phoneNumber, role, address);
         setCreditLimit(creditLimit);
+        // If the list is null, create a new one. Fixes NullPointerException.
+        if (enrolledCourses != null) {
+            this.enrolledCourses = enrolledCourses;
+        } else {
+            this.enrolledCourses = new ArrayList<>();
+        }
     }
 
     public List<Course> getEnrolledCourses() {
@@ -36,25 +42,19 @@ public class Student extends User<Student> {
 
     @Override
     public Student login(List<Student> students, String id, String password) {
-        Student student = null;
-       
         for (Student s : students) {
-
             if (s.getId().equals(id) && s.getPassword().equals(password)) {
-                student = s;
-                System.out.println("Student " + student.getName() + " logged in.");
+                System.out.println("Student " + s.getName() + " logged in.");
+                return s;
             }
         }
-        if (student == null) {
-            System.out.println("No student record was found with the ID and password provided.");
-            return null;
-        } 
-        return student;
+        System.out.println("No student record was found with the ID and password provided.");
+        return null;
     }
 
     @Override
     public String logout(Student student) {
-       return("Student " + student.getName() + " logged out.");
+        return ("Student " + student.getName() + " logged out.");
     }
 
     // Count the hours of the courses already enrolled
@@ -80,7 +80,8 @@ public class Student extends User<Student> {
         else if (totalCreditLimit() + c.getCreditHours() > creditLimit) {
             System.out.println("Cannot enroll in " + c.getCourseName() + " — credit limit exceeded.");
         } else {
-            this.enrolledCourses.add(c);
+            // Needed inorder for the course to know who enrolled.
+            c.getEnrolledStudents().add(this);
             System.out.println(getName() + " enrolled successfully");
         }
     }
@@ -101,7 +102,21 @@ public class Student extends User<Student> {
     public void viewCreditLimit(List<Student> students) {
         for (Student s : students) {
             System.out.println(s.getName() + "'s credit limit is: " + s.getCreditLimit());
+
+            // (condition) ? (value if true) : (value if false);
+            int enrolledHours = (s.getEnrolledCourses() != null) ? s.enrolledInHours() : 0;
+            System.out.println("Remaining credit limit is: " + (s.getCreditLimit() - enrolledHours) + " hours.");
         }
+    }
+
+    public int enrolledInHours() {
+        int total = 0;
+        if (enrolledCourses != null) {
+            for (Course c : enrolledCourses) {
+                total += c.getCreditHours();
+            }
+        }
+        return total;
     }
 
     public void viewEnrolledCourses() {
