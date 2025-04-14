@@ -11,10 +11,6 @@ public class Administrator extends User<Administrator> {
         super(name, id, password, email, phoneNumber, role, address);
     }
 
-    public List<Instructor> getInstructors() {
-        return getInstructors();
-    }
-
     // Methods
 
     // Login/logout & role
@@ -26,13 +22,14 @@ public class Administrator extends User<Administrator> {
                 return a;
             }
         }
+        System.out.println("No admin record was found with the ID and password provided.");
         return null; // Return null if no match is found
-    
+
     }
 
     @Override
     public String logout(Administrator administrators) {
-        return("Administrator " + administrators.getName() + " logged out.");
+        return ("Administrator " + administrators.getName() + " logged out.");
     }
 
     @Override
@@ -44,32 +41,40 @@ public class Administrator extends User<Administrator> {
     // Add and remove users
 
     public boolean removeStudent(List<Student> students, String targetId) {
-        // Loop used to iterate over all the students
-        for (Student s : students) {
+        // Loop used to iterate over all the students.
+         // An Iterator keeps track of the current position safely, and when you call
+        // remove(), it tells the collection to safely remove the current element
+        // without invalidating the loop.
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student s = iterator.next();
             if (s.getId().equals(targetId)) {
-                students.remove(s);
+                iterator.remove();
                 System.out.println(s.getName() + " with the ID: " + s.getId() + " has been successfully removed");
                 return true;
             }
         }
         System.out.println(targetId + " is not found.");
         return false;
-
     }
 
     public boolean removeInstructor(List<Instructor> instructors, String targetId) {
+        // An Iterator keeps track of the current position safely, and when you call
+        // remove(), it tells the collection to safely remove the current element
+        // without invalidating the loop.
+
         // Loop used to iterate over all the instructors
-        for (Instructor i : instructors) {
+        Iterator<Instructor> iterator = instructors.iterator();
+        while (iterator.hasNext()) {
+            Instructor i = iterator.next();
             if (i.getId().equals(targetId)) {
-                instructors.remove(i);
+                iterator.remove();
                 System.out.println(i.getName() + " with the ID: " + i.getId() + " removed successfully.");
                 return true;
             }
         }
-
-        System.out.println("Instructor witht the ID: " + targetId + " not found.");
+        System.out.println("Instructor with the ID: " + targetId + " not found.");
         return false;
-
     }
 
     public void addInstructor(Instructor i, List<Instructor> instructors) {
@@ -108,7 +113,7 @@ public class Administrator extends User<Administrator> {
 
             updateStudentInfo.setName(newName);
             updateStudentInfo.setPassword(newPassword);
-           // updateStudentInfo.setId(newId);
+            // updateStudentInfo.setId(newId);
             updateStudentInfo.setEmail(newEmail);
             updateStudentInfo.setPhoneNumber(newPhoneNumber);
             updateStudentInfo.setRole(newRole);
@@ -176,7 +181,7 @@ public class Administrator extends User<Administrator> {
         } else if (!courses.contains(c)) {
             System.out.println(c.getCourseName() + " not found.");
         } else {
-            System.out.println(c.getCourseName() + " still has avaliable capacity.");
+            System.out.println(c.getCourseName() + " still has available capacity.");
         }
     }
 
