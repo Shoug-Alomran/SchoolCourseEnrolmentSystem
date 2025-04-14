@@ -308,8 +308,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your password?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int passwordChoice = input.nextInt();
-        input.nextLine(); // Buffer
+        int passwordChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (passwordChoice == 1) {
             System.out.print("\nEnter new password: ");
             newPassword = Helpers.checkValidityOfPassword(input, instructor);
@@ -321,7 +320,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your email?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int emailChoice = input.nextInt();
+        int emailChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (emailChoice == 1) {
             System.out.print("\nEnter new email: ");
             newEmail = Helpers.checkValidityOfEmail(input, instructor);
@@ -333,8 +332,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your phone number?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int phoneNumberChoice = Helpers.getSafeIntInput(input, newAddress);
-        input.nextLine(); // Buffer
+        int phoneNumberChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (phoneNumberChoice == 1) {
             System.out.print("\nEnter new phone number: ");
             newPhone = Helpers.checkValidityOfPhoneNumber(input, instructor);
@@ -346,8 +344,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your address?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int addressChoice = input.nextInt();
-        input.nextLine(); // Buffer
+        int addressChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (addressChoice == 1) {
             System.out.print("\nEnter new address: ");
             newAddress = Helpers.checkValidityOfAddress(input, instructor);
@@ -426,8 +423,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your password?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int passwordChoice = input.nextInt();
-        input.nextLine(); // Buffer
+        int passwordChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (passwordChoice == 1) {
             System.out.print("\nEnter new password: ");
             newPassword = Helpers.checkValidityOfPassword(input, student);
@@ -439,7 +435,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your email?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int emailChoice = input.nextInt();
+        int emailChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (emailChoice == 1) {
             System.out.print("\nEnter new email: ");
             newEmail = Helpers.checkValidityOfEmail(input, student);
@@ -451,8 +447,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your phone number?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int phoneNumberChoice = input.nextInt();
-        input.nextLine(); // Buffer
+        int phoneNumberChoice = Helpers.getSafeIntInput(input, "Option: ");
         if (phoneNumberChoice == 1) {
             System.out.print("\nEnter new phone number: ");
             newPhone = Helpers.checkValidityOfPhoneNumber(input, student);
@@ -464,7 +459,7 @@ public class Helpers {
         System.out.println("\nDo you want to change your address?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int addressChoice = input.nextInt();
+        int addressChoice = Helpers.getSafeIntInput(input, "Option: ");
         input.nextLine(); // Buffer
         if (addressChoice == 1) {
             System.out.print("\nEnter new address: ");
