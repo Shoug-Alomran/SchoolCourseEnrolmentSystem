@@ -28,9 +28,8 @@ public abstract class User<T> {
         if (name == null || name.isEmpty()) {
             System.out.println("Name cannot be null or empty.");
             return;
-        } else {
+        } 
             this.name = name;
-        }
     }
 
     public String getId() {
@@ -41,9 +40,8 @@ public abstract class User<T> {
         if (id == null || id.isEmpty()) {
             System.out.println("ID cannot be null or empty.");
             return;
-        } else {
+        } 
             this.id = id;
-        }
     }
 
     public String getPassword() {
@@ -62,9 +60,8 @@ public abstract class User<T> {
         if (email == null || email.isEmpty()) {
             System.out.println("Email cannot be null or empty.");
             return;
-        } else {
+        } 
             this.email = email;
-        }
     }
 
     public String getPhoneNumber() {
@@ -72,17 +69,17 @@ public abstract class User<T> {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        // research on how to ensure that phone numbers follow the KSA pattern
+       // research on how to ensure that phone numbers follow the KSA pattern
         if (phoneNumber.equals("temp")) {
-            this.phoneNumber = phoneNumber;
-            return;
+        this.phoneNumber = phoneNumber;
+        return;
         }
         if (phoneNumber.length() < 10) {
-            System.out.println("Length must be > 10.");
-            return;
+        System.out.println("Length must be > 10.");
+        return;
         } else if (phoneNumber.length() > 10) {
-            System.out.println("Length must be < 10.");
-            return;
+        System.out.println("Length must be < 10.");
+        return;
         }
         this.phoneNumber = phoneNumber;
     }
@@ -93,10 +90,10 @@ public abstract class User<T> {
 
     public void setRole(String role) {
         if (role == null || role.isEmpty()) {
-            System.out.println("Role can't be null or empty.");
-            return;
+        System.out.println("Role can't be null or empty.");
+        return;
         } else {
-            this.role = role;
+        this.role = role;
         }
     }
 
@@ -106,11 +103,10 @@ public abstract class User<T> {
 
     public void setAddress(String address) {
         if (address == null || address.isEmpty()) {
-            System.out.println("Address can't be null or empty.");
-            return;
-        } else {
-            this.address = address;
+        System.out.println("Address can't be null or empty.");
+        return;
         }
+        this.address = address;
     }
 
     // Methods
