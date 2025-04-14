@@ -184,6 +184,24 @@ public class Helpers {
         return name;
     }
 
+    public static int getSafeIntInput(Scanner input, String prompt) {
+        int number = -1;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                System.out.print(prompt);
+                number = input.nextInt();
+                input.nextLine();
+                valid = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number.");
+                input.nextLine();
+            }
+        }
+        return number;
+    }
+
+    // MENUS
     public static void showStudentMenu() {
         System.out.println("\nEnter the number for the choice you want.");
         System.out.println("1. View avaliable courses.");
@@ -197,7 +215,6 @@ public class Helpers {
     }
 
     public static void showInstructorMenu() {
-        System.out.println("\nEnter the number for the option you desire.");
         System.out.println("1. View enrolled students.");
         System.out.println("2. Grade assignments.");
         System.out.println("3. Update course information.");
@@ -206,7 +223,6 @@ public class Helpers {
     }
 
     public static void showAdminMenu() {
-        System.out.println("\nEnter the number for the option you desire.");
         System.out.println("\n1. Add/Remove Students.");
         System.out.println("2. Add/Remove Instructors.");
         System.out.println("3. Add Course.");
@@ -219,7 +235,9 @@ public class Helpers {
         System.out.println("10.Logout.");
     }
 
-    // needs acutal logic
+    // CASES
+    // INSTRUCTORS CASES
+    
     public static void instructorCase2(Scanner input) {
         System.out.println("\nEnter the students ID you would like to enter their grade for.");
         // = input.next();
@@ -249,7 +267,7 @@ public class Helpers {
 
         }
     }
-
+// needs acutal logic ^
     public static void instructorCase3(Instructor instructor, List<Course> courses, Scanner input) {
         System.out.print("\nEnter the course code you want to update: ");
         String courseCode = input.next();
@@ -396,6 +414,7 @@ public class Helpers {
         instructor.updateInstructorPersonalInfo(instructors, targetId, newPassword, newEmail, newPhone, newAddress);
     }
 
+    // STUDENT CASES
     public static void studentCase1(List<Course> courses, Student student, Scanner input) {
         System.out.println("Courses avaliable to enroll in: ");
         // Sub-List to the main
@@ -514,6 +533,7 @@ public class Helpers {
         student.updatePersonalInfo(students, newAddress, newPassword, newEmail, newPhone, newAddress);
     }
 
+    // ADMIN CASES
     public static void adminCase1(Administrator administrator, List<Student> students, Scanner input) {
         System.out.println("\nEnter the number for the option you desire.");
         System.out.println("1. Add student.");
@@ -561,7 +581,6 @@ public class Helpers {
     }
 
     public static void adminCase2(Administrator administrator, List<Instructor> instructors, Scanner input) {
-        System.out.println("\nEnter the number for the option you desire.");
         System.out.println("1. Add instructor.");
         System.out.println("2. Remove instructor.");
         int add_remove = input.nextInt();

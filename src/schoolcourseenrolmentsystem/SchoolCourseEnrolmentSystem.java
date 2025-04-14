@@ -61,8 +61,7 @@ public class SchoolCourseEnrolmentSystem {
                     boolean studentExit = false;
                     while (!studentExit) {
                         Helpers.showStudentMenu();
-                        int studentChoice = input.nextInt();
-                        input.nextLine(); // Buffer
+                        int studentChoice = Helpers.getSafeIntInput(input, "Enter your option: ");
 
                         switch (studentChoice) {
                             case 1:
@@ -119,7 +118,7 @@ public class SchoolCourseEnrolmentSystem {
                     boolean exitInstructor = false;
                     while (!exitInstructor) {
                         Helpers.showInstructorMenu();
-                        int instructorChoice = input.nextInt();
+                        int instructorChoice = Helpers.getSafeIntInput(input, "Enter your option: ");
                         input.nextLine(); // Buffer
 
                         switch (instructorChoice) {
@@ -154,7 +153,7 @@ public class SchoolCourseEnrolmentSystem {
 
                     // If login fails, skip to next loop iteration (try another role).
                     if (loggedInAdministrator == null) {
-                        continue;
+                        continue; 
                     }
                     // If everything is ok, we can now use the loggedInAdministrator object.
                     Administrator administrator = loggedInAdministrator;
@@ -163,8 +162,7 @@ public class SchoolCourseEnrolmentSystem {
                     while (!exitAdmin) {
                         Helpers.showAdminMenu();
                         System.out.println();
-                        int adminChoice = input.nextInt();
-                        input.nextLine();
+                        int adminChoice = Helpers.getSafeIntInput(input, "Enter your option: ");
 
                         switch (adminChoice) {
                             case 1:
