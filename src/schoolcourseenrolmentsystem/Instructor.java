@@ -4,15 +4,10 @@ package schoolcourseenrolmentsystem;
 import java.util.List;
 
 public class Instructor extends User<Instructor> {
-    // Attributes
-    List<Student> enrolledStudents;
-
     // Constructor
-  
     public Instructor(String name, String id, String password, String email, String phoneNumber, String role,
             String address, List<Student> enrolledStudents) {
         super(name, id, password, email, phoneNumber, role, address);
-        this.enrolledStudents = enrolledStudents;
     }
 
     // Methods
@@ -21,27 +16,21 @@ public class Instructor extends User<Instructor> {
         return "Instructor"; // Return the role for Instructor
     }
 
-
     @Override
     public Instructor login(List<Instructor> instructors, String id, String password) {
-        Instructor instructor = null;
         for (Instructor i : instructors) {
             if (i.getId().equals(id) && i.getPassword().equals(password)) {
-                instructor = i;
-                System.out.println("Instructor " + getName() + " logged in.");
+                System.out.println("Instructor " + i.getName() + " logged in.");
+                return i;   
             }
         }
-        if (instructor == null) {
             System.out.println("No instructor record was found with the ID and password provided.");
             return null;
-        }
-        return instructor;
     }
 
     @Override
     public String logout(Instructor instructors) {
         return ("Instructor " + instructors.getName() + " logged out.");
-
     }
 
     public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
@@ -56,7 +45,7 @@ public class Instructor extends User<Instructor> {
                 c.getEnrolledStudents();
 
                 // Make sure there are actually students enrolled in the course.
-                //Update the list.
+                // Update the list.
                 List<Student> courseStudents = c.getEnrolledStudents();
                 if (courseStudents == null || courseStudents.isEmpty()) {
                     System.out.println("No students enrolled in this course.");
@@ -115,7 +104,8 @@ public class Instructor extends User<Instructor> {
         }
     }
 
-    public void updateInstructorPersonalInfo(List<Instructor> instructors, String instructorTargetId, String newPassword, String newEmail,
+    public void updateInstructorPersonalInfo(List<Instructor> instructors, String instructorTargetId,
+            String newPassword, String newEmail,
             String newPhoneNumber,
             String newAddress) {
         Instructor instructorFound = null;
