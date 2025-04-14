@@ -8,7 +8,7 @@ public class Course {
     public enum EnrollmentStatusEnum {
         Closed,
         Open
-    };
+    }
 
     // Attributes
     private String courseName, courseCode, schedule, description;
