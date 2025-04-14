@@ -15,7 +15,7 @@ public class Course {
     private EnrollmentStatusEnum enrollmentStatus;
     private Instructor instructor;
     private int capacity;
-    private List<Assesment> grades;
+    private List<Assessment> grades;
     private int creditHours;
 
     // Fixes java.lang.StackOverflowError
@@ -23,7 +23,7 @@ public class Course {
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
-            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, List<Assesment> grades,
+            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, List<Assessment> grades,
             int creditHours) {
         setCourseName(courseName);
         setCourseCode(courseCode);
@@ -34,7 +34,9 @@ public class Course {
         setCapacity(capacity);
         setAssesment(grades);
         setCreditHours(creditHours);
-
+        // Make sure enrolledStudents is initialized when a Course is created to avoid
+        // null.
+        this.enrolledStudents = new ArrayList<>();
     }
 
     public void setEnrolledStudents(List<Student> enrolledStudents) {
@@ -141,11 +143,11 @@ public class Course {
         }
     }
 
-    public List<Assesment> getGrades() {
+    public List<Assessment> getGrades() {
         return grades;
     }
 
-    public List<Assesment> setAssesment(List<Assesment> grades) {
+    public List<Assessment> setAssesment(List<Assessment> grades) {
         if (grades == null) {
             this.grades = null;
             return null;
@@ -155,7 +157,7 @@ public class Course {
         }
     }
 
-    public void setGrades(List<Assesment> grades) {
+    public void setGrades(List<Assessment> grades) {
         if (grades == null) {
             this.grades = null;
         } else {
@@ -164,16 +166,12 @@ public class Course {
     }
 
     // Methods
-    public void viewGrades(Assesment grades) {
+    public void viewGrades(Assessment grades) {
 
     }
 
     // Check if the course is full
     public boolean isFull() {
-        if (this.getEnrolledStudents().size() >= capacity) {
-            return true;
-        } else {
-            return false;
-        }
+        return enrolledStudents != null && this.getEnrolledStudents().size() >= capacity;
     }
 }
