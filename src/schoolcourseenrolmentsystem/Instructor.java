@@ -5,27 +5,24 @@ import java.util.List;
 
 public class Instructor extends User<Instructor> {
     // Constructor
-    public Instructor(String name, String id, String password, String email, String phoneNumber, String role,
-            String address, List<Student> enrolledStudents) {
+    public Instructor(String name, String id, String password, String email, String phoneNumber,
+            User.Role role, String address, List<Student> enrolledStudents) {
         super(name, id, password, email, phoneNumber, role, address);
+        // If you store enrolled students, save them here
     }
 
     // Methods
-    @Override
-    public String getRole() {
-        return "Instructor"; // Return the role for Instructor
-    }
 
     @Override
     public Instructor login(List<Instructor> instructors, String id, String password) {
         for (Instructor i : instructors) {
             if (i.getId().equals(id) && i.getPassword().equals(password)) {
                 System.out.println("Instructor " + i.getName() + " logged in.");
-                return i;   
+                return i;
             }
         }
-            System.out.println("No instructor record was found with the ID and password provided.");
-            return null;
+        System.out.println("No instructor record was found with the ID and password provided.");
+        return null;
     }
 
     @Override

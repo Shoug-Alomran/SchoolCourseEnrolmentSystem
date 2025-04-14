@@ -6,10 +6,10 @@ import schoolcourseenrolmentsystem.Course.EnrollmentStatusEnum;
 
 public class Administrator extends User<Administrator> {
     // Constructor
-    public Administrator(String name, String id, String password, String email, String phoneNumber, String role,
-            String address) {
+    public Administrator(String name, String id, String password, String email, String phoneNumber, User.Role role, String address) {
         super(name, id, password, email, phoneNumber, role, address);
     }
+    
 
     // Methods
 
@@ -32,17 +32,12 @@ public class Administrator extends User<Administrator> {
         return ("Administrator " + administrators.getName() + " logged out.");
     }
 
-    @Override
-    public String getRole() {
-        return "Administrator"; // Return the role for Administrator
-    }
-
     // 1. Manage student & instructor accounts
     // Add and remove users
 
     public boolean removeStudent(List<Student> students, String targetId) {
         // Loop used to iterate over all the students.
-         // An Iterator keeps track of the current position safely, and when you call
+        // An Iterator keeps track of the current position safely, and when you call
         // remove(), it tells the collection to safely remove the current element
         // without invalidating the loop.
         Iterator<Student> iterator = students.iterator();
@@ -99,7 +94,7 @@ public class Administrator extends User<Administrator> {
 
     public void updateStudent(String targetId, List<Student> students, String newName, String newId, String newPassword,
             String newEmail,
-            String newPhoneNumber, String newRole, String newAddress) {
+            String newPhoneNumber, User.Role newRole, String newAddress) {
 
         Student updateStudentInfo = null;
         for (Student s : students) {
@@ -126,7 +121,7 @@ public class Administrator extends User<Administrator> {
     public void updateInstructor(String targetId, List<Instructor> instructors, String newName,
             String newPassword,
             String newEmail,
-            String newPhoneNumber, String newRole, String newAddress) {
+            String newPhoneNumber, User.Role newRole, String newAddress) {
 
         Instructor updateInstructorInfo = null;
         for (Instructor i : instructors) {

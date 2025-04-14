@@ -11,7 +11,7 @@ public class Student extends User<Student> {
     // Constructor
     public Student(String name, String id, String password, String email, String phoneNumber, String role,
             String address, int creditLimit, List<Course> enrolledCourses) {
-        super(name, id, password, email, phoneNumber, role, address);
+        super(name, id, password, email, phoneNumber, Role.STUDENT, address);
         setCreditLimit(creditLimit);
         // If the list is null, create a new one. Fixes NullPointerException.
         if (enrolledCourses != null) {
@@ -35,10 +35,6 @@ public class Student extends User<Student> {
     }
 
     // Methods
-    @Override
-    public String getRole() {
-        return "Student"; // Return the role for Student
-    }
 
     @Override
     public Student login(List<Student> students, String id, String password) {

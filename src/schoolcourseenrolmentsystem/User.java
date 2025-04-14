@@ -5,12 +5,17 @@ import java.util.List;
 
 public abstract class User<T> {
     // Attributes
+    public enum Role {
+        STUDENT,
+        INSTRUCTOR,
+        ADMIN;
+    }
     private String name, id, password, email, phoneNumber;
-    private String role, address;
+    private Role role;
+    private String address;
 
     // Constructor
-    public User(String name, String id, String password, String email, String phoneNumber, String role,
-            String address) {
+    public User(String name, String id, String password, String email, String phoneNumber, Role role, String address){
         setName(name);
         setId(id);
         setPassword(password);
@@ -86,19 +91,8 @@ public abstract class User<T> {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        if (role == null || role.isEmpty()) {
-        System.out.println("Role can't be null or empty.");
-        return;
-        } else {
-        this.role = role;
-        }
-    }
-
+   
+   
     public String getAddress() {
         return address;
     }
@@ -115,4 +109,16 @@ public abstract class User<T> {
     public abstract T login(List<T> list, String id, String password);
 
     public abstract String logout(T user);
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        if (role == null) {
+            System.out.println("Role can't be null.");
+            return;
+        }
+        this.role = role;
+    }
 }
