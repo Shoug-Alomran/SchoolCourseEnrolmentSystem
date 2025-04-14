@@ -56,12 +56,12 @@ public class Instructor extends User<Instructor> {
                 c.getEnrolledStudents();
 
                 // Make sure there are actually students enrolled in the course.
-                if (enrolledStudents.isEmpty()) {
-                    // Will return true if its indeed empty whuch will trigger this message.
+                //Update the list.
+                List<Student> courseStudents = c.getEnrolledStudents();
+                if (courseStudents == null || courseStudents.isEmpty()) {
                     System.out.println("No students enrolled in this course.");
                 } else {
-                    // This part will be triggered if the code above it is false.
-                    for (Student s : enrolledStudents) {
+                    for (Student s : courseStudents) {
                         System.out.println("Student: " + s.getName() + ", ID: " + s.getId()
                                 + ", Email: " + s.getEmail() + ", Phone number: " + s.getPhoneNumber() + ".");
                     }
