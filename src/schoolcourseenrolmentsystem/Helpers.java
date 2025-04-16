@@ -73,13 +73,15 @@ public class Helpers {
         String email = null;
         boolean validEmail = false;
         while (!validEmail) {
-            System.out.print("Enter email: ");
             String inputCorrectEmail = input.nextLine();
             try {
                 if (inputCorrectEmail.contains("@") && inputCorrectEmail.contains(".")) {
                     tempUser.setEmail(inputCorrectEmail);
                     email = inputCorrectEmail;
                     validEmail = true;
+                } else {
+                    System.out.println("Invalid email format. Please include '@' and a domain (e.g., '.com').");
+                    System.out.print("Re-enter email: ");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -111,13 +113,15 @@ public class Helpers {
         String address = null;
         boolean validAddress = false;
         while (!validAddress) {
-            System.out.print("Enter address: ");
             String inputCorrectAddress = input.nextLine();
             try {
                 if (inputCorrectAddress.length() > 0) {
                     tempUser.setAddress(inputCorrectAddress);
                     address = inputCorrectAddress;
                     validAddress = true;
+                } else {
+                    System.out.println("Invalid address.");
+                    System.out.println("Re-enter address: ");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -130,13 +134,15 @@ public class Helpers {
         String id = null;
         boolean validID = false;
         while (!validID) {
-            System.out.print("Enter ID: ");
             String inputCorrectID = input.nextLine();
             try {
                 if (inputCorrectID.length() > 0) {
                     tempUser.setId(inputCorrectID);
                     id = inputCorrectID;
                     validID = true;
+                } else {
+                    System.out.println("Invalid ID.");
+                    System.out.println("Re-enter ID: ");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -149,13 +155,15 @@ public class Helpers {
         String name = null;
         boolean validName = false;
         while (!validName) {
-            System.out.print("Enter individuals name: ");
             String inputCorrectName = input.nextLine();
             try {
                 if (inputCorrectName.length() > 0) {
                     tempUser.setName(inputCorrectName);
                     name = inputCorrectName;
                     validName = true;
+                } else {
+                    System.out.println("Invalid name format.");
+                    System.out.println("Re-enter name: ");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -280,7 +288,7 @@ public class Helpers {
     }
 
     // needs acutal logic ^
-    public static void instructorCase3(Instructor instructor, List<Course> courses, Scanner input) {
+    public static void instructorCase3(Instructor instructor, Set<Course> courses, Scanner input) {
         System.out.print("\nEnter the course code  of the course you would like to update: ");
         String courseCode = input.next();
         input.nextLine(); // Buffer
@@ -294,8 +302,7 @@ public class Helpers {
         instructor.updateCourseInfo(courseCode, courses, newSchedule, newDescription);
     }
 
-    public static void instructorCase4(Instructor instructor, List<Course> courses, List<Instructor> instructors,
-            Scanner input) {
+    public static void instructorCase4(Instructor instructor, Scanner input) {
         System.out.println("\nPlease fill out the form to update your profile.");
 
         // Start with default (existing) values
@@ -352,11 +359,11 @@ public class Helpers {
         } else if (addressChoice == 2) {
             System.out.println("Address number remains unchanged.");
         }
-        instructor.updateInstructorPersonalInfo(instructors, newAddress, newPassword, newEmail, newPhone, newAddress);
+        instructor.updateInstructorPersonalInfo(newPassword, newEmail, newPhone, newAddress);
     }
 
     // STUDENT CASES
-    public static void studentCase1(List<Course> courses, Student student, Scanner input) {
+    public static void studentCase1(Set<Course> courses, Student student, Scanner input) {
         System.out.println("Courses avaliable to enroll in: ");
         // Sub-List to the main
         List<Course> availableCourses = new ArrayList<>();
@@ -388,7 +395,7 @@ public class Helpers {
         }
     }
 
-    public static void studentCase5(List<Course> courses, Student student, Scanner input) {
+    public static void studentCase5(Set<Course> courses, Student student, Scanner input) {
         System.out.print(
                 "\nEnter course code of the course you would like to drop: ");
         String dropCourseCode = input.next();
@@ -411,7 +418,7 @@ public class Helpers {
 
     }
 
-    public static void studentCase7(Student student, List<Student> students, Scanner input) {
+    public static void studentCase7(Student student, Scanner input) {
         System.out.println("\nPlease enter the needed information to update your profile.");
         // Start with default (existing) values
         String newPassword = student.getPassword();
@@ -468,43 +475,56 @@ public class Helpers {
         } else if (addressChoice == 2) {
             System.out.println("Address number remains unchanged.");
         }
-        student.updatePersonalInfo(students, newAddress, newPassword, newEmail, newPhone, newAddress);
+        student.updatePersonalInfo(newPassword, newEmail, newPhone, newAddress);
     }
 
     // ADMIN CASES
-    public static void adminCase1(Administrator administrator, List<Student> students, Scanner input) {
+    public static void adminCase1(Administrator administrator, List<Student> students, Set<String> allUserIds,
+            Scanner input) {
         System.out.println("\nEnter the number for the option you desire.");
         System.out.println("1. Add student.");
         System.out.println("2. Remove student.");
         int remove_add = input.nextInt();
         input.nextLine(); // buffer
         if (remove_add == 1) {
-            System.out.print("\nEnter student name: ");
-            String name = input.nextLine();
-
-            System.out.print("\nEnter student ID: ");
-            String ID = input.next();
-            input.nextLine(); // Buffer
-
             Student tempStudent = new Student("temp", "temp", "temp", "temp", "temp",
                     "temp", "temp", 0, null);
+            System.out.print("\nEnter student name: ");
+            String name = Helpers.checkValidityOfName(input, tempStudent);
+
+            // Check if ID already exists; if the ID exists the admin is prompted to enter
+            // different ID without going back to main menu.
+            String ID;
+            while (true) {
+                System.out.print("\nEnter student ID: ");
+                String inputId = input.next();
+                input.nextLine(); // Buffer
+
+                if (allUserIds.contains(inputId)) {
+                    System.out.println("ID already in use. Please try a different one.");
+                } else {
+                    ID = inputId;
+                    tempStudent.setId(ID);
+                    break; // valid and unique ID, exit the loop
+                }
+            }
+            System.out.println("");
             String password = Helpers.checkValidityOfPassword(input, tempStudent);
 
             System.out.print("\nEnter email: ");
             String email = Helpers.checkValidityOfEmail(input, tempStudent);
-
-            System.out.print("\nEnter phone number: ");
+            System.out.println("");
             String phoneNumber = Helpers.checkValidityOfPhoneNumber(input, tempStudent);
-
             System.out.print("\nEnter address: ");
-            String address = Helpers.checkValidityOfAddress(input, null);
+            String address = Helpers.checkValidityOfAddress(input, tempStudent);
 
             System.out.print("\nEnter credit limit: ");
             int creditLimit = input.nextInt();
             input.nextLine(); // Buffer
-            // input.close();
+
             Student newStudent = new Student(name, ID, password, email, phoneNumber, "Student", address, creditLimit,
                     new ArrayList<>());
+            allUserIds.add(ID);
             administrator.addStudent(newStudent, students);
 
         } else if (remove_add == 2) {
@@ -517,7 +537,8 @@ public class Helpers {
         }
     }
 
-    public static void adminCase2(Administrator administrator, List<Instructor> instructors, Scanner input) {
+    public static void adminCase2(Administrator administrator, List<Instructor> instructors, Set<String> allUserIds,
+            Scanner input) {
         System.out.println("1. Add instructor.");
         System.out.println("2. Remove instructor.");
         int add_remove = Helpers.getSafeIntInput(input, "Option: ");
@@ -528,18 +549,35 @@ public class Helpers {
                     User.Role.INSTRUCTOR, "temp", new ArrayList<>());
             System.out.print("\nEnter instructor name: ");
             String name = Helpers.checkValidityOfName(input, tempInstructor);
-            String ID = Helpers.checkValidityOfID(input, tempInstructor);
+            // Check if ID already exists; if the ID exists the admin is prompted to enter
+            // different ID without going back to main menu.
+            String ID;
+            while (true) {
+                System.out.print("\nEnter instructor ID: ");
+                String inputId = input.next();
+                input.nextLine(); // Buffer
+
+                if (allUserIds.contains(inputId)) {
+                    System.out.println("ID already in use. Please try a different one.");
+                } else {
+                    ID = inputId;
+                    tempInstructor.setId(ID);
+                    break; // valid and unique ID, exit the loop
+                }
+            }
 
             // This will validate input and set it only if correct
             String password = Helpers.checkValidityOfPassword(input, tempInstructor);
+            System.out.print("Enter email: ");
             String email = Helpers.checkValidityOfEmail(input, tempInstructor);
+
             String phoneNumber = Helpers.checkValidityOfPhoneNumber(input, tempInstructor);
+            System.out.print("\nEnter address: ");
             String address = Helpers.checkValidityOfAddress(input, tempInstructor);
 
-            Instructor newInstructor = new Instructor(
-                    name, ID, password, email, phoneNumber,
+            Instructor newInstructor = new Instructor(name, ID, password, email, phoneNumber,
                     User.Role.INSTRUCTOR, address, new ArrayList<>());
-
+            allUserIds.add(ID);
             administrator.addInstructor(newInstructor, instructors);
 
         } else if (add_remove == 2) {
@@ -552,7 +590,7 @@ public class Helpers {
         }
     }
 
-    public static void adminCase3(Administrator administrator, List<Course> courses, List<Instructor> instructors,
+    public static void adminCase3(Administrator administrator, Set<Course> courses, List<Instructor> instructors,
             Scanner input) {
         System.out.println("\nEnter the course's information that you would like to add.");
         System.out.print("\nEnter course name: ");
@@ -643,7 +681,7 @@ public class Helpers {
 
             // Option to update name
             System.out.println(
-                    "Would you like to update " + studentToUpdate.getName() + " name?");
+                    "Would you like to update " + studentToUpdate.getName() + "'s name?");
             System.out.println("1. Yes");
             System.out.println("2. No");
             int nameChoice = input.nextInt();
@@ -655,7 +693,7 @@ public class Helpers {
                 System.out.println("Name remains unchanged.");
             }
             // Option to update ID
-            System.out.println("Do you want to change " + studentToUpdate.getName() + " ID?");
+            System.out.println("Do you want to change " + studentToUpdate.getName() + "'s ID?");
             System.out.println("1. Yes");
             System.out.println("2. No");
             int IDChoice = input.nextInt();
@@ -779,9 +817,8 @@ public class Helpers {
             String newAddress = instructorToUpdate.getAddress();
 
             // Option to update name
-            System.out
-                    .println("Would you like to update " + instructorToUpdate.getName()
-                            + "'s name?");
+            System.out.println("Would you like to update " + instructorToUpdate.getName()
+                    + "'s name?");
             System.out.println("1. Yes");
             System.out.println("2. No");
             int nameChoice = input.nextInt();
@@ -832,7 +869,6 @@ public class Helpers {
                 System.out.print("Enter new phone number: ");
                 newPhone = Helpers.checkValidityOfPhoneNumber(input, instructorToUpdate);
                 instructorToUpdate.setPhoneNumber(newPhone);
-                ;
             } else if (phoneNumberChoice == 2) {
                 System.out.println("Phone number remains unchanged.");
             }
@@ -866,15 +902,18 @@ public class Helpers {
         }
     }
 
-    public static void adminCase6(Administrator administrator, List<Course> courses,
+    public static void adminCase6(Administrator administrator, Set<Course> courses,
             List<Instructor> instructors, Scanner input) {
         // Show the admin the avaliale courses to pick from.
         System.out.println("\nAvailable Courses:");
+        List<Course> courseList = new ArrayList<>(courses); // Convert Set to List to be able to use i.get().
+
         for (int i = 0; i < courses.size(); i++) {
             // The i+1 is for the indext of which the admin will select. The i is for 'this'
             // spesific course.
-            System.out.println((i + 1) + ". " + courses.get(i).getCourseName() + " (Code: "
-                    + courses.get(i).getCourseCode() + ")");
+            Course c = courseList.get(i);
+            System.out.println((i + 1) + ". " + c.getCourseName() + " (Code: "
+                    + c.getCourseCode() + ")");
         }
         System.out.print("Enter the number of the course to assign the instructor to: ");
         int courseIndex = input.nextInt() - 1;
@@ -885,7 +924,7 @@ public class Helpers {
             System.out.println("Invalid course selection.");
             return;
         }
-        Course selectedCourse = courses.get(courseIndex);
+        Course selectedCourse = courseList.get(courseIndex);
 
         System.out.print("Enter the ID of the instructor to assign: ");
         String instructorID2 = input.next();
@@ -906,7 +945,7 @@ public class Helpers {
         }
     }
 
-    public static void adminCase7(Administrator administrator, List<Course> courses,
+    public static void adminCase7(Administrator administrator, Set<Course> courses,
             Scanner input) {
         System.out.println("\nEnter the details requiered to close the course.");
         System.out.print("\nEnter course name: ");
@@ -936,5 +975,4 @@ public class Helpers {
     public static void adminCase9() {
 
     }
-
 }
