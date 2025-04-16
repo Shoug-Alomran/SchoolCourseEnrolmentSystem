@@ -14,8 +14,9 @@ public class SchoolCourseEnrolmentSystem {
     private static List<Instructor> instructors = new ArrayList<>();
     private static List<Administrator> administrators = new ArrayList<>();
     private static List<Student> students = new ArrayList<>();// List to store enrolled students
-    private static List<Course> courses = new ArrayList<>(); // List to store courses
-
+    private static Set<Course> courses = new HashSet<>(); // List to store courses based on unique key, no duplicates allowed.
+    private static Set<String> allUserIds = new HashSet<>(); // We don't want duplicates.
+    
     public static void main(String[] args) {
         // I'm putting them outside the switch because multiple cases use them so this
         // helps my code be less dense.
@@ -56,7 +57,7 @@ public class SchoolCourseEnrolmentSystem {
                     boolean studentExit = false;
                     while (!studentExit) {
                         Helpers.showStudentMenu();
-                        int studentChoice = Helpers.getSafeIntInput(input, "Enter your option: ");
+                        int studentChoice = Helpers.getSafeIntInput(input, "Enter your choice: ");
 
                         switch (studentChoice) {
                             case 1:
@@ -78,7 +79,7 @@ public class SchoolCourseEnrolmentSystem {
 
                                 break;
                             case 7:
-                                Helpers.studentCase7(student, students, input);
+                                Helpers.studentCase7(student, input);
                                 break;
                             case 8:
                                 student.logout(student);
@@ -111,7 +112,7 @@ public class SchoolCourseEnrolmentSystem {
                     boolean exitInstructor = false;
                     while (!exitInstructor) {
                         Helpers.showInstructorMenu();
-                        int instructorChoice = Helpers.getSafeIntInput(input, "Enter your option: ");
+                        int instructorChoice = Helpers.getSafeIntInput(input, "Enter your choice: ");
                         input.nextLine(); // Buffer
 
                         switch (instructorChoice) {
@@ -126,7 +127,7 @@ public class SchoolCourseEnrolmentSystem {
                                 Helpers.instructorCase3(instructor, courses, input);
                                 break;
                             case 4:
-
+                                Helpers.instructorCase4(instructor, input);
                                 break;
                             case 5:
                                 instructor.logout(instructor);
@@ -163,10 +164,10 @@ public class SchoolCourseEnrolmentSystem {
 
                         switch (adminChoice) {
                             case 1:
-                                Helpers.adminCase1(administrator, students, input);
+                                Helpers.adminCase1(administrator, students,allUserIds, input);
                                 break;
                             case 2:
-                                Helpers.adminCase2(administrator, instructors, input);
+                                Helpers.adminCase2(administrator, instructors, allUserIds, input);
                                 break;
                             case 3:
                                 Helpers.adminCase3(administrator, courses, instructors, input);
