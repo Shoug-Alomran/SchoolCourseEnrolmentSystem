@@ -1,13 +1,11 @@
 package schoolcourseenrolmentsystem;
 
 import java.util.*;
-//import schoolcourseenrolmentsystem.Helpers.*;
 
 public class SchoolCourseEnrolmentSystem {
 
     // To achieve data constiencey, we instantiate the main lists in here and pass
     // them along other functions to act upon them.
-    // Buffer used after each input.nextInt();
 
     // MAIN LISTS
     private static List<Instructor> Instructors = new ArrayList<>();
@@ -95,7 +93,6 @@ public class SchoolCourseEnrolmentSystem {
                         while (!exitInstructor) {
                             Helpers.showInstructorMenu();
                             int instructorChoice = Helpers.getSafeIntInput("Enter your choice: ");
-                            input.nextLine(); // Buffer
 
                             switch (instructorChoice) {
                                 case 1:
@@ -104,7 +101,6 @@ public class SchoolCourseEnrolmentSystem {
                                     break;
                                 case 2:
                                     Helpers.editStudentGrades();
-                                    ;
                                     break;
                                 case 3:
                                     Helpers.updateCourseInfo(instructor, Courses);
@@ -173,7 +169,7 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.generateReports();
                                     break;
                                 case 12:
-                                    System.out.println(administrator.logout(administrator));
+                                    administrator.logout(administrator);
                                     exitAdmin = true;
                                     break;
                                 default:
@@ -193,7 +189,7 @@ public class SchoolCourseEnrolmentSystem {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
-            input.close();
+            // input.close();
         }
     }
 }
