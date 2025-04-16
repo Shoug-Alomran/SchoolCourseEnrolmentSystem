@@ -81,7 +81,6 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
-
         }
         return isValid;
     }
@@ -93,7 +92,6 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
-
         }
         return isValid;
     }
@@ -106,7 +104,6 @@ public class Helpers {
             }
         } catch (Exception e) {
         }
-
         return isValid;
     }
 
@@ -161,7 +158,6 @@ public class Helpers {
             }
             return number;
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
             return -1;
         } finally {
             input2.close();
@@ -238,7 +234,6 @@ public class Helpers {
             }
 
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
@@ -246,7 +241,6 @@ public class Helpers {
 
     // needs acutal logic ^
     public static void updateCourseInfo(Instructor instructor, List<Course> courses) {
-
         try {
             System.out.print("\nEnter the course code  of the course you would like to update: ");
             String courseCode = input.next();
@@ -260,7 +254,6 @@ public class Helpers {
 
             instructor.updateCourseInfo(courseCode, courses, newSchedule, newDescription);
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
@@ -269,7 +262,6 @@ public class Helpers {
     public static void updateInstructorProfile(Instructor instructor) {
         try {
             System.out.println("\nPlease fill out the form to update your profile.");
-
             // Start with default (existing) values
             String newPassword = instructor.getPassword();
             String newEmail = instructor.getEmail();
@@ -355,11 +347,9 @@ public class Helpers {
             instructor.updateInstructorPersonalInfo(newPassword, newEmail, newPhone, newAddress);
             System.out.println("Instructor " + instructor.getName() + "'s information updated.");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
-
     }
 
     // STUDENT CASES
@@ -371,8 +361,6 @@ public class Helpers {
             int index = 1;
 
             for (Course c : courses) {
-                // Validate that the course is not full, not closed, and doesnt already contain
-                // the same course
                 if (!c.isFull() && c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open
                         && !student.getEnrolledCourses().contains(c)) {
                     // List the avaliable courses
@@ -395,7 +383,6 @@ public class Helpers {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -420,11 +407,9 @@ public class Helpers {
                 System.out.println("No course found with the code" + dropCourseCode + "'.");
             }
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
-
     }
 
     public static void viewGradesStudent() {
@@ -529,11 +514,9 @@ public class Helpers {
             student.updatePersonalInfo(newPassword, newEmail, newPhone, newAddress);
 
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
-
     }
 
     // ADMIN CASES
@@ -595,7 +578,7 @@ public class Helpers {
                 // Address
                 System.out.print("\nEnter address: ");
                 String addressInput = input.nextLine();
-                while (Helpers.ValidateAddress(addressInput)) {
+                while (!Helpers.ValidateAddress(addressInput)) {
                     System.out.println("Invalid address. Please try again.");
                     System.out.print("Enter address: ");
                     addressInput = input.nextLine();
@@ -626,7 +609,6 @@ public class Helpers {
             administrator.removeStudent(students, targetId);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -656,7 +638,6 @@ public class Helpers {
                     if (instructor.getId().equals(ID)) {
                         System.out.println("ID already in use. Please try a different one.");
                         break;
-
                     }
                 }
                 break;
@@ -704,7 +685,6 @@ public class Helpers {
                     emailInstructor, phoneNumberInstructor, User.Role.INSTRUCTOR, addressInstructor, null);
             administrator.addInstructor(newInstructor, instructors);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -718,7 +698,6 @@ public class Helpers {
             input.nextLine(); // Buffer
             administrator.removeInstructor(instructors, targetId);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -780,7 +759,6 @@ public class Helpers {
             }
             administrator.addCourse(courses, newCourse);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -934,11 +912,9 @@ public class Helpers {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
-
     }
 
     public static void adminUpdateInstructorProfile(Administrator administrator, List<Instructor> instructors) {
@@ -992,7 +968,6 @@ public class Helpers {
                 } else if (nameChoice == 2) {
                     System.out.println("Name remains unchanged.");
                 }
-
                 // Option to update password
                 System.out.println(
                         "Do you want to change " + instructorToUpdate.getName() + "'s password?");
@@ -1013,7 +988,6 @@ public class Helpers {
                 } else if (passwordChoice == 2) {
                     System.out.println("Password number remains unchanged.");
                 }
-
                 // Option to update email
                 System.out.println(
                         "Do you want to change " + instructorToUpdate.getEmail() + "'s email?");
@@ -1034,7 +1008,6 @@ public class Helpers {
                 } else if (emailChoice == 2) {
                     System.out.println("Email remains unchanged.");
                 }
-
                 // Option to update phone number
                 System.out.println(
                         "Do you want to change " + instructorToUpdate.getName()
@@ -1056,7 +1029,6 @@ public class Helpers {
                 } else if (phoneNumberChoice == 2) {
                     System.out.println("Phone number remains unchanged.");
                 }
-
                 // Option to update role
                 System.out.println(
                         "Do you want to change " + instructorToUpdate.getName() + "'s role?");
@@ -1070,7 +1042,6 @@ public class Helpers {
                 } else if (roleChoice == 2) {
                     System.out.println("Role remains unchanged.");
                 }
-
                 // Option to update address
                 System.out.println(
                         "Do you want to change" + instructorToUpdate.getName() + "'s address?");
@@ -1092,7 +1063,6 @@ public class Helpers {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             input.close();
         }
@@ -1136,9 +1106,7 @@ public class Helpers {
             } else {
                 System.out.println("Instructor with ID " + instructorID2 + " not found.");
             }
-
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
@@ -1166,7 +1134,6 @@ public class Helpers {
                 System.out.println("Course not found.");
             }
         } catch (Exception e) {
-            System.out.println("Validation error: " + e.getMessage());
         } finally {
             input.close();
         }
