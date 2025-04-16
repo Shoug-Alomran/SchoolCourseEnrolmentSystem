@@ -1,12 +1,11 @@
 
 package schoolcourseenrolmentsystem;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Instructor extends User<Instructor> {
     // Constructor
+    public Instructor() {}
     public Instructor(String name, String id, String password, String email, String phoneNumber,
             User.Role role, String address, List<Student> enrolledStudents) {
         super(name, id, password, email, phoneNumber, role, address);
@@ -48,7 +47,7 @@ public int hashCode() {
 }
 
 
-    public void viewEnrolledStudents(Instructor instructor, Set<Course> courses) {
+    public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
         boolean enrolledCourse = false;
         // Look through all the courses
         for (Course c : courses) {
@@ -83,7 +82,7 @@ public int hashCode() {
 
     }
 
-    public void updateCourseInfo(String courseCode, Set<Course> courses, String newSchedule, String newDescription) {
+    public void updateCourseInfo(String courseCode, List<Course> courses, String newSchedule, String newDescription) {
         // We must make sure that the course actually even exists.
         Course courseNotFound = new Course(courseCode, courseCode, newSchedule, newDescription, null, null, 0, null, 0);
         // This following block is created for when the course actually exists.

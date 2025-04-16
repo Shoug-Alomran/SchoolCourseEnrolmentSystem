@@ -5,6 +5,7 @@ import java.util.List;
 
 public abstract class User<T> {
     // Attributes
+    // enum is short for enumeration
     public enum Role {
         STUDENT,
         INSTRUCTOR,
@@ -14,6 +15,7 @@ public abstract class User<T> {
     private Role role;
     private String address;
 
+    public User() {}
     // Constructor
     public User(String name, String id, String password, String email, String phoneNumber, Role role, String address){
         setName(name);

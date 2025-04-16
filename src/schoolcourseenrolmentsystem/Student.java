@@ -8,9 +8,11 @@ public class Student extends User<Student> {
     private int creditLimit;
     private List<Course> enrolledCourses;
 
+    public Student() {
+        
+    }
     // Constructor
-    public Student(String name, String id, String password, String email, String phoneNumber, String role,
-            String address, int creditLimit, List<Course> enrolledCourses) {
+    public Student(String name, String id, String password, String email, String phoneNumber, String address, int creditLimit, List<Course> enrolledCourses) {
         super(name, id, password, email, phoneNumber, Role.STUDENT, address);
         setCreditLimit(creditLimit);
         // If the list is null, create a new one. Fixes NullPointerException.
@@ -153,7 +155,7 @@ public class Student extends User<Student> {
 
     }
 
-    public void viewAvailableCourses(Set<Course> courses) {
+    public void viewAvailableCourses(List<Course> courses) {
         boolean avaliableCourses = false;
         System.out.println("Available courses are: ");
         for (Course c : courses) {

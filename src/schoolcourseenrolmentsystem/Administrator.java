@@ -5,26 +5,32 @@ import java.util.*;
 import schoolcourseenrolmentsystem.Course.EnrollmentStatusEnum;
 
 public class Administrator extends User<Administrator> {
-    // Constructor
-    public Administrator(String name, String id, String password, String email, String phoneNumber, User.Role role, String address) {
-        super(name, id, password, email, phoneNumber, role, address);
+    // Constructors
+    // We must define the default constructor in case we define any other custom
+    // constructors
+    public Administrator() {
     }
-    
+
+    public Administrator(String name, String id, String password, String email, String phoneNumber, String address) {
+        super(name, id, password, email, phoneNumber, User.Role.ADMIN, address);
+    }
 
     // Methods
 
     // Login/logout & role
     @Override
     public Administrator login(List<Administrator> administrators, String id, String password) {
-        for (Administrator a : administrators) {
-            if (a.getId().equals(id) && a.getPassword().equals(password)) {
-                System.out.println("Administrator " + a.getName() + " logged in.");
-                return a;
+        Administrator returnAdmin = null;
+        for (Administrator administrator : administrators) {
+            if (administrator.getId().equals(id) && administrator.getPassword().equals(password)) {
+                System.out.println("Administrator " + administrator.getName() + " logged in.");
+                returnAdmin = administrator;
+                break;
             }
+            System.out.println("No admin record was found with the ID and password provided.");
         }
-        System.out.println("No admin record was found with the ID and password provided.");
-        return null; // Return null if no match is found
 
+        return returnAdmin;
     }
 
     @Override
@@ -73,14 +79,14 @@ public class Administrator extends User<Administrator> {
     }
 
     public void addInstructor(Instructor i, List<Instructor> instructors) {
-            instructors.add(i);
-            System.out.println("Instructor added: " + i.getName()+ " with the ID: " + i.getId());
+        instructors.add(i);
+        System.out.println("Instructor added: " + i.getName() + " with the ID: " + i.getId());
     }
 
     public void addStudent(Student s, List<Student> students) {
-            students.add(s);
-            System.out.println("Student added: " + s.getName() + " with the ID: " + s.getId());
-       
+        students.add(s);
+        System.out.println("Student added: " + s.getName() + " with the ID: " + s.getId());
+
     }
 
     // Update user info.
@@ -136,7 +142,7 @@ public class Administrator extends User<Administrator> {
 
     // 2. Create & manage courses.
     // Create a new course
-    public void addCourse(Set<Course> courses, Course c) {
+    public void addCourse(List<Course> courses, Course c) {
         if (courses.add(c)) {
             System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ") succesfully.");
         } else {
@@ -156,7 +162,7 @@ public class Administrator extends User<Administrator> {
     }
 
     // Closes course when capacity is full or closed
-    public void closeCourse(Course c, Set<Course> courses) {
+    public void closeCourse(Course c, List<Course> courses) {
         if (courses.contains(c)) {
             if (c.getEnrolledStudents().size() >= c.getCapacity()) {
                 System.out.println(c.getCourseName() + " is at full capacity.");
@@ -182,5 +188,4 @@ public class Administrator extends User<Administrator> {
     public void generateReports() {
 
     }
-    // input.close();
 }

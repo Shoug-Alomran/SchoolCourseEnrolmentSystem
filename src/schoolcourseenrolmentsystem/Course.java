@@ -38,6 +38,8 @@ public class Course {
         // null.
         this.enrolledStudents = new ArrayList<>();
     }
+    public Course() {
+    }
 
     public void setEnrolledStudents(List<Student> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
@@ -168,6 +170,7 @@ public class Course {
     @Override
     public int hashCode() {
         // HashSet uses hashCode() rely on it to quickly locate objects
+        
         return Objects.hash(courseCode.toLowerCase());
     }
 
