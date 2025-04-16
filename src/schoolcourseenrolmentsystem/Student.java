@@ -53,6 +53,21 @@ public class Student extends User<Student> {
         return ("Student " + student.getName() + " logged out.");
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Student other = (Student) obj;
+        return this.getId() != null && this.getId().equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
     // Count the hours of the courses already enrolled
     public int totalCreditLimit() {
         int total = 0;
@@ -76,8 +91,10 @@ public class Student extends User<Student> {
         else if (totalCreditLimit() + c.getCreditHours() > creditLimit) {
             System.out.println("Cannot enroll in " + c.getCourseName() + " — credit limit exceeded.");
         } else {
-            // Needed inorder for the course to know who enrolled.
+            /// Adding the current student to the course's list of enrolled students.
             c.getEnrolledStudents().add(this);
+            /// Adding the course to the student's list of enrolled courses.
+            this.enrolledCourses.add(c);
             System.out.println(getName() + " enrolled successfully");
         }
     }
@@ -136,7 +153,7 @@ public class Student extends User<Student> {
 
     }
 
-    public void viewAvailableCourses(List<Course> courses) {
+    public void viewAvailableCourses(Set<Course> courses) {
         boolean avaliableCourses = false;
         System.out.println("Available courses are: ");
         for (Course c : courses) {
@@ -152,27 +169,14 @@ public class Student extends User<Student> {
         }
     }
 
-    public void updatePersonalInfo(List<Student> students, String targetId, String newPassword, String newEmail,
+    public void updatePersonalInfo(String newPassword, String newEmail,
             String newPhoneNumber,
             String newAddress) {
-        // Initialize a variable to store the matched student
-        Student studentFound = null;
-        /// Search for the student with the given ID in the list
-        for (Student s : students) {
-            if (s.getId().equals(targetId)) {
-                studentFound = s;
-                break;
-            }
-        }
-        // If the student is found, update their information
-        if (studentFound != null) {
-            studentFound.setPassword(newPassword);
-            studentFound.setEmail(newEmail);
-            studentFound.setPhoneNumber(newPhoneNumber);
-            studentFound.setAddress(newAddress);
-            System.out.println("Student found succesfully.");
-        } else {
-            System.out.println("Student with ID " + targetId + " not found.");
-        }
+
+        setPassword(newPassword);
+        setEmail(newEmail);
+        setPhoneNumber(newPhoneNumber);
+        setAddress(newAddress);
+        System.out.println("Student " + getName() + "'s information updated.");
     }
 }

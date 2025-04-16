@@ -165,6 +165,29 @@ public class Course {
         }
     }
 
+    @Override
+    public int hashCode() {
+        // HashSet uses hashCode() rely on it to quickly locate objects
+        return Objects.hash(courseCode.toLowerCase());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Course other = (Course) obj;
+        if (courseCode == null) {
+            if (other.courseCode != null)
+                return false;
+        } else if (!courseCode.equals(other.courseCode))
+            return false;
+        return true;
+    }
+
     // Methods
     public void viewGrades(Assessment grades) {
 
