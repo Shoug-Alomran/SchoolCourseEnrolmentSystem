@@ -73,21 +73,14 @@ public class Administrator extends User<Administrator> {
     }
 
     public void addInstructor(Instructor i, List<Instructor> instructors) {
-        if (!instructors.contains(i)) {
             instructors.add(i);
-            System.out.println("User added: " + i.getName());
-        } else {
-            System.out.println("User already exists: " + i.getName());
-        }
+            System.out.println("Instructor added: " + i.getName()+ " with the ID: " + i.getId());
     }
 
     public void addStudent(Student s, List<Student> students) {
-        if (!students.contains(s)) {
             students.add(s);
-            System.out.println("User added: " + s.getName());
-        } else {
-            System.out.println("User already exists: " + s.getName());
-        }
+            System.out.println("Student added: " + s.getName() + " with the ID: " + s.getId());
+       
     }
 
     // Update user info.
@@ -105,7 +98,6 @@ public class Administrator extends User<Administrator> {
             }
         }
         if (updateStudentInfo != null) {
-
             updateStudentInfo.setName(newName);
             updateStudentInfo.setPassword(newPassword);
             // updateStudentInfo.setId(newId);
@@ -144,9 +136,8 @@ public class Administrator extends User<Administrator> {
 
     // 2. Create & manage courses.
     // Create a new course
-    public void addCourse(List<Course> courses, Course c) {
-        if (!courses.contains(c)) {
-            courses.add(c);
+    public void addCourse(Set<Course> courses, Course c) {
+        if (courses.add(c)) {
             System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ") succesfully.");
         } else {
             System.out.println("Course already exists: " + c.getCourseName());
@@ -165,7 +156,7 @@ public class Administrator extends User<Administrator> {
     }
 
     // Closes course when capacity is full or closed
-    public void closeCourse(Course c, List<Course> courses) {
+    public void closeCourse(Course c, Set<Course> courses) {
         if (courses.contains(c)) {
             if (c.getEnrolledStudents().size() >= c.getCapacity()) {
                 System.out.println(c.getCourseName() + " is at full capacity.");
