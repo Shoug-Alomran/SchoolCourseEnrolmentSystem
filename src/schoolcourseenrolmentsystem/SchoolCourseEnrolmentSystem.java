@@ -14,13 +14,13 @@ public class SchoolCourseEnrolmentSystem {
     private static List<Course> Courses = new ArrayList<>();
 
     // Default admin
-    private static Administrator DefaultAdmin = new Administrator("Shoug", "112233445", "Default12345",
+    private static Administrator DefaultAdmin = new Administrator("Shoug", "1122334455", "Default12345",
             "S.Alomran@gmail.com",
             "0531110904", "Qirawan district");
 
     public static void main(String[] args) {
-
-        try (Scanner input = new Scanner(System.in)) {
+        Scanner input = Helpers.input;
+        try {
             Administrators.add(DefaultAdmin);
             boolean exit = false;
 
@@ -64,7 +64,7 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.dropCourse(Courses, student);
                                     break;
                                 case 6:
-                                    Helpers.viewGradesStudent();
+                                    // Helpers.viewGradesStudent();
                                     break;
                                 case 7:
                                     Helpers.updateStudentProfile(student);
@@ -188,8 +188,6 @@ public class SchoolCourseEnrolmentSystem {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            // input.close();
         }
     }
 }
