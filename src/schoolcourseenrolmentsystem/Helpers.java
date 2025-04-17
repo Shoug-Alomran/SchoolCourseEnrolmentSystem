@@ -1,9 +1,10 @@
 package schoolcourseenrolmentsystem;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class Helpers {
-    public static Scanner input = new Scanner(System.in);
+    public static final Scanner input = new Scanner(System.in);
 
     /// <T extends User<T>> This method works with any User (Admin, Instructor,
     /// Student). T inherits from User<T>.
@@ -36,8 +37,6 @@ public class Helpers {
             return loggedInUser;
         } catch (Exception e) {
             return loggedInUser;
-        } finally {
-            input.close();
         }
     }
 
@@ -85,17 +84,6 @@ public class Helpers {
         return isValid;
     }
 
-    public static boolean ValidateId(String ID) {
-        boolean isValid = false;
-        try {
-            if (ID != null && ID != "" && ID.length() == 9) {
-                isValid = true;
-            }
-        } catch (Exception e) {
-        }
-        return isValid;
-    }
-
     public static Boolean ValidateName(String name) {
         boolean isValid = false;
         try {
@@ -133,35 +121,81 @@ public class Helpers {
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a number.");
                 input.nextLine(); // clear the invalid input
-            } finally {
-                input.close();
             }
         }
     }
 
     /// Method created to avoid InputMismatchException
     public static int getSafeIntInput(String prompt) {
-        Scanner input2 = new Scanner(System.in);
         try {
             int number = -1; // -1 is typically related to false or not true. This is a default number.
             boolean valid = false;
             while (!valid) {
-                try {
-                    System.out.print(prompt);
-                    number = input2.nextInt();
-                    input2.nextLine();
-                    valid = true;
-                } catch (InputMismatchException e) {
-                    System.out.println("Please enter a valid number.");
-                    input2.nextLine();
-                }
+                System.out.print(prompt);
+                number = input.nextInt();
+                input.nextLine(); // Buffer
+                valid = true;
             }
             return number;
-        } catch (Exception e) {
-            return -1;
-        } finally {
-            input2.close();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            input.nextLine(); // Clear the invalid input
+            return getSafeIntInput(prompt); // Retry
         }
+    }
+
+    public static User.Role updateRolePrompt(User.Role currentRole) {
+        System.out.println("\nDo you want to change the role?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+        int choice = getSafeIntInput("Option: ");
+        input.nextLine();
+
+        if (choice == 1) {
+            return checkValidityOfRole(); // Assuming you already have this
+        } else {
+            System.out.println("Role remains unchanged.");
+            return currentRole;
+        }
+    }
+
+    // Predicate <> helps us use premade validators.
+    public static String updateFieldWithPrompt(String fieldName, String currentValue, Predicate<String> validator) {
+        System.out.println("\nDo you want to change your " + fieldName + "?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+
+        int choice = Helpers.getSafeIntInput("Option: ");
+        input.nextLine(); // Clear buffer
+
+        if (choice == 1) {
+            System.out.print("Enter new " + fieldName + ": ");
+            String newValue = input.nextLine();
+            while (!validator.test(newValue)) {
+                System.out.println("Invalid " + fieldName + ". Please try again.");
+                System.out.print("Enter new " + fieldName + ": ");
+                newValue = input.nextLine();
+            }
+            return newValue;
+        } else {
+            System.out.println(fieldName + " remains unchanged.");
+            return currentValue;
+        }
+    }
+
+    public static String createUserWithPrompt(String fieldName, Predicate<String> validator) {
+        String inputValue;
+        while (true) {
+            System.out.print("\nEnter " + fieldName + ": ");
+            inputValue = input.nextLine();
+            if (!validator.test(inputValue)) { // .test() method is just how you invoke the logic inside the Predicate
+                                               // <>
+                System.out.println("Invalid " + fieldName + ". Please try again.");
+            } else {
+                break;
+            }
+        }
+        return inputValue;
     }
 
     // MENUS
@@ -234,9 +268,22 @@ public class Helpers {
             }
 
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
+    }
+
+    public static String GenerateRandomID() {
+        String CHARACTERS = "0123456789";
+        int ID_LENGTH = 10;
+        Random random = new Random();
+
+        StringBuilder id = new StringBuilder(ID_LENGTH);
+
+        for (int i = 0; i < ID_LENGTH; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            id.append(randomChar);
+        }
+        return id.toString();
     }
 
     // needs acutal logic ^
@@ -254,101 +301,22 @@ public class Helpers {
 
             instructor.updateCourseInfo(courseCode, courses, newSchedule, newDescription);
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
     public static void updateInstructorProfile(Instructor instructor) {
         try {
             System.out.println("\nPlease fill out the form to update your profile.");
-            // Start with default (existing) values
-            String newPassword = instructor.getPassword();
-            String newEmail = instructor.getEmail();
-            String newPhone = instructor.getPhoneNumber();
-            String newAddress = instructor.getAddress();
-
-            // Option to update password
-            System.out.println("\nDo you want to change your password?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int passwordChoice = Helpers.getSafeIntInput("Option: ");
-
-            if (passwordChoice == 1) {
-                System.out.print("\nEnter new password: ");
-                String passwordInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidatePassword(passwordInput)) {
-                    System.out.println("Invalid password. Please try again.");
-                    System.out.print("Enter password: ");
-                    passwordInput = input.nextLine();
-                }
-                String newPasswordInstructor = passwordInput;
-                instructor.setPassword(newPasswordInstructor);
-            } else if (passwordChoice == 2) {
-                System.out.println("Previous password kept.");
-            }
-            // Option to update email
-            System.out.println("\nDo you want to change your email?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int emailChoice = Helpers.getSafeIntInput("Option: ");
-            if (emailChoice == 1) {
-                System.out.print("\nEnter new email: ");
-                String emailInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidateEmail(emailInput)) {
-                    System.out.println("Invalid email. Please try again.");
-                    System.out.print("Enter email: ");
-                    emailInput = input.nextLine();
-                }
-                String newEmailInstructor = emailInput;
-                instructor.setEmail(newEmailInstructor);
-            } else if (emailChoice == 2) {
-                System.out.println("Email remains unchanged.");
-            }
-            // Option to update phone number
-            System.out.println("\nDo you want to change your phone number?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int phoneNumberChoice = Helpers.getSafeIntInput("Option: ");
-            if (phoneNumberChoice == 1) {
-                System.out.print("\nEnter new phone number: ");
-                String phoneNumberInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidatePhoneNumber(phoneNumberInput)) {
-                    System.out.println("Invalid phone number. Please try again.");
-                    System.out.print("Enter phone number: ");
-                    phoneNumberInput = input.nextLine();
-                }
-                String newPhoneInstructor = phoneNumberInput;
-                instructor.setPhoneNumber(newPhoneInstructor);
-            } else if (phoneNumberChoice == 2) {
-                System.out.println("Phone number remains unchanged.");
-            }
-            // Option to update address
-            System.out.println("\nDo you want to change your address?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int addressChoice = Helpers.getSafeIntInput("Option: ");
-            if (addressChoice == 1) {
-                System.out.print("\nEnter new address: ");
-                String addressInput = input.nextLine();
-                while (!Helpers.ValidateAddress(addressInput)) {
-                    System.out.println("Invalid address. Please try again.");
-                    System.out.print("Enter address: ");
-                    addressInput = input.nextLine();
-                }
-                String newAddressInstructor = addressInput;
-                instructor.setAddress(newAddressInstructor);
-            } else if (addressChoice == 2) {
-                System.out.println("Address number remains unchanged.");
-            }
-            instructor.updateInstructorPersonalInfo(newPassword, newEmail, newPhone, newAddress);
+            String updatedPassword = Helpers.updateFieldWithPrompt("password", instructor.getPassword(),
+                    Helpers::ValidatePassword); // Helpers::ValidatePassword is like an inhanced for-each loop
+            String updateEmail = Helpers.updateFieldWithPrompt("email", instructor.getEmail(), Helpers::ValidateEmail);
+            String updatePhone = Helpers.updateFieldWithPrompt("phone number", instructor.getPhoneNumber(),
+                    Helpers::ValidatePhoneNumber);
+            String updateAddress = Helpers.updateFieldWithPrompt("address", instructor.getAddress(),
+                    Helpers::ValidateAddress);
+            instructor.updateInstructorPersonalInfo(updatedPassword, updateEmail, updatePhone, updateAddress);
             System.out.println("Instructor " + instructor.getName() + "'s information updated.");
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -383,8 +351,6 @@ public class Helpers {
                 }
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -407,115 +373,37 @@ public class Helpers {
                 System.out.println("No course found with the code" + dropCourseCode + "'.");
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
-    public static void viewGradesStudent() {
-        System.out.println("What would you like to view?");
-        System.out.println("1. View grades by exam type.");
-        System.out.println("2. View total average grade.");
-        int choice = Helpers.getSafeIntInput("Option: ");
-        if (choice == 1) {
-            student.viewGradesByExamType(grades, student);
-        } else if (choice == 2) {
-            student.viewAverageGrade(grades, student.getId(), courseCode, examType);
-        } else {
-            System.out.println("Invalid choice.");
-        }
-    }
+    // TO-DO
+    // public static void viewGradesStudent(Student student) {
+    // System.out.println("What would you like to view?");
+    // System.out.println("1. View grades by exam type.");
+    // System.out.println("2. View total average grade.");
+    // int choice = Helpers.getSafeIntInput("Option: ");
+    // if (choice == 1) {
+    // student.viewGradesByExamType(grades, student);
+    // } else if (choice == 2) {
+    // student.viewAverageGrade(grades, student.getId(), courseCode, examType);
+    // } else {
+    // System.out.println("Invalid choice.");
+    // }
+    // }
 
     public static void updateStudentProfile(Student student) {
         try {
             System.out.println("\nPlease enter the needed information to update your profile.");
-            // Start with default (existing) values
-            String newPassword = student.getPassword();
-            String newEmail = student.getEmail();
-            String newPhone = student.getPhoneNumber();
-            String newAddress = student.getAddress();
+            String updatedPassword = Helpers.updateFieldWithPrompt("password", student.getPassword(),
+                    Helpers::ValidatePassword); // Helpers::ValidatePassword is like an inhanced for-each loop
+            String updateEmail = Helpers.updateFieldWithPrompt("email", student.getEmail(), Helpers::ValidateEmail);
+            String updatePhone = Helpers.updateFieldWithPrompt("phone number", student.getPhoneNumber(),
+                    Helpers::ValidatePhoneNumber);
+            String updateAddress = Helpers.updateFieldWithPrompt("address", student.getAddress(),
+                    Helpers::ValidateAddress);
 
-            // Option to update password
-            System.out.println("\nDo you want to change your password?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int passwordChoice = Helpers.getSafeIntInput("Option: ");
-            if (passwordChoice == 1) {
-                System.out.print("\nEnter new password: ");
-                String passwordInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidatePassword(passwordInput)) {
-                    System.out.println("Invalid password. Please try again.");
-                    System.out.print("Enter password: ");
-                    passwordInput = input.nextLine();
-                }
-                String newPasswordStudent = passwordInput;
-                student.setPassword(newPasswordStudent);
-            } else if (passwordChoice == 2) {
-                System.out.println("Previous password kept.");
-            }
-            // Option to update email
-            System.out.println("\nDo you want to change your email?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int emailChoice = Helpers.getSafeIntInput("Option: ");
-            if (emailChoice == 1) {
-                System.out.print("\nEnter new email: ");
-                String emailInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidateEmail(emailInput)) {
-                    System.out.println("Invalid email. Please try again.");
-                    System.out.print("Enter email: ");
-                    emailInput = input.nextLine();
-                }
-                String newEmailStudent = emailInput;
-                student.setEmail(newEmailStudent);
-            } else if (emailChoice == 2) {
-                System.out.println("Email remains unchanged.");
-            }
-            // Option to update phone number
-            System.out.println("\nDo you want to change your phone number?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int phoneNumberChoice = Helpers.getSafeIntInput("Option: ");
-            if (phoneNumberChoice == 1) {
-                System.out.print("\nEnter new phone number: ");
-                String phoneNumberInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidatePhoneNumber(phoneNumberInput)) {
-                    System.out.println("Invalid phone number. Please try again.");
-                    System.out.print("Enter phone number: ");
-                    phoneNumberInput = input.nextLine();
-                }
-                String newPhoneStudent = phoneNumberInput;
-                student.setPhoneNumber(newPhoneStudent);
-            } else if (phoneNumberChoice == 2) {
-                System.out.println("Phone number remains unchanged.");
-            }
-            // Option to update address
-            System.out.println("\nDo you want to change your address?");
-            System.out.println("1. Yes");
-            System.out.println("2. No");
-            int addressChoice = Helpers.getSafeIntInput("Option: ");
-            input.nextLine(); // Buffer
-            if (addressChoice == 1) {
-                System.out.print("\nEnter new address: ");
-                String addressInput = input.nextLine();
-                while (Helpers.ValidateAddress(addressInput)) {
-                    System.out.println("Invalid address. Please try again.");
-                    System.out.print("Enter address: ");
-                    addressInput = input.nextLine();
-                }
-                String newAddressStudent = addressInput;
-                student.setAddress(newAddressStudent);
-            } else if (addressChoice == 2) {
-                System.out.println("Address number remains unchanged.");
-            }
-            student.updatePersonalInfo(newPassword, newEmail, newPhone, newAddress);
-
+            student.updateStudentPersonalInfo(updatedPassword, updateEmail, updatePhone, updateAddress);
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -526,78 +414,42 @@ public class Helpers {
             while (true) {
                 System.out.print("\nEnter student name: ");
                 studentName = input.nextLine();
-                boolean isValid = Helpers.ValidateName(studentName);
-                if (!isValid) {
+
+                if (!Helpers.ValidateName(studentName)) {
                     System.out.println("Invalid name. Please enter a valid name.");
                     continue;
                 }
-                String studentID = "";
-                while (true) {
-                    System.out.print("\nEnter student ID: ");
-                    studentID = input.next();
-                    input.nextLine(); // Buffer
-
-                    for (Student s : students) {
-                        if (s.getId().equals(studentID)) {
-                            System.out.println("ID already in use. Please try a different one.");
-                            break;
-                        }
-                    }
-                    break;
-                }
-                // Password
-                System.out.print("\nEnter password: ");
-                String passwordInput = input.nextLine();
-                while (!Helpers.ValidatePassword(passwordInput)) {
-                    System.out.println("Invalid password. Please try again.");
-                    System.out.print("Enter password: ");
-                    passwordInput = input.nextLine();
-                }
-                String passwordStudent = passwordInput;
-                // Email
-                System.out.print("\nEnter email: ");
-                String emailInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidateEmail(emailInput)) {
-                    System.out.println("Invalid email. Please try again.");
-                    System.out.print("Enter email: ");
-                    emailInput = input.nextLine();
-                }
-                String emailStudent = emailInput;
-
-                // Phone number
-                System.out.print("\nEnter phone number: ");
-                String phoneNumberInput = input.next();
-                input.nextLine(); // Buffer
-                while (!Helpers.ValidatePhoneNumber(phoneNumberInput)) {
-                    System.out.println("Invalid phone number. Please try again.");
-                    System.out.print("Enter phone number: ");
-                    phoneNumberInput = input.nextLine();
-                }
-                String phoneNumberStudent = phoneNumberInput;
-                // Address
-                System.out.print("\nEnter address: ");
-                String addressInput = input.nextLine();
-                while (!Helpers.ValidateAddress(addressInput)) {
-                    System.out.println("Invalid address. Please try again.");
-                    System.out.print("Enter address: ");
-                    addressInput = input.nextLine();
-                }
-                String addressStudent = addressInput;
-
-                System.out.print("\nEnter credit limit: ");
-                int creditLimit = input.nextInt();
-                input.nextLine(); // Buffer
-
-                Student newStudent = new Student(studentName, studentID, passwordStudent, emailStudent,
-                        phoneNumberStudent, addressStudent, creditLimit,
-                        new ArrayList<>());
-                administrator.addStudent(newStudent, students);
-
+                break;
             }
+            String studentID;
+            while (true) {
+                studentID = GenerateRandomID();
+                boolean exists = false;
+                for (Student s : students) {
+                    if (s.getId().equals(studentID)) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    break; // We found a unique ID, exit the loop
+                }
+            }
+            String createPassword = Helpers.createUserWithPrompt("password", Helpers::ValidatePassword);
+            String createEmail = Helpers.createUserWithPrompt("email", Helpers::ValidateEmail);
+            String createPhoneNumber = Helpers.createUserWithPrompt("phone number", Helpers::ValidatePhoneNumber);
+            String createAddress = Helpers.createUserWithPrompt("address", Helpers::ValidateAddress);
+            System.out.print("\nEnter credit limit: ");
+            int creditLimit = input.nextInt();
+            input.nextLine(); // Buffer
+            // TO-DO
+            Student newStudent = new Student(studentName, studentID, createPassword, createEmail,
+                    createPhoneNumber, createAddress, creditLimit,
+                    new ArrayList<>());
+            administrator.addStudent(newStudent, students);
+
         } catch (Exception e) {
-        } finally {
-            input.close();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -609,86 +461,49 @@ public class Helpers {
             administrator.removeStudent(students, targetId);
 
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
         System.out.println("Invalid option.");
     }
 
     public static void addInstructor(Administrator administrator, List<Instructor> instructors) {
         try {
-            String name = "";
+            String instructorName = "";
             while (true) {
                 System.out.print("\nEnter instructor name: ");
-                name = input.nextLine();
-                boolean isValid = Helpers.ValidateName(name);
-                if (!isValid) {
+                instructorName = input.nextLine();
+                if (!Helpers.ValidateName(instructorName)) {
                     System.out.println("Invalid name. Please enter a valid name.");
                     continue;
                 }
                 break;
             }
-            String ID = "";
+            String instructorID;
             while (true) {
-                System.out.print("\nEnter instructor ID: ");
-                ID = input.next();
-                input.nextLine(); // Buffer
-
+                instructorID = GenerateRandomID();
+                boolean exists = false;
                 for (Instructor instructor : instructors) {
-                    if (instructor.getId().equals(ID)) {
-                        System.out.println("ID already in use. Please try a different one.");
+                    if (instructor.getId().equals(instructorID)) {
+                        exists = true;
                         break;
                     }
                 }
-                break;
+                if (!exists) {
+                    break;
+                }
             }
+            String createPassword = Helpers.createUserWithPrompt("password", Helpers::ValidatePassword);
+            String createEmail = Helpers.createUserWithPrompt("email", Helpers::ValidateEmail);
+            String createPhoneNumber = Helpers.createUserWithPrompt("phone number", Helpers::ValidatePhoneNumber);
+            String createAddress = Helpers.createUserWithPrompt("address", Helpers::ValidateAddress);
 
-            // This will validate input and set it only if correct
-            System.out.print("Enter password: ");
-            String passwordInput = input.next();
-            input.nextLine(); // Buffer
-            while (!Helpers.ValidatePassword(passwordInput)) {
-                System.out.println("Invalid password. Please try again.");
-                System.out.print("Enter password: ");
-                passwordInput = input.nextLine();
-            }
-            String passwordInstructor = passwordInput;
-            System.out.print("Enter email: ");
-            String emailInput = input.next();
-            input.nextLine(); // Buffer
-            while (!Helpers.ValidateEmail(emailInput)) {
-                System.out.println("Invalid email. Please try again.");
-                System.out.print("Enter email: ");
-                emailInput = input.nextLine();
-            }
-            String emailInstructor = emailInput;
-
-            System.out.print("Enter phone number: ");
-            String phoneNumberInput = input.next();
-            input.nextLine(); // Buffer
-            while (!Helpers.ValidatePhoneNumber(phoneNumberInput)) {
-                System.out.println("Invalid phone number. Please try again.");
-                System.out.print("Enter phone number: ");
-                phoneNumberInput = input.nextLine();
-            }
-            String phoneNumberInstructor = phoneNumberInput;
-            System.out.print("\nEnter address: ");
-            String addressInput = input.nextLine();
-            while (!Helpers.ValidateAddress(addressInput)) {
-                System.out.println("Invalid address. Please try again.");
-                System.out.print("Enter address: ");
-                addressInput = input.nextLine();
-            }
-            String addressInstructor = addressInput;
-
-            Instructor newInstructor = new Instructor(phoneNumberInput, addressInput, passwordInstructor,
-                    emailInstructor, phoneNumberInstructor, User.Role.INSTRUCTOR, addressInstructor, null);
+            Instructor newInstructor = new Instructor(instructorName,
+                    instructorID, createPassword,
+                    createEmail, createPhoneNumber,
+                    createAddress, new ArrayList<>());
             administrator.addInstructor(newInstructor, instructors);
         } catch (Exception e) {
-        } finally {
-            input.close();
+            System.out.println("Invalid option.");
         }
-        System.out.println("Invalid option.");
     }
 
     public static void removeInstructor(Administrator administrator, List<Instructor> instructors) {
@@ -698,10 +513,8 @@ public class Helpers {
             input.nextLine(); // Buffer
             administrator.removeInstructor(instructors, targetId);
         } catch (Exception e) {
-        } finally {
-            input.close();
+            System.out.println("Invalid option.");
         }
-        System.out.println("Invalid option.");
     }
 
     public static void addCourse(Administrator administrator, List<Course> courses, List<Instructor> instructors) {
@@ -759,8 +572,6 @@ public class Helpers {
             }
             administrator.addCourse(courses, newCourse);
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -786,117 +597,17 @@ public class Helpers {
             if (studentToUpdate != null) {
                 System.out.println("Update " + studentToUpdate.getName() + " details below: ");
 
-                // Start with default (existing) values
-                String newName = studentToUpdate.getName();
-                String newPassword = studentToUpdate.getPassword();
-                String newEmail = studentToUpdate.getEmail();
-                String newPhone = studentToUpdate.getPhoneNumber();
-                User.Role newRole = studentToUpdate.getRole();
-                String newAddress = studentToUpdate.getAddress();
-
-                // Option to update name
-                System.out.println(
-                        "Would you like to update " + studentToUpdate.getName() + "'s name?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int nameChoice = input.nextInt();
-                if (nameChoice == 1) {
-                    System.out.print("Enter new name: ");
-                    newName = input.nextLine();
-                    while (!Helpers.ValidateName(newName)) {
-                        System.out.println("Invalid name. Please try again.");
-                        System.out.print("Enter name: ");
-                        newName = input.nextLine();
-                    }
-                    studentToUpdate.setName(newName);
-                } else if (nameChoice == 2) {
-                    System.out.println("Name remains unchanged.");
-                }
-                // Option to update email
-                System.out.println(
-                        "Do you want to change " + studentToUpdate.getEmail() + "'s email?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int emailChoice = input.nextInt();
-                if (emailChoice == 1) {
-                    System.out.print("Enter new email: ");
-                    newEmail = input.nextLine();
-                    while (!Helpers.ValidateEmail(newEmail)) {
-                        System.out.println("Invalid email. Please try again.");
-                        System.out.print("Enter email: ");
-                        newEmail = input.nextLine();
-                    }
-                    studentToUpdate.setEmail(newEmail);
-                } else if (emailChoice == 2) {
-                    System.out.println("Email remains unchanged.");
-                }
-                // Option to update phone number
-                System.out.println(
-                        "Do you want to change " + studentToUpdate.getName() + "'s phone number?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int phoneNumberChoice = input.nextInt();
-                if (phoneNumberChoice == 1) {
-                    System.out.print("Enter new phone number: ");
-                    newPhone = input.nextLine();
-                    while (!Helpers.ValidatePhoneNumber(newPhone)) {
-                        System.out.println("Invalid phone number. Please try again.");
-                        System.out.print("Enter phone number: ");
-                        newPhone = input.nextLine();
-                    }
-                    studentToUpdate.setPhoneNumber(newPhone);
-                } else if (phoneNumberChoice == 2) {
-                    System.out.println("Phone number remains unchanged.");
-                }
-                // Option to update password number
-                System.out.println(
-                        "Do you want to change " + studentToUpdate.getName() + "'s password?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int passwordChoice = input.nextInt();
-                if (passwordChoice == 1) {
-                    System.out.print("Enter new password: ");
-                    newPassword = input.nextLine();
-                    while (!Helpers.ValidatePassword(newPassword)) {
-                        System.out.println("Invalid password. Please try again.");
-                        System.out.print("Enter password: ");
-                        newPassword = input.nextLine();
-                    }
-                    studentToUpdate.setPassword(newPassword);
-                } else if (passwordChoice == 2) {
-                    System.out.println("Password number remains unchanged.");
-                }
-                // Option to update role
-                System.out
-                        .println("Do you want to change " + studentToUpdate.getName() + "'s role?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int roleChoice = input.nextInt();
-                if (roleChoice == 1) {
-                    System.out.print("Enter new role: ");
-                    newRole = Helpers.checkValidityOfRole();
-                    studentToUpdate.setRole(newRole);
-                } else if (roleChoice == 2) {
-                    System.out.println("Role remains unchanged.");
-                }
-                // Option to update address
-                System.out.println(
-                        "Do you want to change" + studentToUpdate.getName() + "'s address?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int addressChoice = input.nextInt();
-                if (addressChoice == 1) {
-                    System.out.print("Enter new address: ");
-                    newAddress = input.nextLine();
-                    while (!Helpers.ValidateAddress(newAddress)) {
-                        System.out.println("Invalid address. Please try again.");
-                        System.out.print("Enter address: ");
-                        newAddress = input.nextLine();
-                    }
-                    studentToUpdate.setAddress(newAddress);
-                } else if (addressChoice == 2) {
-                    System.out.println("Address remains unchanged.");
-                }
+                String updateName = Helpers.updateFieldWithPrompt("name", studentToUpdate.getName(),
+                        Helpers::ValidateName);
+                String updatePassword = Helpers.updateFieldWithPrompt("password", studentToUpdate.getPassword(),
+                        Helpers::ValidatePassword);
+                String updateEmail = Helpers.updateFieldWithPrompt("email", studentToUpdate.getEmail(),
+                        Helpers::ValidateEmail);
+                String updatePhoneNumber = Helpers.updateFieldWithPrompt("phone number",
+                        studentToUpdate.getPhoneNumber(), Helpers::ValidatePhoneNumber);
+                String updateAddress = Helpers.updateFieldWithPrompt("address", studentToUpdate.getAddress(),
+                        Helpers::ValidateAddress);
+                User.Role updateRole = Helpers.updateRolePrompt(studentToUpdate.getRole());
                 // Option to update credit limit
                 System.out.println(
                         "Do you want to update " + studentToUpdate.getName() + "'s credit limit?");
@@ -910,10 +621,17 @@ public class Helpers {
                 } else if (creditLimitChoice == 2) {
                     System.out.println("Credit limit number remains unchanged.");
                 }
+                // Apply updates
+                studentToUpdate.setName(updateName);
+                studentToUpdate.setPassword(updatePassword);
+                studentToUpdate.setEmail(updateEmail);
+                studentToUpdate.setPhoneNumber(updatePhoneNumber);
+                studentToUpdate.setAddress(updateAddress);
+                studentToUpdate.setRole(updateRole);
+
+                System.out.println("Student " + updateName + "'s profile updated successfully.");
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -939,132 +657,28 @@ public class Helpers {
             if (instructorToUpdate != null) {
                 System.out.println("Update " + instructorToUpdate.getName() + "'s details below: ");
 
-                // Start with default values
-                String newName = instructorToUpdate.getName();
-                // Ruins data persistancy.
-                // String newID = instructorToUpdate.getId();
-                String newPassword = instructorToUpdate.getPassword();
-                String newEmail = instructorToUpdate.getEmail();
-                String newPhone = instructorToUpdate.getPhoneNumber();
-                User.Role newRole = instructorToUpdate.getRole();
-                String newAddress = instructorToUpdate.getAddress();
+                String updateName = Helpers.updateFieldWithPrompt("name", instructorToUpdate.getName(),
+                        Helpers::ValidateName);
+                String updatePassword = Helpers.updateFieldWithPrompt("password", instructorToUpdate.getPassword(),
+                        Helpers::ValidatePassword);
+                String updateEmail = Helpers.updateFieldWithPrompt("email", instructorToUpdate.getEmail(),
+                        Helpers::ValidateEmail);
+                String updatePhoneNumber = Helpers.updateFieldWithPrompt("phone number",
+                        instructorToUpdate.getPhoneNumber(), Helpers::ValidatePhoneNumber);
+                String updateAddress = Helpers.updateFieldWithPrompt("address", instructorToUpdate.getAddress(),
+                        Helpers::ValidateAddress);
+                User.Role updateRole = Helpers.updateRolePrompt(instructorToUpdate.getRole());
+                // Apply updates
+                instructorToUpdate.setName(updateName);
+                instructorToUpdate.setPassword(updatePassword);
+                instructorToUpdate.setEmail(updateEmail);
+                instructorToUpdate.setPhoneNumber(updatePhoneNumber);
+                instructorToUpdate.setAddress(updateAddress);
+                instructorToUpdate.setRole(updateRole);
 
-                // Option to update name
-                System.out.println("Would you like to update " + instructorToUpdate.getName()
-                        + "'s name?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int nameChoice = input.nextInt();
-                if (nameChoice == 1) {
-                    System.out.print("Enter new name: ");
-                    String newNameInput = input.nextLine();
-                    while (!Helpers.ValidateName(newNameInput)) {
-                        System.out.println("Invalid name. Please try again.");
-                        System.out.print("Enter name: ");
-                        newName = input.nextLine();
-                    }
-                    newName = newNameInput;
-                    instructorToUpdate.setName(newName);
-                } else if (nameChoice == 2) {
-                    System.out.println("Name remains unchanged.");
-                }
-                // Option to update password
-                System.out.println(
-                        "Do you want to change " + instructorToUpdate.getName() + "'s password?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int passwordChoice = input.nextInt();
-                if (passwordChoice == 1) {
-                    System.out.print("Enter new password number: ");
-                    String passwordInput = input.next();
-                    input.nextLine(); // Buffer
-                    while (!Helpers.ValidatePassword(passwordInput)) {
-                        System.out.println("Invalid password. Please try again.");
-                        System.out.print("Enter password: ");
-                        passwordInput = input.nextLine();
-                    }
-                    newPassword = passwordInput;
-                    instructorToUpdate.setPassword(newPassword);
-                } else if (passwordChoice == 2) {
-                    System.out.println("Password number remains unchanged.");
-                }
-                // Option to update email
-                System.out.println(
-                        "Do you want to change " + instructorToUpdate.getEmail() + "'s email?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int emailChoice = input.nextInt();
-                if (emailChoice == 1) {
-                    System.out.print("Enter new email: ");
-                    String emailInput = input.next();
-                    input.nextLine(); // Buffer
-                    while (!Helpers.ValidateEmail(emailInput)) {
-                        System.out.println("Invalid email. Please try again.");
-                        System.out.print("Enter email: ");
-                        emailInput = input.nextLine();
-                    }
-                    newEmail = emailInput;
-                    instructorToUpdate.setEmail(newEmail);
-                } else if (emailChoice == 2) {
-                    System.out.println("Email remains unchanged.");
-                }
-                // Option to update phone number
-                System.out.println(
-                        "Do you want to change " + instructorToUpdate.getName()
-                                + "'s phone number?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int phoneNumberChoice = input.nextInt();
-                if (phoneNumberChoice == 1) {
-                    System.out.print("Enter new phone number: ");
-                    String phoneNumberInput = input.next();
-                    input.nextLine(); // Buffer
-                    while (!Helpers.ValidatePhoneNumber(phoneNumberInput)) {
-                        System.out.println("Invalid phone number. Please try again.");
-                        System.out.print("Enter phone number: ");
-                        phoneNumberInput = input.nextLine();
-                    }
-                    newPhone = phoneNumberInput;
-                    instructorToUpdate.setPhoneNumber(newPhone);
-                } else if (phoneNumberChoice == 2) {
-                    System.out.println("Phone number remains unchanged.");
-                }
-                // Option to update role
-                System.out.println(
-                        "Do you want to change " + instructorToUpdate.getName() + "'s role?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int roleChoice = input.nextInt();
-                if (roleChoice == 1) {
-                    System.out.print("Enter new role: ");
-                    newRole = Helpers.checkValidityOfRole();
-                    instructorToUpdate.setRole(newRole);
-                } else if (roleChoice == 2) {
-                    System.out.println("Role remains unchanged.");
-                }
-                // Option to update address
-                System.out.println(
-                        "Do you want to change" + instructorToUpdate.getName() + "'s address?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
-                int addressChoice = input.nextInt();
-                if (addressChoice == 1) {
-                    System.out.print("Enter new address: ");
-                    String addressInput = input.nextLine();
-                    while (!Helpers.ValidateAddress(addressInput)) {
-                        System.out.println("Invalid address. Please try again.");
-                        System.out.print("Enter address: ");
-                        addressInput = input.nextLine();
-                    }
-                    newAddress = addressInput;
-                    instructorToUpdate.setAddress(newAddress);
-                } else if (addressChoice == 2) {
-                    System.out.println("Address remains unchanged.");
-                }
+                System.out.println("Instructor " + updateName + "'s profile updated successfully.");
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -1107,8 +721,6 @@ public class Helpers {
                 System.out.println("Instructor with ID " + instructorID2 + " not found.");
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
@@ -1120,6 +732,7 @@ public class Helpers {
             System.out.print("\nEnter course code: ");
             String closeCourseCode = input.next();
             input.nextLine(); // Buffer
+
             Course courseToClose = null;
             for (Course c : courses) {
                 if (c.getCourseName().equals(closeCourseName)
@@ -1134,8 +747,6 @@ public class Helpers {
                 System.out.println("Course not found.");
             }
         } catch (Exception e) {
-        } finally {
-            input.close();
         }
     }
 
