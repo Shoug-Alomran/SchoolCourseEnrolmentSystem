@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Instructor extends User<Instructor> {
     // Constructor
-    public Instructor() {}
+    public Instructor() {
+    }
+
     public Instructor(String name, String id, String password, String email, String phoneNumber,
-            User.Role role, String address, List<Student> enrolledStudents) {
-        super(name, id, password, email, phoneNumber, role, address);
-        // If you store enrolled students, save them here
+        String address, List<Student> enrolledStudents) {
+        super(name, id, password, email, phoneNumber, Role.INSTRUCTOR, address);
     }
 
     // Methods
-
     @Override
     public Instructor login(List<Instructor> instructors, String id, String password) {
         for (Instructor i : instructors) {
@@ -31,21 +31,20 @@ public class Instructor extends User<Instructor> {
         return ("Instructor " + instructors.getName() + " logged out.");
     }
 
-@Override
-public boolean equals(Object obj) {
-    if (this == obj)
-        return true;
-    if (obj == null || getClass() != obj.getClass())
-        return false;
-    Instructor other = (Instructor) obj;
-    return this.getId() != null && this.getId().equals(other.getId());
-}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Instructor other = (Instructor) obj;
+        return this.getId() != null && this.getId().equals(other.getId());
+    }
 
-@Override
-public int hashCode() {
-    return Objects.hash(getId());
-}
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 
     public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
         boolean enrolledCourse = false;
@@ -113,21 +112,23 @@ public int hashCode() {
 
                 System.out.println("Instructor " + assignedInstructor.getName() + "'s"
                         + " course information updated for " + courseToUpdate.getCourseName());
-            } // This is just in case if the course is assigned to a different instructor.
-              // Its not empty but it also doesnt match the targetId.
+            }
+            // This is just in case if the course is assigned to a different instructor.
+            // Its not empty but it also doesnt match the targetId.
             else if (assignedInstructor != null) {
                 System.out
                         .println(assignedInstructor.getName() + " with the ID number: " + assignedInstructor.getId()
                                 + " is not assigned to " + courseToUpdate.getCourseName() + ".");
-            } // You don't see it but its basically (assignedInstructor == null);
+            }
+            // You don't see it but its basically (assignedInstructor == null);
             else {
                 System.out.println("No instructor assigned to " + courseToUpdate.getCourseName() + ".");
             }
         }
     }
 
-    public void updateInstructorPersonalInfo(String newPassword, String newEmail,
-            String newPhoneNumber, String newAddress) {
+    public void updateInstructorPersonalInfo(String newPassword, String newEmail, String newPhoneNumber,
+            String newAddress) {
         // No need to check if they match because instructors are already logged in.
         setPassword(newPassword);
         setEmail(newEmail);
