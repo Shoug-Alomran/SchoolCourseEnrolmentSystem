@@ -171,7 +171,7 @@ public class Student extends User<Student> {
         }
     }
 
-    public void updatePersonalInfo(String newPassword, String newEmail,
+    public void updateStudentPersonalInfo(String newPassword, String newEmail,
             String newPhoneNumber,
             String newAddress) {
 
