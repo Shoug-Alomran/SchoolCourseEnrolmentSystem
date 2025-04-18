@@ -132,8 +132,9 @@ public class Assessment {
         Assessment.ExamType selectedExamType = examTypes[examChoice - 1]; // Subtract 1 to match java indexing.
 
         // View results.
-        viewSpecificGrade(grades, student.getId(), courseCode, selectedExamType);
-        viewAverageGrade(grades, student.getId(), courseCode, selectedExamType);
+        // TO-DO
+        // viewSpecificGrade(grades, student.getId(), courseCode, selectedExamType);
+        // viewAverageGrade(grades, student.getId(), courseCode, selectedExamType);
     }
 
     public void viewAverageGrade(List<Assessment> grades, String studentId, String courseCode,
