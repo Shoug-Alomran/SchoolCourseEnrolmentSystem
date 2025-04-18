@@ -188,4 +188,25 @@ public class Administrator extends User<Administrator> {
     public void generateReports() {
 
     }
+
+    public void viewStudentList(List<Student> students) {
+        if (students == null || students.isEmpty()) {
+            System.out.println("No students are on record.");
+        } else {
+            for (Student student : students) {
+               // System.out.println("\n-Student: " + student.getName() + ", ID: " + student.getId() + ".");
+               System.out.println(student.toString());
+            }
+        }
+    }
+
+    public void viewInstructorList(List<Instructor> instructors) {
+        if (instructors == null || instructors.isEmpty()) {
+            System.out.println("No instructors are on record.");
+        } else {
+            for (Instructor instructor : instructors) {
+                System.out.println(instructor.toString());
+            }
+        }
+    }
 }
