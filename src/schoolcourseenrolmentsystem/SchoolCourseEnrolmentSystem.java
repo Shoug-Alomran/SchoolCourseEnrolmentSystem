@@ -3,7 +3,6 @@ package schoolcourseenrolmentsystem;
 import java.util.*;
 
 public class SchoolCourseEnrolmentSystem {
-
     // To achieve data constiencey, we instantiate the main lists in here and pass
     // them along other functions to act upon them.
 
@@ -35,7 +34,7 @@ public class SchoolCourseEnrolmentSystem {
                 switch (role.toLowerCase()) {
                     case "student":
                         Student tempStudent = new Student();
-                        Student loggedInStudent = Helpers.loginWithRetry(Students, tempStudent);
+                        Student loggedInStudent = Helpers.login(Students, tempStudent);
 
                         if (loggedInStudent == null) {
                             continue;
@@ -82,7 +81,7 @@ public class SchoolCourseEnrolmentSystem {
                     case "instructor":
                         Instructor tempInstructor = new Instructor();
 
-                        Instructor loggedInInstructor = Helpers.loginWithRetry(Instructors, tempInstructor);
+                        Instructor loggedInInstructor = Helpers.login(Instructors, tempInstructor);
 
                         Instructor instructor = loggedInInstructor;
 
@@ -121,7 +120,7 @@ public class SchoolCourseEnrolmentSystem {
                         break;
                     case "admin":
                         Administrator temp = new Administrator();
-                        Administrator loggedInAdministrator = Helpers.loginWithRetry(Administrators, temp);
+                        Administrator loggedInAdministrator = Helpers.login(Administrators, temp);
 
                         if (loggedInAdministrator == null) {
                             continue;
@@ -142,33 +141,39 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.removeStudent(administrator, Students);
                                     break;
                                 case 3:
-                                    Helpers.addInstructor(administrator, Instructors);
+                                    administrator.viewStudentList(Students);
                                     break;
                                 case 4:
-                                    Helpers.removeInstructor(administrator, Instructors);
+                                    Helpers.addInstructor(administrator, Instructors);
                                     break;
                                 case 5:
-                                    Helpers.addCourse(administrator, Courses, Instructors);
+                                    Helpers.removeInstructor(administrator, Instructors);
                                     break;
                                 case 6:
-                                    Helpers.adminUpdateStudentProfile(administrator, Students);
+                                    administrator.viewInstructorList(Instructors);
                                     break;
                                 case 7:
-                                    Helpers.adminUpdateInstructorProfile(administrator, Instructors);
+                                    Helpers.addCourse(administrator, Courses, Instructors);
                                     break;
                                 case 8:
-                                    Helpers.assignInstructor(administrator, Courses, Instructors);
-                                    break;
-                                case 9:
                                     Helpers.closeCourse(administrator, Courses);
                                     break;
+                                case 9:
+                                    Helpers.adminUpdateStudentProfile(administrator, Students);
+                                    break;
                                 case 10:
-                                    Helpers.viewEnrollmentStatistics();
+                                    Helpers.adminUpdateInstructorProfile(administrator, Instructors);
                                     break;
                                 case 11:
-                                    Helpers.generateReports();
+                                    Helpers.assignInstructor(administrator, Courses, Instructors);
                                     break;
                                 case 12:
+                                    Helpers.viewEnrollmentStatistics();
+                                    break;
+                                case 13:
+                                    Helpers.generateReports();
+                                    break;
+                                case 14:
                                     administrator.logout(administrator);
                                     exitAdmin = true;
                                     break;
