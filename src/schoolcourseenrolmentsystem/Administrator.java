@@ -140,8 +140,7 @@ public class Administrator extends User<Administrator> {
         }
     }
 
-    // 2. Create & manage courses.
-    // Create a new course
+    // Course related.
     public void addCourse(List<Course> courses, Course c) {
         if (courses.add(c)) {
             System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ") succesfully.");
@@ -161,7 +160,6 @@ public class Administrator extends User<Administrator> {
         }
     }
 
-    // Closes course when capacity is full or closed
     public void closeCourse(Course c, List<Course> courses) {
         if (courses.contains(c)) {
             if (c.getEnrolledStudents().size() >= c.getCapacity()) {
@@ -177,25 +175,12 @@ public class Administrator extends User<Administrator> {
         }
     }
 
-    // 3. View enrollment statistics
-    public void enrollmentStatistics(List<Student> enrolledStudents, List<Course> enrolledCourses) {
-
-    }
-
-    // 4. Generate reports.
-    // Administrators can generate reports on student enrollment patterns,
-    // course popularity, and other statistics for analysis
-    public void generateReports() {
-
-    }
-
     public void viewStudentList(List<Student> students) {
         if (students == null || students.isEmpty()) {
             System.out.println("No students are on record.");
         } else {
             for (Student student : students) {
-               // System.out.println("\n-Student: " + student.getName() + ", ID: " + student.getId() + ".");
-               System.out.println(student.toString());
+                System.out.println(student.toString());
             }
         }
     }
