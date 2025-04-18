@@ -24,6 +24,7 @@ public abstract class User<T> {
         setName(name);
         setId(id);
         setPassword(password);
+        setEmail(email);
         setPhoneNumber(phoneNumber);
         setRole(role);
         setAddress(address);
