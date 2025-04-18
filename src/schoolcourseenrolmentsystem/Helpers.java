@@ -168,7 +168,7 @@ public class Helpers {
         System.out.println("\nDo you want to change the role?");
         System.out.println("1. Yes");
         System.out.println("2. No");
-        int choice = getSafeIntInput("Option: ");
+        int choice = getSafeIntInput("\nOption: ");
         input.nextLine();
 
         if (choice == 1) {
@@ -185,7 +185,7 @@ public class Helpers {
         System.out.println("1. Yes");
         System.out.println("2. No");
 
-        int choice = Helpers.getSafeIntInput("Option: ");
+        int choice = Helpers.getSafeIntInput("\nOption: ");
 
         if (choice == 1) {
             System.out.print("Enter new " + fieldName + ": ");
@@ -219,6 +219,7 @@ public class Helpers {
 
     // MENUS
     public static void showStudentMenu() {
+        System.out.println("");
         System.out.println("1. View avaliable courses.");
         System.out.println("2. Enroll in course.");
         System.out.println("3. View enrolled courses.");
@@ -230,6 +231,7 @@ public class Helpers {
     }
 
     public static void showInstructorMenu() {
+        System.out.println("");
         System.out.println("1. View enrolled students.");
         System.out.println("2. Grade assignments.");
         System.out.println("3. Update course information.");
@@ -238,7 +240,8 @@ public class Helpers {
     }
 
     public static void showAdminMenu() {
-        System.out.println("\n1.  Add Students.");
+        System.out.println("");
+        System.out.println("1.  Add Students.");
         System.out.println("2.  Remove Students.");
         System.out.println("3.  View student list.");
         System.out.println("4.  Add Instructors.");
@@ -257,40 +260,6 @@ public class Helpers {
     // CASES
     // INSTRUCTORS CASES
 
-    public static void editStudentGrades() {
-        try {
-            System.out.println("\nEnter the students ID you would like to enter their grade for.");
-            // = input.next();
-            System.out.println(
-                    "\n Please choose from the menu of what assignment type you would like to grade.");
-            System.out.println("1. Quizes.");
-            System.out.println("2. Midterms.");
-            System.out.println("3. Homework.");
-            System.out.println("4. Final exam.");
-            System.out.println("5. Total average grade");
-            int examChoice = Helpers.getSafeIntInput("Option: "); // -> check parameters
-            input.nextLine(); // Buffer
-            if (examChoice == 1) {
-                // instructor.assignGrade(grades, inputStudentGrade, courseCode, examType,
-                // score);
-            }
-            if (examChoice == 2) {
-
-            }
-            if (examChoice == 3) {
-
-            }
-            if (examChoice == 4) {
-
-            }
-            if (examChoice == 5) {
-
-            }
-
-        } catch (Exception e) {
-        }
-    }
-
     public static String GenerateRandomID() {
         String CHARACTERS = "0123456789";
         int ID_LENGTH = 10;
@@ -306,7 +275,6 @@ public class Helpers {
         return id.toString();
     }
 
-    // needs acutal logic ^
     public static void updateCourseInfo(Instructor instructor, List<Course> courses) {
         try {
             System.out.print("\nEnter the course code  of the course you would like to update: ");
@@ -395,21 +363,6 @@ public class Helpers {
         } catch (Exception e) {
         }
     }
-
-    // TO-DO
-    // public static void viewGradesStudent(Student student) {
-    // System.out.println("What would you like to view?");
-    // System.out.println("1. View grades by exam type.");
-    // System.out.println("2. View total average grade.");
-    // int choice = Helpers.getSafeIntInput("Option: ");
-    // if (choice == 1) {
-    // student.viewGradesByExamType(grades, student);
-    // } else if (choice == 2) {
-    // student.viewAverageGrade(grades, student.getId(), courseCode, examType);
-    // } else {
-    // System.out.println("Invalid choice.");
-    // }
-    // }
 
     public static void updateStudentProfile(Student student) {
         try {
@@ -558,7 +511,7 @@ public class Helpers {
             System.out.println("Would you like to assign instructor now?");
             System.out.println("1. Assign now.");
             System.out.println("2. Assign later.");
-            int assignChoice = Helpers.getSafeIntInput("Option: ");
+            int assignChoice = Helpers.getSafeIntInput("\nOption: ");
             if (assignChoice == 1) {
                 System.out.print("\nAssign instructor by ID: ");
                 String assignInstructorID = input.nextLine();
@@ -776,11 +729,44 @@ public class Helpers {
         }
     }
 
-    public static void viewEnrollmentStatistics() {
+    // Statistics.
+    public static void viewEnrollmentStatistics(List<Course> courses) {
+        int totalEnrolled = 0;
+        boolean openCoursesExist = false;
 
+        System.out.println("\n--- Enrollment Statistics ---");
+        for (Course c : courses) {
+            int count = c.getEnrolledStudents() != null ? c.getEnrolledStudents().size() : 0;
+            totalEnrolled += count;
+            System.out.println("Course: " + c.getCourseName() + " (" + c.getCourseCode() + ") — Enrolled: " + count);
+            if (c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
+                openCoursesExist = true;
+            }
+        }
+        System.out.println("Total enrolled students across all courses: " + totalEnrolled);
+        System.out.println("Open courses available: " + (openCoursesExist ? "Yes" : "No"));
     }
 
-    public static void generateReports() {
+    public static void generateReports(List<Course> courses) {
+        System.out.println("\n--- Enrollment Report ---");
 
+        // Most popular course
+        Course mostPopular = null;
+        int maxEnrolled = 0;
+
+        for (Course c : courses) {
+            int enrolled = c.getEnrolledStudents() != null ? c.getEnrolledStudents().size() : 0;
+            if (enrolled > maxEnrolled) {
+                mostPopular = c;
+                maxEnrolled = enrolled;
+            }
+        }
+
+        if (mostPopular != null) {
+            System.out.println("Most popular course: " + mostPopular.getCourseName()
+                    + " (" + mostPopular.getCourseCode() + ") — Enrolled: " + maxEnrolled);
+        } else {
+            System.out.println("No enrollments found.");
+        }
     }
 }
