@@ -18,7 +18,7 @@ public class Instructor extends User<Instructor> {
     public Instructor login(List<Instructor> instructors, String id, String password) {
         for (Instructor i : instructors) {
             if (i.getId().equals(id) && i.getPassword().equals(password)) {
-                System.out.println("Instructor " + i.getName() + " logged in.");
+                System.out.println("Instructor " + i.getName() + " logged in.\n");
                 return i;
             }
         }
@@ -29,21 +29,6 @@ public class Instructor extends User<Instructor> {
     @Override
     public String logout(Instructor instructors) {
         return ("Instructor " + instructors.getName() + " logged out.");
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Instructor other = (Instructor) obj;
-        return this.getId() != null && this.getId().equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
@@ -70,8 +55,6 @@ public class Instructor extends User<Instructor> {
                 }
             }
         }
-        // The ! means false which will activate if the upper block returns false
-        // instead of true.
         if (!enrolledCourse) {
             System.out.println("Instructor " + instructor.getName() + " is not assigned to any courses.");
         }
@@ -102,8 +85,6 @@ public class Instructor extends User<Instructor> {
             return;
         }
         if (courseToUpdate != null) {
-            // We must validate if the instructor is even assigned to the course they want
-            // to update
             Instructor assignedInstructor = courseToUpdate.getInstructor();
 
             if (assignedInstructor != null && assignedInstructor.getId().equals(this.getId())) {
@@ -113,8 +94,6 @@ public class Instructor extends User<Instructor> {
                 System.out.println("Instructor " + assignedInstructor.getName() + "'s"
                         + " course information updated for " + courseToUpdate.getCourseName());
             }
-            // This is just in case if the course is assigned to a different instructor.
-            // Its not empty but it also doesnt match the targetId.
             else if (assignedInstructor != null) {
                 System.out
                         .println(assignedInstructor.getName() + " with the ID number: " + assignedInstructor.getId()
@@ -136,4 +115,13 @@ public class Instructor extends User<Instructor> {
         setAddress(newAddress);
         System.out.println("Instructor " + getName() + "'s information updated.");
     }
+
+    @Override
+    public String toString() {
+       return String.format("ID: %s Name: %s", this.getId() ,this.getName());
+    } 
+
+
+
+    
 }
