@@ -9,7 +9,7 @@ public class Helpers {
     /// <T extends User<T>> This method works with any User (Admin, Instructor,
     /// Student). T inherits from User<T>.
     /// The single T will return a single object of type T.
-    public static <T extends User<T>> T loginWithRetry(List<T> usersList, T tempUser) {
+    public static <T extends User<T>> T login(List<T> usersList, T tempUser) {
         T loggedInUser = null;
         try {
             System.out.print("Please enter your ID: ");
@@ -26,18 +26,38 @@ public class Helpers {
             }
             if (!idExists) {
                 System.out.println("No user found with the entered ID.");
-            } else {
-                System.out.print("\nPlease enter your password: ");
-                String password = input.nextLine();
-                T tempUser2 = tempUser.login(usersList, id, password);
-                if (null != tempUser2) {
-                    loggedInUser = tempUser2;
-                }
             }
+            loggedInUser = validatePasswordWithRetries(usersList, tempUser, id, input);
             return loggedInUser;
         } catch (Exception e) {
             return loggedInUser;
         }
+    }
+
+    public static <T extends User<T>> T validatePasswordWithRetries(List<T> usersList, T tempUser, String id,
+            Scanner input) {
+        T loggedInUser = null;
+        int attempts = 0;
+        final int maxAttempts = 3;
+
+        while (attempts < maxAttempts) {
+            System.out.print("Please enter your password: ");
+            String password = input.nextLine();
+
+            loggedInUser = tempUser.login(usersList, id, password);
+
+            if (loggedInUser != null) {
+                return loggedInUser;
+            } else {
+                attempts++;
+                if (attempts < maxAttempts) {
+                    System.out
+                            .println("Incorrect password. Try again (" + (maxAttempts - attempts) + " attempts left).");
+                }
+            }
+        }
+        System.out.println("Too many failed attempts. Returning to main menu.");
+        return null;
     }
 
     public static boolean ValidatePassword(String password) {
@@ -166,7 +186,6 @@ public class Helpers {
         System.out.println("2. No");
 
         int choice = Helpers.getSafeIntInput("Option: ");
-        input.nextLine(); // Clear buffer
 
         if (choice == 1) {
             System.out.print("Enter new " + fieldName + ": ");
@@ -200,7 +219,6 @@ public class Helpers {
 
     // MENUS
     public static void showStudentMenu() {
-        System.out.println("\nEnter the number for the choice you want.");
         System.out.println("1. View avaliable courses.");
         System.out.println("2. Enroll in course.");
         System.out.println("3. View enrolled courses.");
@@ -220,18 +238,20 @@ public class Helpers {
     }
 
     public static void showAdminMenu() {
-        System.out.println("\n1. Add Students.");
-        System.out.println("2. Remove Students.");
-        System.out.println("3. Add Instructors.");
-        System.out.println("4. Remove Instructors.");
-        System.out.println("5. Add Course.");
-        System.out.println("6. Update Student Info.");
-        System.out.println("7. Update Instructor Info.");
-        System.out.println("8. Assign Instructor to Course.");
-        System.out.println("9. Close Course.");
-        System.out.println("10. View Enrollment Statistics.");
-        System.out.println("11. Generate Reports.");
-        System.out.println("12.Logout.");
+        System.out.println("\n1.  Add Students.");
+        System.out.println("2.  Remove Students.");
+        System.out.println("3.  View student list.");
+        System.out.println("4.  Add Instructors.");
+        System.out.println("5.  Remove Instructors.");
+        System.out.println("6.  View instructor list.");
+        System.out.println("7.  Add Course.");
+        System.out.println("8.  Close Course.");
+        System.out.println("9.  Update Student Info.");
+        System.out.println("10. Update Instructor Info.");
+        System.out.println("11. Assign Instructor to Course.");
+        System.out.println("12. View Enrollment Statistics.");
+        System.out.println("13. Generate Reports.");
+        System.out.println("14. Logout.");
     }
 
     // CASES
@@ -444,8 +464,7 @@ public class Helpers {
             input.nextLine(); // Buffer
             // TO-DO
             Student newStudent = new Student(studentName, studentID, createPassword, createEmail,
-                    createPhoneNumber, createAddress, creditLimit,
-                    new ArrayList<>());
+                    createPhoneNumber, createAddress, creditLimit, new ArrayList<>());
             administrator.addStudent(newStudent, students);
 
         } catch (Exception e) {
@@ -536,26 +555,33 @@ public class Helpers {
 
             Course newCourse = new Course(courseName, courseCode, null, null, null, null,
                     courseCapacity, null, courseCreditHours);
+            System.out.println("Would you like to assign instructor now?");
+            System.out.println("1. Assign now.");
+            System.out.println("2. Assign later.");
+            int assignChoice = Helpers.getSafeIntInput("Option: ");
+            if (assignChoice == 1) {
+                System.out.print("\nAssign instructor by ID: ");
+                String assignInstructorID = input.nextLine();
 
-            // Assign instructor
-            System.out.print("\nAssign instructor by ID: ");
-            String assignInstructorID = input.nextLine();
-
-            // Validate instructor list is not empty.
-            if (instructors.isEmpty()) {
-                System.out.println("No instructors available. Please add an instructor before creating a course.");
-                return; // Stop the method early
-            }
-            Instructor selectedInstructor = null;
-            for (Instructor i : instructors) {
-                if (i.getId().equals(assignInstructorID)) {
-                    selectedInstructor = i;
-                    break;
+                // Validate instructor list is not empty.
+                if (instructors.isEmpty()) {
+                    System.out.println("No instructors available. Please add an instructor before creating a course.");
+                    return; // Stop the method early
+                }
+                Instructor selectedInstructor = null;
+                for (Instructor i : instructors) {
+                    if (i.getId().equals(assignInstructorID)) {
+                        selectedInstructor = i;
+                        break;
+                    }
+                }
+                administrator.assignInstructor(newCourse, selectedInstructor);
+                if (selectedInstructor == null) {
+                    System.out.println("Instructor with ID " + assignInstructorID + " not found.");
                 }
             }
-            administrator.assignInstructor(newCourse, selectedInstructor);
-            if (selectedInstructor == null) {
-                System.out.println("Instructor with ID " + assignInstructorID + " not found.");
+            if (assignChoice == 2) {
+                System.out.println("To be assigned.");
             }
 
             // Assign course status
@@ -563,7 +589,6 @@ public class Helpers {
             System.out.println("1. Open");
             System.out.println("2. Closed");
             int courseStatus = Helpers.getSafeIntInput("");
-            input.nextLine(); // Buffer
 
             if (courseStatus == 1) {
                 newCourse.setEnrollmentStatus(Course.EnrollmentStatusEnum.Open);
@@ -716,7 +741,8 @@ public class Helpers {
                 }
             }
             if (instructorToUpdate2 != null) {
-                administrator.assignInstructor(null, instructorToUpdate2);
+                Course selectedCourse = courses.get(courseIndex);
+                administrator.assignInstructor(selectedCourse, instructorToUpdate2);
             } else {
                 System.out.println("Instructor with ID " + instructorID2 + " not found.");
             }
