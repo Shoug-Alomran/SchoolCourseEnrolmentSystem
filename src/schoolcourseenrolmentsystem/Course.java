@@ -1,6 +1,4 @@
-
 package schoolcourseenrolmentsystem;
-
 import java.util.*;
 
 public class Course {
@@ -59,11 +57,9 @@ public class Course {
     }
 
     public void setCourseName(String courseName) {
-        // how to write the function such that if an error occurs it wont throw an error
-        // but return
-        // an indicator to the caller to retry again
         if (courseName == null || courseName.isEmpty()) {
-            throw new IllegalArgumentException("Course name cannot be null or empty.");
+          System.out.println("Course name cannot be null or empty.");
+          return;
         } else {
             this.courseName = courseName;
         }
@@ -78,6 +74,7 @@ public class Course {
             this.creditHours = creditHours;
         } else {
             System.out.println("Credit hours can not be <= 0");
+            return;
         }
     }
 
@@ -91,7 +88,8 @@ public class Course {
 
     public void setCourseCode(String courseCode) {
         if (courseCode == null || courseCode.isEmpty()) {
-            throw new IllegalArgumentException("Course code cannot be null or empty.");
+       System.out.println("Course code cannot be null or empty.");
+       return;
         } else {
             this.courseCode = courseCode;
         }
@@ -142,6 +140,7 @@ public class Course {
             this.capacity = capacity;
         } else {
             System.out.println("Error: Capacity must be > 0.");
+            return;
         }
     }
 
@@ -166,36 +165,7 @@ public class Course {
             this.grades = grades;
         }
     }
-
-    @Override
-    public int hashCode() {
-        // HashSet uses hashCode() rely on it to quickly locate objects
-        
-        return Objects.hash(courseCode.toLowerCase());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Course other = (Course) obj;
-        if (courseCode == null) {
-            if (other.courseCode != null)
-                return false;
-        } else if (!courseCode.equals(other.courseCode))
-            return false;
-        return true;
-    }
-
     // Methods
-    public void viewGrades(Assessment grades) {
-
-    }
-
     // Check if the course is full
     public boolean isFull() {
         return enrolledStudents != null && this.getEnrolledStudents().size() >= capacity;
