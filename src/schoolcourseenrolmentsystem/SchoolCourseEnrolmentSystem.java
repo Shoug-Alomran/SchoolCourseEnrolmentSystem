@@ -11,6 +11,7 @@ public class SchoolCourseEnrolmentSystem {
     private static List<Administrator> Administrators = new ArrayList<>();
     private static List<Student> Students = new ArrayList<>();
     private static List<Course> Courses = new ArrayList<>();
+    private static List<Assessment> grades = new ArrayList<>();
 
     // Default admin
     private static Administrator DefaultAdmin = new Administrator("Shoug", "1122334455", "Default12345",
@@ -63,7 +64,7 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.dropCourse(Courses, student);
                                     break;
                                 case 6:
-                                    // Helpers.viewGradesStudent();
+                                    student.viewGrades(grades);
                                     break;
                                 case 7:
                                     Helpers.updateStudentProfile(student);
@@ -99,7 +100,7 @@ public class SchoolCourseEnrolmentSystem {
                                     instructor.viewEnrolledStudents(instructor, Courses);
                                     break;
                                 case 2:
-                                    Helpers.editStudentGrades();
+                                    instructor.gradeStudent(grades, Courses);
                                     break;
                                 case 3:
                                     Helpers.updateCourseInfo(instructor, Courses);
@@ -131,7 +132,7 @@ public class SchoolCourseEnrolmentSystem {
                         while (!exitAdmin) {
                             Helpers.showAdminMenu();
                             System.out.println();
-                            int adminChoice = Helpers.getSafeIntInput("Enter your option: ");
+                            int adminChoice = Helpers.getSafeIntInput("\nEnter your option: ");
 
                             switch (adminChoice) {
                                 case 1:
@@ -168,10 +169,10 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.assignInstructor(administrator, Courses, Instructors);
                                     break;
                                 case 12:
-                                    Helpers.viewEnrollmentStatistics();
+                                  Helpers.viewEnrollmentStatistics(Courses);
                                     break;
                                 case 13:
-                                    Helpers.generateReports();
+                                Helpers.generateReports(Courses);
                                     break;
                                 case 14:
                                     administrator.logout(administrator);
