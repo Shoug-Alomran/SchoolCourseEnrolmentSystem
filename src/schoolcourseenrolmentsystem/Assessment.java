@@ -1,6 +1,4 @@
-
 package schoolcourseenrolmentsystem;
-
 import java.util.*;
 
 public class Assessment {
@@ -75,46 +73,6 @@ public class Assessment {
 
     // Methods
 
-    public void viewGradesByExamType(List<Assessment> grades, Student student) {
-        List<Course> enrolledCourses = student.getEnrolledCourses();
-        if (enrolledCourses.isEmpty()) {
-            System.out.println("You are not enrolled in any courses.");
-            return;
-        }
-
-        System.out.println("Select a course:");
-        for (int i = 0; i < enrolledCourses.size(); i++) {
-            System.out.println((i + 1) + ". " + enrolledCourses.get(i).getCourseName()
-                    + " (" + enrolledCourses.get(i).getCourseCode() + ")");
-        }
-
-        int courseChoice = Helpers.getSafeIntInput("Choice: ");
-        if (courseChoice < 1 || courseChoice > enrolledCourses.size()) {
-            System.out.println("Invalid course selection.");
-            return;
-        }
-
-        String courseCode = enrolledCourses.get(courseChoice - 1).getCourseCode();
-
-        System.out.println("Select exam type to view:");
-        Assessment.ExamType[] examTypes = Assessment.ExamType.values();
-        for (int i = 0; i < examTypes.length; i++) {
-            System.out.println((i + 1) + ". " + examTypes[i]);
-        }
-
-        int examChoice = Helpers.getSafeIntInput("Choice: ");
-        if (examChoice < 1 || examChoice > examTypes.length) {
-            System.out.println("Invalid exam type selection.");
-            return;
-        }
-
-        Assessment.ExamType selectedExamType = examTypes[examChoice - 1];
-
-        // Show all grades of that type and their average
-        viewSpecificGrade(grades, student.getId(), courseCode, selectedExamType);
-        viewTotalAverageGrade(grades, courseCode, courseCode);
-    }
-
     public void assignGrade(List<Assessment> grades, String studentId, String courseCode,
             Assessment.ExamType examType, double score) {
         boolean gradeUpdated = false;
@@ -136,20 +94,37 @@ public class Assessment {
         }
     }
 
-    public void viewSpecificGrade(List<Assessment> grades, String studentId, String courseCode,
-            Assessment.ExamType examType) {
+    public void viewAllGradesForCourse(List<Assessment> grades, Student student) {
+        List<Course> courses = student.getEnrolledCourses();
+        if (courses.isEmpty()) {
+            System.out.println("You are not enrolled in any courses.");
+            return;
+        }
+
+        System.out.println("Select a course to view all your grades:");
+        for (int i = 0; i < courses.size(); i++) {
+            System.out.println((i + 1) + ". " + courses.get(i).getCourseName()
+                    + " (" + courses.get(i).getCourseCode() + ")");
+        }
+
+        int courseChoice = Helpers.getSafeIntInput("Choice: ");
+        if (courseChoice < 1 || courseChoice > courses.size()) {
+            System.out.println("Invalid course selection.");
+            return;
+        }
+
+        String courseCode = courses.get(courseChoice - 1).getCourseCode();
         boolean found = false;
 
         for (Assessment g : grades) {
-            if (g.getCourseCode().equals(courseCode)
-                    && g.getStudentId().equals(studentId)
-                    && g.getExamType() == examType) {
-                System.out.println("Your " + examType + " score: " + g.getScore());
+            if (g.getStudentId().equals(student.getId()) && g.getCourseCode().equals(courseCode)) {
+                System.out.println(g.getExamType() + ": " + g.getScore());
                 found = true;
             }
         }
+
         if (!found) {
-            System.out.println("No " + examType + " grades found for this course.");
+            System.out.println("No grades found for this course.");
         }
     }
 
@@ -168,6 +143,56 @@ public class Assessment {
             System.out.println("Your total average grade in " + courseCode + " is: " + average);
         } else {
             System.out.println("No grades found for this course.");
+        }
+    }
+
+    public void viewSpecificExamScore(List<Assessment> grades, Student student) {
+        List<Course> courses = student.getEnrolledCourses();
+        if (courses.isEmpty()) {
+            System.out.println("You are not enrolled in any courses.");
+            return;
+        }
+
+        System.out.println("Select a course:");
+        for (int i = 0; i < courses.size(); i++) {
+            System.out.println((i + 1) + ". " + courses.get(i).getCourseName()
+                    + " (" + courses.get(i).getCourseCode() + ")");
+        }
+
+        int courseChoice = Helpers.getSafeIntInput("Choice: ");
+        if (courseChoice < 1 || courseChoice > courses.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        String courseCode = courses.get(courseChoice - 1).getCourseCode();
+
+        // Choose exam type
+        Assessment.ExamType[] types = Assessment.ExamType.values();
+        System.out.println("Select an exam to view:");
+        for (int i = 0; i < types.length; i++) {
+            System.out.println((i + 1) + ". " + types[i]);
+        }
+
+        int examChoice = Helpers.getSafeIntInput("Choice: ");
+        if (examChoice < 1 || examChoice > types.length) {
+            System.out.println("Invalid exam type.");
+            return;
+        }
+
+        Assessment.ExamType selected = types[examChoice - 1];
+        boolean found = false;
+        for (Assessment a : grades) {
+            if (a.getStudentId().equals(student.getId()) &&
+                    a.getCourseCode().equals(courseCode) &&
+                    a.getExamType() == selected) {
+                System.out.println("Your " + selected + " score: " + a.getScore());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No " + selected + " score found for this course.");
         }
     }
 }
