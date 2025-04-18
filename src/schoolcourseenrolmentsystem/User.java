@@ -1,6 +1,4 @@
-
 package schoolcourseenrolmentsystem;
-
 import java.util.List;
 
 public abstract class User<T> {
@@ -31,6 +29,7 @@ public abstract class User<T> {
     }
 
     // Setters & Getters
+    // we do validation in prior to calling this method to avoid bloating it
     public String getName() {
         return name;
     }

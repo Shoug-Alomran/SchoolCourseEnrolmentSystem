@@ -169,10 +169,10 @@ public class SchoolCourseEnrolmentSystem {
                                     Helpers.assignInstructor(administrator, Courses, Instructors);
                                     break;
                                 case 12:
-                                  Helpers.viewEnrollmentStatistics(Courses);
+                                    Helpers.viewEnrollmentStatistics(Courses);
                                     break;
                                 case 13:
-                                Helpers.generateReports(Courses);
+                                    Helpers.generateReports(Courses);
                                     break;
                                 case 14:
                                     administrator.logout(administrator);

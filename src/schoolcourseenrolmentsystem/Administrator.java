@@ -1,4 +1,3 @@
-
 package schoolcourseenrolmentsystem;
 
 import java.util.*;
@@ -41,11 +40,11 @@ public class Administrator extends User<Administrator> {
     // 1. Manage student & instructor accounts
     // Add and remove users
 
+    // Loop used to iterate over all the students/instructors.
+    // An Iterator keeps track of the current position safely, and when you call
+    // remove(), it tells the collection to safely remove the current element
+    // without invalidating the loop.
     public boolean removeStudent(List<Student> students, String targetId) {
-        // Loop used to iterate over all the students.
-        // An Iterator keeps track of the current position safely, and when you call
-        // remove(), it tells the collection to safely remove the current element
-        // without invalidating the loop.
         Iterator<Student> iterator = students.iterator();
         while (iterator.hasNext()) {
             Student s = iterator.next();
@@ -60,10 +59,6 @@ public class Administrator extends User<Administrator> {
     }
 
     public boolean removeInstructor(List<Instructor> instructors, String targetId) {
-        // An Iterator keeps track of the current position safely, and when you call
-        // remove(), it tells the collection to safely remove the current element
-        // without invalidating the loop.
-
         // Loop used to iterate over all the instructors
         Iterator<Instructor> iterator = instructors.iterator();
         while (iterator.hasNext()) {
@@ -100,7 +95,6 @@ public class Administrator extends User<Administrator> {
             if (s.getId().equals(targetId)) {
                 updateStudentInfo = s;
                 break;
-
             }
         }
         if (updateStudentInfo != null) {

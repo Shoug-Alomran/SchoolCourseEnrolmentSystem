@@ -1,6 +1,4 @@
-
 package schoolcourseenrolmentsystem;
-
 import java.util.*;
 
 public class Instructor extends User<Instructor> {
@@ -62,7 +60,6 @@ public class Instructor extends User<Instructor> {
 
     public void gradeStudent(List<Assessment> grades, List<Course> courses) {
         Scanner input = new Scanner(System.in);
-
         try {
             // Step 1: Show instructor's courses
             List<Course> instructorCourses = new ArrayList<>();
@@ -155,7 +152,6 @@ public class Instructor extends User<Instructor> {
                 grades.add(newAssessment);
                 System.out.println("Grade recorded successfully.");
             }
-          
         } catch (Exception e) {
             System.out.println(e.getMessage()); 
         }

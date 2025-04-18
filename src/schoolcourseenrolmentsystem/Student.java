@@ -1,5 +1,4 @@
 package schoolcourseenrolmentsystem;
-
 import java.util.*;
 
 public class Student extends User<Student> {
@@ -137,48 +136,44 @@ public class Student extends User<Student> {
     }
 
     public void viewGrades(List<Assessment> grades) {
-        System.out.println("");
-        System.out.println("What would you like to view?");
-        System.out.println("");
-        System.out.println("1. View grades by exam type.");
-        System.out.println("2. View total average grade.");
+        System.out.println("\nWhat would you like to view?");
+        System.out.println("1. View a specific exam score.");
+        System.out.println("2. View all grades in a course.");
+        System.out.println("3. View total average in a course.");
 
-        int choice = Helpers.getSafeIntInput("\nOption: ");
+        int choice = Helpers.getSafeIntInput("Option: ");
+        Assessment temp = new Assessment(null, null, null, 0.0, null);
 
         if (choice == 1) {
-            Assessment assessmentHelper = new Assessment(null, null, null, 0.0, null);
-            assessmentHelper.viewGradesByExamType(grades, this);
+            temp.viewSpecificExamScore(grades, this);
         } else if (choice == 2) {
-            // View total average for a selected course
-            List<Course> enrolledCourses = this.getEnrolledCourses();
+            temp.viewAllGradesForCourse(grades, this);
+        } else if (choice == 3) {
+            List<Course> courses = this.getEnrolledCourses();
 
-            if (enrolledCourses.isEmpty()) {
+            if (courses.isEmpty()) {
                 System.out.println("You are not enrolled in any courses.");
                 return;
             }
 
-            System.out.println("Select a course to view your overall average:");
-            for (int i = 0; i < enrolledCourses.size(); i++) {
-                System.out.println((i + 1) + ". " + enrolledCourses.get(i).getCourseName()
-                        + " (" + enrolledCourses.get(i).getCourseCode() + ")");
+            System.out.println("Select a course:");
+            for (int i = 0; i < courses.size(); i++) {
+                System.out.println((i + 1) + ". " + courses.get(i).getCourseName()
+                        + " (" + courses.get(i).getCourseCode() + ")");
             }
 
             int courseChoice = Helpers.getSafeIntInput("Choice: ");
-            if (courseChoice < 1 || courseChoice > enrolledCourses.size()) {
+            if (courseChoice < 1 || courseChoice > courses.size()) {
                 System.out.println("Invalid course selection.");
                 return;
             }
 
-            String courseCode = enrolledCourses.get(courseChoice - 1).getCourseCode();
-
-            Assessment assessment = new Assessment(null, null, null, 0.0, null);
-            assessment.viewTotalAverageGrade(grades, this.getId(), courseCode);
+            String courseCode = courses.get(courseChoice - 1).getCourseCode();
+            temp.viewTotalAverageGrade(grades, this.getId(), courseCode);
         } else {
             System.out.println("Invalid choice.");
         }
     }
-
-    
 
     public void viewAvailableCourses(List<Course> courses) {
         boolean avaliableCourses = false;
