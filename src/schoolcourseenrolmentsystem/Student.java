@@ -7,7 +7,8 @@ public class Student extends User<Student> {
     private int creditLimit;
     private List<Course> enrolledCourses;
 
-    public Student() { }
+    public Student() {
+    }
 
     // Constructor
     public Student(String name, String id, String password, String email, String phoneNumber, String address,
@@ -16,9 +17,9 @@ public class Student extends User<Student> {
         setCreditLimit(creditLimit);
         // If the list is null, create a new one. Fixes NullPointerException.
         if (enrolledCourses != null) {
-            this.enrolledCourses = enrolledCourses;
+        this.enrolledCourses = enrolledCourses;
         } else {
-            this.enrolledCourses = new ArrayList<>();
+        this.enrolledCourses = new ArrayList<>();
         }
     }
 
@@ -32,6 +33,11 @@ public class Student extends User<Student> {
     }
 
     public void setCreditLimit(int creditLimit) {
+        // TO-DO
+        if (creditLimit < 0) {
+            System.out.println("Must be greater than 0");
+            return;
+        }
         this.creditLimit = creditLimit;
     }
 
@@ -67,7 +73,8 @@ public class Student extends User<Student> {
     public void enroll_In_Course(Course course) {
         // 1. make sure credit limit is not excited and that the capacity is avaliable
         if (enrolledCourses.contains(course)) {
-            System.out.printf("\nYou are already enrolled in (%s) (%s).", course.getCourseName(),course.getCourseCode() );
+            System.out.printf("\nYou are already enrolled in (%s) (%s).", course.getCourseName(),
+                    course.getCourseCode());
         } else if (course.isFull()) {
             System.out.println("Cannot enroll in " + course.getCourseName() + " — course is full.");
         } // Check if the enrollment status is open or not
@@ -198,6 +205,6 @@ public class Student extends User<Student> {
 
     @Override
     public String toString() {
-        return String.format("Student data:\nID: %s\nName: %s", this.getId(), this.getName());
+        return String.format("Student data:\nID: %s Name: %s", this.getId(), this.getName());
     }
 }
