@@ -1,4 +1,5 @@
 package schoolcourseenrolmentsystem;
+
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -26,15 +27,14 @@ public class Helpers {
             if (!idExists) {
                 System.out.println("No user found with the entered ID.");
             }
-            loggedInUser = validatePasswordWithRetries(usersList, tempUser, id, input);
+            loggedInUser = validatePasswordWithRetries(usersList, tempUser, id);
             return loggedInUser;
         } catch (Exception e) {
             return loggedInUser;
         }
     }
 
-    public static <T extends User<T>> T validatePasswordWithRetries(List<T> usersList, T tempUser, String id,
-            Scanner input) {
+    public static <T extends User<T>> T validatePasswordWithRetries(List<T> usersList, T tempUser, String tempID) {
         T loggedInUser = null;
         int attempts = 0;
         final int maxAttempts = 3;
@@ -43,7 +43,7 @@ public class Helpers {
             System.out.print("Please enter your password: ");
             String password = input.nextLine();
 
-            loggedInUser = tempUser.login(usersList, id, password);
+            loggedInUser = tempUser.login(usersList, tempID, password);
 
             if (loggedInUser != null) {
                 return loggedInUser;
@@ -66,6 +66,7 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return isValid;
     }
@@ -77,6 +78,7 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return isValid;
     }
@@ -88,6 +90,7 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return isValid;
     }
@@ -99,6 +102,7 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return isValid;
     }
@@ -110,24 +114,21 @@ public class Helpers {
                 isValid = true;
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return isValid;
     }
 
     public static User.Role checkValidityOfRole() {
         while (true) {
-            System.out.println("Select a role:");
-            System.out.println("1. STUDENT");
-            System.out.println("2. INSTRUCTOR");
-            System.out.println("3. ADMIN");
-            System.out.print("Your choice: ");
+            System.out.println("Select a role: \n1. STUDENT \n2. INSTRUCTOR \n3. ADMIN \nOption:");
 
-            int choice;
+            int Option;
             try {
-                choice = input.nextInt();
+                Option = input.nextInt();
                 input.nextLine(); // buffer
 
-                switch (choice) {
+                switch (Option) {
                     case 1:
                         return User.Role.STUDENT;
                     case 2:
@@ -164,9 +165,7 @@ public class Helpers {
     }
 
     public static User.Role updateRolePrompt(User.Role currentRole) {
-        System.out.println("\nDo you want to change the role?");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
+        System.out.println("\nDo you want to change the role? \n1.Yes \n2.No");
         int choice = getSafeIntInput("\nOption: ");
         input.nextLine();
 
@@ -180,10 +179,7 @@ public class Helpers {
 
     // Predicate <> helps us use premade validators.
     public static String updateFieldWithPrompt(String fieldName, String currentValue, Predicate<String> validator) {
-        System.out.println("\nDo you want to change your " + fieldName + "?");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
-
+        System.out.println("\nDo you want to change your " + fieldName + "? \n1.Yes \n2.No");
         int choice = Helpers.getSafeIntInput("\nOption: ");
 
         if (choice == 1) {
@@ -206,8 +202,7 @@ public class Helpers {
         while (true) {
             System.out.print("\nEnter " + fieldName + ": ");
             inputValue = input.nextLine();
-            if (!validator.test(inputValue)) { // .test() method is just how you invoke the logic inside the Predicate
-                                               // <>
+            if (!validator.test(inputValue)) {// .test() method is just how you invoke the logic inside the Predicate<>
                 System.out.println("Invalid " + fieldName + ". Please try again.");
             } else {
                 break;
@@ -218,7 +213,7 @@ public class Helpers {
 
     // MENUS
     public static void showStudentMenu() {
-        System.out.println("");
+        System.out.println("\n---------Student Menu---------");
         System.out.println("1. View avaliable courses.");
         System.out.println("2. Enroll in course.");
         System.out.println("3. View enrolled courses.");
@@ -230,7 +225,7 @@ public class Helpers {
     }
 
     public static void showInstructorMenu() {
-        System.out.println("");
+        System.out.println("\n---------Instructor Menu---------");
         System.out.println("1. View enrolled students.");
         System.out.println("2. Grade assignments.");
         System.out.println("3. Update course information.");
@@ -239,7 +234,7 @@ public class Helpers {
     }
 
     public static void showAdminMenu() {
-        System.out.println("");
+        System.out.println("\n---------Administrator Menu---------");
         System.out.println("1.  Add Students.");
         System.out.println("2.  Remove Students.");
         System.out.println("3.  View student list.");
@@ -260,22 +255,23 @@ public class Helpers {
     // INSTRUCTORS CASES
 
     public static String GenerateRandomID() {
-        String CHARACTERS = "0123456789";
-        int ID_LENGTH = 10;
+        String numbers = "0123456789";
+        int ID_Length = 10;
         Random random = new Random();
 
-        StringBuilder id = new StringBuilder(ID_LENGTH);
+        StringBuilder id = new StringBuilder(ID_Length);
 
-        for (int i = 0; i < ID_LENGTH; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
+        for (int i = 0; i < ID_Length; i++) {
+            int randomIndex = random.nextInt(numbers.length());
+            char randomChar = numbers.charAt(randomIndex);
             id.append(randomChar);
         }
         return id.toString();
     }
 
-    public static void updateCourseInfo(Instructor instructor, List<Course> courses) {
+    public static void updateCourseInfo(Instructor instructor, List<Course> listOfCourses) {
         try {
+            System.out.println("\n---------Update Course Information---------");
             System.out.print("\nEnter the course code  of the course you would like to update: ");
             String courseCode = input.next();
             input.nextLine(); // Buffer
@@ -286,14 +282,17 @@ public class Helpers {
             System.out.print("\nEnter new description: ");
             String newDescription = input.nextLine();
 
-            instructor.updateCourseInfo(courseCode, courses, newSchedule, newDescription);
+            instructor.updateCourseInfo(courseCode, listOfCourses, newSchedule, newDescription);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public static void updateInstructorProfile(Instructor instructor) {
         try {
+            System.out.println("\n---------Update Personal Profile---------");
             System.out.println("\nPlease fill out the form to update your profile.");
+
             String updatedPassword = Helpers.updateFieldWithPrompt("password", instructor.getPassword(),
                     Helpers::ValidatePassword); // Helpers::ValidatePassword is like an inhanced for-each loop
             String updateEmail = Helpers.updateFieldWithPrompt("email", instructor.getEmail(), Helpers::ValidateEmail);
@@ -301,27 +300,29 @@ public class Helpers {
                     Helpers::ValidatePhoneNumber);
             String updateAddress = Helpers.updateFieldWithPrompt("address", instructor.getAddress(),
                     Helpers::ValidateAddress);
+
             instructor.updateInstructorPersonalInfo(updatedPassword, updateEmail, updatePhone, updateAddress);
             System.out.println("Instructor " + instructor.getName() + "'s information updated.");
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     // STUDENT CASES
-    public static void enroll_In_Course_Student(List<Course> courses, Student student) {
+    public static void enroll_In_Course_Student(List<Course> listOfCourses, Student student) {
         try {
+            System.out.println("\n---------Enroll In Course---------");
             System.out.println("Courses avaliable to enroll in: ");
             // Sub-List to the main
             List<Course> availableCourses = new ArrayList<>();
             int index = 1;
 
-            for (Course c : courses) {
-                if (!c.isFull() && c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open
-                        && !student.getEnrolledCourses().contains(c)) {
+            for (Course course : listOfCourses) {
+                if (!course.isFull() && course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open
+                        && !student.getEnrolledCourses().contains(course)) {
                     // List the avaliable courses
-                    System.out.println(
-                            index + ". (" + c.getCourseName() + ") (" + c.getCourseCode() + ")");
-                    availableCourses.add(c);
+                    System.out.println(index + ". (" + course.getCourseName() + ") (" + course.getCourseCode() + ")");
+                    availableCourses.add(course);
                     index++;
                 }
             }
@@ -338,19 +339,22 @@ public class Helpers {
                 }
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void dropCourse(List<Course> courses, Student student) {
+    public static void dropCourse(List<Course> listOfCourses, Student student) {
         try {
-            System.out.print(
-                    "\nEnter course code of the course you would like to drop: ");
+            System.out.println("\n---------Unenroll In Course---------");
+            System.out.print("\nEnter course code of the course you would like to drop: ");
             String dropCourseCode = input.next();
             input.nextLine(); // Buffer
+
             Course courseCodeToDrop = null;
-            for (Course c : courses) {
-                if (c.getCourseCode().equalsIgnoreCase(dropCourseCode)) {
-                    courseCodeToDrop = c;
+
+            for (Course course : listOfCourses) {
+                if (course.getCourseCode().equalsIgnoreCase(dropCourseCode)) {
+                    courseCodeToDrop = course;
                     break;
                 }
             }
@@ -360,28 +364,34 @@ public class Helpers {
                 System.out.println("No course found with the code" + dropCourseCode + "'.");
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void updateStudentProfile(Student student) {
+    public static void updateStudentProfile(Student specificStudent) {
         try {
+            System.out.println("\n---------Update Personal Profile---------");
             System.out.println("\nPlease enter the needed information to update your profile.");
-            String updatedPassword = Helpers.updateFieldWithPrompt("password", student.getPassword(),
+
+            String updatedPassword = Helpers.updateFieldWithPrompt("password", specificStudent.getPassword(),
                     Helpers::ValidatePassword); // Helpers::ValidatePassword is like an inhanced for-each loop
-            String updateEmail = Helpers.updateFieldWithPrompt("email", student.getEmail(), Helpers::ValidateEmail);
-            String updatePhone = Helpers.updateFieldWithPrompt("phone number", student.getPhoneNumber(),
+            String updateEmail = Helpers.updateFieldWithPrompt("email", specificStudent.getEmail(),
+                    Helpers::ValidateEmail);
+            String updatePhone = Helpers.updateFieldWithPrompt("phone number", specificStudent.getPhoneNumber(),
                     Helpers::ValidatePhoneNumber);
-            String updateAddress = Helpers.updateFieldWithPrompt("address", student.getAddress(),
+            String updateAddress = Helpers.updateFieldWithPrompt("address", specificStudent.getAddress(),
                     Helpers::ValidateAddress);
 
-            student.updateStudentPersonalInfo(updatedPassword, updateEmail, updatePhone, updateAddress);
+            specificStudent.updateStudentPersonalInfo(updatedPassword, updateEmail, updatePhone, updateAddress);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     // ADMIN CASES
-    public static void addStudent(Administrator administrator, List<Student> students) {
+    public static void addStudent(Administrator administrator, List<Student> listOfStudents) {
         try {
+            System.out.println("\n---------Create New Student---------");
             String studentName = "";
             while (true) {
                 System.out.print("\nEnter student name: ");
@@ -397,7 +407,7 @@ public class Helpers {
             while (true) {
                 studentID = GenerateRandomID();
                 boolean exists = false;
-                for (Student s : students) {
+                for (Student s : listOfStudents) {
                     if (s.getId().equals(studentID)) {
                         exists = true;
                         break;
@@ -411,33 +421,50 @@ public class Helpers {
             String createEmail = Helpers.createUserWithPrompt("email", Helpers::ValidateEmail);
             String createPhoneNumber = Helpers.createUserWithPrompt("phone number", Helpers::ValidatePhoneNumber);
             String createAddress = Helpers.createUserWithPrompt("address", Helpers::ValidateAddress);
+
             System.out.print("\nEnter credit limit: ");
             int creditLimit = input.nextInt();
             input.nextLine(); // Buffer
-            // TO-DO
+
             Student newStudent = new Student(studentName, studentID, createPassword, createEmail,
                     createPhoneNumber, createAddress, creditLimit, new ArrayList<>());
-            administrator.addStudent(newStudent, students);
+
+            administrator.addStudent(newStudent, listOfStudents);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void removeStudent(Administrator administrator, List<Student> students) {
+    public static void removeStudent(Administrator administrator, List<Student> listOfStudents) {
         try {
+            System.out.println("\n---------Remove Student---------");
             System.out.print("\nEnter the ID of the student to remove: ");
             String targetId = input.next();
             input.nextLine(); // Buffer
-            administrator.removeStudent(students, targetId);
+            administrator.removeStudent(listOfStudents, targetId);
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         System.out.println("Invalid option.");
     }
 
-    public static void addInstructor(Administrator administrator, List<Instructor> instructors) {
+    public static void removeInstructor(Administrator administrator, List<Instructor> listOfInstructors) {
         try {
+            System.out.println("\n---------Remove Instructor---------");
+            System.out.print("\nEnter the ID of the instructor to remove: ");
+            String targetId = input.next();
+            input.nextLine(); // Buffer
+            administrator.removeInstructor(listOfInstructors, targetId);
+        } catch (Exception e) {
+            System.out.println("Invalid option.");
+        }
+    }
+
+    public static void addInstructor(Administrator administrator, List<Instructor> listOfInstructors) {
+        try {
+            System.out.println("\n---------Create New Instructor---------");
             String instructorName = "";
             while (true) {
                 System.out.print("\nEnter instructor name: ");
@@ -452,7 +479,7 @@ public class Helpers {
             while (true) {
                 instructorID = GenerateRandomID();
                 boolean exists = false;
-                for (Instructor instructor : instructors) {
+                for (Instructor instructor : listOfInstructors) {
                     if (instructor.getId().equals(instructorID)) {
                         exists = true;
                         break;
@@ -467,31 +494,20 @@ public class Helpers {
             String createPhoneNumber = Helpers.createUserWithPrompt("phone number", Helpers::ValidatePhoneNumber);
             String createAddress = Helpers.createUserWithPrompt("address", Helpers::ValidateAddress);
 
-            Instructor newInstructor = new Instructor(instructorName,
-                    instructorID, createPassword,
-                    createEmail, createPhoneNumber,
-                    createAddress, new ArrayList<>());
-            administrator.addInstructor(newInstructor, instructors);
+            Instructor newInstructor = new Instructor(instructorName, instructorID, createPassword, createEmail,
+                    createPhoneNumber, createAddress, new ArrayList<>());
+
+            administrator.addInstructor(newInstructor, listOfInstructors);
         } catch (Exception e) {
             System.out.println("Invalid option.");
         }
     }
 
-    public static void removeInstructor(Administrator administrator, List<Instructor> instructors) {
+    public static void addCourse(Administrator administrator, List<Course> listOfCourses,
+            List<Instructor> listOfInstructors) {
         try {
-            System.out.print("\nEnter the ID of the instructor to remove: ");
-            String targetId = input.next();
-            input.nextLine(); // Buffer
-            administrator.removeInstructor(instructors, targetId);
-        } catch (Exception e) {
-            System.out.println("Invalid option.");
-        }
-    }
-
-    public static void addCourse(Administrator administrator, List<Course> courses, List<Instructor> instructors) {
-        try {
-            System.out.println("\nEnter the course's information that you would like to create.");
-            System.out.print("\nEnter course name: ");
+            System.out.println("\n---------Create Course---------");
+            System.out.println("\nEnter the course's information that you would like to create. \nEnter course name: ");
             String courseName = input.nextLine();
 
             System.out.print("\nEnter course code: ");
@@ -507,27 +523,28 @@ public class Helpers {
 
             Course newCourse = new Course(courseName, courseCode, null, null, null, null,
                     courseCapacity, null, courseCreditHours);
-            System.out.println("Would you like to assign instructor now?");
-            System.out.println("1. Assign now.");
-            System.out.println("2. Assign later.");
+
+            System.out.println("Would you like to assign instructor now? \n1. Assign now. \n2. Assign later.");
             int assignChoice = Helpers.getSafeIntInput("\nOption: ");
+
             if (assignChoice == 1) {
                 System.out.print("\nAssign instructor by ID: ");
                 String assignInstructorID = input.nextLine();
 
                 // Validate instructor list is not empty.
-                if (instructors.isEmpty()) {
+                if (listOfInstructors.isEmpty()) {
                     System.out.println("No instructors available. Please add an instructor before creating a course.");
                     return; // Stop the method early
                 }
                 Instructor selectedInstructor = null;
-                for (Instructor i : instructors) {
-                    if (i.getId().equals(assignInstructorID)) {
-                        selectedInstructor = i;
+                for (Instructor instructor : listOfInstructors) {
+                    if (instructor.getId().equals(assignInstructorID)) {
+                        selectedInstructor = instructor;
                         break;
                     }
                 }
                 administrator.assignInstructor(newCourse, selectedInstructor);
+
                 if (selectedInstructor == null) {
                     System.out.println("Instructor with ID " + assignInstructorID + " not found.");
                 }
@@ -537,37 +554,35 @@ public class Helpers {
             }
 
             // Assign course status
-            System.out.println("Enter course status: ");
-            System.out.println("1. Open");
-            System.out.println("2. Closed");
-            int courseStatus = Helpers.getSafeIntInput("");
+            System.out.println("Enter course status: \n1. Open \n2.Closed");
+            int courseStatus = Helpers.getSafeIntInput("Option: ");
 
             if (courseStatus == 1) {
                 newCourse.setEnrollmentStatus(Course.EnrollmentStatusEnum.Open);
             } else if (courseStatus == 2) {
                 newCourse.setEnrollmentStatus(Course.EnrollmentStatusEnum.Closed);
             }
-            administrator.addCourse(courses, newCourse);
+            administrator.addCourse(listOfCourses, newCourse);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void adminUpdateStudentProfile(Administrator administrator, List<Student> students) {
+    public static void adminUpdateStudentProfile(Administrator administrator, List<Student> listOfStudents) {
         try {
-            System.out.println(
-                    "\nPlease enter the requiered information to update students profiles.");
-            System.out.print("\nEnter student name: ");
+            System.out.print(
+                    "\n---------Update Student Profile---------\nPlease enter the requiered information below.\nStudent's name: ");
             String name = input.nextLine();
 
-            System.out.print("\nEnter student ID: ");
+            System.out.print("\nStudent ID: ");
             String ID = input.next();
             input.nextLine(); // Buffer
 
             Student studentToUpdate = null;
 
-            for (Student s : students) {
-                if (s.getName().equals(name) && s.getId().equals(ID)) {
-                    studentToUpdate = s;
+            for (Student student : listOfStudents) {
+                if (student.getName().equals(name) && student.getId().equals(ID)) {
+                    studentToUpdate = student;
                     break;
                 }
             }
@@ -585,12 +600,12 @@ public class Helpers {
                 String updateAddress = Helpers.updateFieldWithPrompt("address", studentToUpdate.getAddress(),
                         Helpers::ValidateAddress);
                 User.Role updateRole = Helpers.updateRolePrompt(studentToUpdate.getRole());
+
                 // Option to update credit limit
-                System.out.println(
-                        "Do you want to update " + studentToUpdate.getName() + "'s credit limit?");
-                System.out.println("1. Yes");
-                System.out.println("2. No");
+                System.out.printf("Do you want to update %s's credit limit? \n1. Yes \n2. No",
+                        studentToUpdate.getName());
                 int creditLimitChoice = input.nextInt();
+
                 if (creditLimitChoice == 1) {
                     System.out.print("Enter new credit limit: ");
                     int updatedStudentcreditLimit = input.nextInt();
@@ -609,13 +624,15 @@ public class Helpers {
                 System.out.println("Student " + updateName + "'s profile updated successfully.");
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void adminUpdateInstructorProfile(Administrator administrator, List<Instructor> instructors) {
+    public static void adminUpdateInstructorProfile(Administrator administrator, List<Instructor> listOfInstructors) {
         try {
             System.out.println(
-                    "\nPlease enter the requiered information to update instructor's profile.");
+                    "\n---------Update Instuctor Profile---------\nPlease enter the requiered information below.");
+
             System.out.print("\nEnter instructor name: ");
             String instructorName = input.nextLine();
 
@@ -625,9 +642,9 @@ public class Helpers {
 
             Instructor instructorToUpdate = null;
 
-            for (Instructor i : instructors) {
-                if (i.getName().equals(instructorName) && i.getId().equals(instructorId)) {
-                    instructorToUpdate = i;
+            for (Instructor instructor : listOfInstructors) {
+                if (instructor.getName().equals(instructorName) && instructor.getId().equals(instructorId)) {
+                    instructorToUpdate = instructor;
                     break;
                 }
             }
@@ -656,89 +673,90 @@ public class Helpers {
                 System.out.println("Instructor " + updateName + "'s profile updated successfully.");
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void assignInstructor(Administrator administrator, List<Course> courses,
-            List<Instructor> instructors) {
+    public static void assignInstructor(Administrator administrator, List<Course> listOfCourses,
+            List<Instructor> listOfInstructors) {
         try {
-            System.out.println("\nAvailable Courses:");
+            System.out.println("\n---------Available Courses---------");
 
-            for (int i = 0; i < courses.size(); i++) {
+            for (int i = 0; i < listOfCourses.size(); i++) {
                 /// The i+1 is for the indext of which the admin will select. The i is for
                 /// 'this' spesific course.
-                System.out.println((i + 1) + ". " + courses.get(i).getCourseName() + " (Code: "
-                        + courses.get(i).getCourseCode() + ")");
+                System.out.println((i + 1) + ". " + listOfCourses.get(i).getCourseName() + " (Code: "
+                        + listOfCourses.get(i).getCourseCode() + ")");
             }
             System.out.print("Enter the number of the course to assign the instructor to: ");
             int courseIndex = input.nextInt() - 1;
             input.nextLine(); // Buffer
 
             // Basic validation.
-            if (courseIndex < 0 || courseIndex >= courses.size()) {
+            if (courseIndex < 0 || courseIndex >= listOfCourses.size()) {
                 System.out.println("Invalid course selection.");
                 return;
             }
-
             System.out.print("Enter the ID of the instructor to assign: ");
             String instructorID2 = input.next();
             input.nextLine(); // Buffer
 
-            Instructor instructorToUpdate2 = null;
+            Instructor assignInstructor = null;
 
-            for (Instructor i : instructors) {
-                if (i.getId().equals(instructorID2)) {
-                    instructorToUpdate2 = i;
+            for (Instructor instructor : listOfInstructors) {
+                if (instructor.getId().equals(instructorID2)) {
+                    assignInstructor = instructor;
                     break;
                 }
             }
-            if (instructorToUpdate2 != null) {
-                Course selectedCourse = courses.get(courseIndex);
-                administrator.assignInstructor(selectedCourse, instructorToUpdate2);
+            if (assignInstructor != null) {
+                Course selectedCourse = listOfCourses.get(courseIndex);
+                administrator.assignInstructor(selectedCourse, assignInstructor);
             } else {
                 System.out.println("Instructor with ID " + instructorID2 + " not found.");
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void closeCourse(Administrator administrator, List<Course> courses) {
+    public static void closeCourse(Administrator administrator, List<Course> listOfCourses) {
         try {
-            System.out.println("\nEnter the details requiered to close the course.");
-            System.out.print("\nEnter course name: ");
+            System.out.println(
+                    "\n---------Close Courses---------\nEnter the details requiered below.\nEnter course name: ");
             String closeCourseName = input.nextLine();
             System.out.print("\nEnter course code: ");
             String closeCourseCode = input.next();
             input.nextLine(); // Buffer
 
             Course courseToClose = null;
-            for (Course c : courses) {
-                if (c.getCourseName().equals(closeCourseName)
-                        && c.getCourseCode().equals(closeCourseCode)) {
-                    courseToClose = c;
+            for (Course course : listOfCourses) {
+                if (course.getCourseName().equals(closeCourseName) && course.getCourseCode().equals(closeCourseCode)) {
+                    courseToClose = course;
                     break;
                 }
             }
             if (courseToClose != null) {
-                administrator.closeCourse(courseToClose, courses);
+                administrator.closeCourse(courseToClose, listOfCourses);
             } else {
                 System.out.println("Course not found.");
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     // Statistics.
-    public static void viewEnrollmentStatistics(List<Course> courses) {
+    public static void viewEnrollmentStatistics(List<Course> listOfCourses) {
         int totalEnrolled = 0;
         boolean openCoursesExist = false;
 
-        System.out.println("\n--- Enrollment Statistics ---");
-        for (Course c : courses) {
-            int count = c.getEnrolledStudents() != null ? c.getEnrolledStudents().size() : 0;
+        System.out.println("\n---------Enrollment Statistics---------");
+        for (Course course : listOfCourses) {
+            int count = course.getEnrolledStudents() != null ? course.getEnrolledStudents().size() : 0;
             totalEnrolled += count;
-            System.out.println("Course: " + c.getCourseName() + " (" + c.getCourseCode() + ") — Enrolled: " + count);
-            if (c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
+            System.out.println("Course: " + course.getCourseName() + " (" + course.getCourseCode() + ") — Enrolled: " + count);
+            if (course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
                 openCoursesExist = true;
             }
         }
@@ -746,21 +764,20 @@ public class Helpers {
         System.out.println("Open courses available: " + (openCoursesExist ? "Yes" : "No"));
     }
 
-    public static void generateReports(List<Course> courses) {
-        System.out.println("\n--- Enrollment Report ---");
+    public static void generateReports(List<Course> listOfCourses) {
+        System.out.println("\n---------Enrollment Report---------");
 
         // Most popular course
         Course mostPopular = null;
         int maxEnrolled = 0;
 
-        for (Course c : courses) {
-            int enrolled = c.getEnrolledStudents() != null ? c.getEnrolledStudents().size() : 0;
+        for (Course course : listOfCourses) {
+            int enrolled = course.getEnrolledStudents() != null ? course.getEnrolledStudents().size() : 0;
             if (enrolled > maxEnrolled) {
-                mostPopular = c;
+                mostPopular = course;
                 maxEnrolled = enrolled;
             }
         }
-
         if (mostPopular != null) {
             System.out.println("Most popular course: " + mostPopular.getCourseName()
                     + " (" + mostPopular.getCourseCode() + ") — Enrolled: " + maxEnrolled);

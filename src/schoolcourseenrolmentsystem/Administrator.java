@@ -18,9 +18,9 @@ public class Administrator extends User<Administrator> {
 
     // Login/logout & role
     @Override
-    public Administrator login(List<Administrator> administrators, String id, String password) {
+    public Administrator login(List<Administrator> listOfAdministrators, String id, String password) {
         Administrator returnAdmin = null;
-        for (Administrator administrator : administrators) {
+        for (Administrator administrator : listOfAdministrators) {
             if (administrator.getId().equals(id) && administrator.getPassword().equals(password)) {
                 System.out.println("Administrator " + administrator.getName() + " logged in.");
                 returnAdmin = administrator;
@@ -28,7 +28,6 @@ public class Administrator extends User<Administrator> {
             }
             System.out.println("No admin record was found with the ID and password provided.");
         }
-
         return returnAdmin;
     }
 
@@ -37,20 +36,20 @@ public class Administrator extends User<Administrator> {
         return ("Administrator " + administrators.getName() + " logged out.");
     }
 
-    // 1. Manage student & instructor accounts
     // Add and remove users
 
-    // Loop used to iterate over all the students/instructors.
-    // An Iterator keeps track of the current position safely, and when you call
-    // remove(), it tells the collection to safely remove the current element
-    // without invalidating the loop.
-    public boolean removeStudent(List<Student> students, String targetId) {
-        Iterator<Student> iterator = students.iterator();
+    /// Loop used to iterate over all the students/instructors.
+    /// An Iterator keeps track of the current position safely, and when you call
+    /// remove(), it tells the collection to safely remove the current element
+    /// without invalidating the loop.
+    public boolean removeStudent(List<Student> listOfStudents, String targetId) {
+        Iterator<Student> iterator = listOfStudents.iterator();
         while (iterator.hasNext()) {
-            Student s = iterator.next();
-            if (s.getId().equals(targetId)) {
+            Student specificStudent = iterator.next();
+            if (specificStudent.getId().equals(targetId)) {
                 iterator.remove();
-                System.out.println(s.getName() + " with the ID: " + s.getId() + " has been successfully removed");
+                System.out.println(specificStudent.getName() + " with the ID: " + specificStudent.getId()
+                        + " has been successfully removed");
                 return true;
             }
         }
@@ -58,14 +57,15 @@ public class Administrator extends User<Administrator> {
         return false;
     }
 
-    public boolean removeInstructor(List<Instructor> instructors, String targetId) {
+    public boolean removeInstructor(List<Instructor> listOfInstructors, String targetId) {
         // Loop used to iterate over all the instructors
-        Iterator<Instructor> iterator = instructors.iterator();
+        Iterator<Instructor> iterator = listOfInstructors.iterator();
         while (iterator.hasNext()) {
-            Instructor i = iterator.next();
-            if (i.getId().equals(targetId)) {
+            Instructor specificInstructor = iterator.next();
+            if (specificInstructor.getId().equals(targetId)) {
                 iterator.remove();
-                System.out.println(i.getName() + " with the ID: " + i.getId() + " removed successfully.");
+                System.out.println(specificInstructor.getName() + " with the ID: " + specificInstructor.getId()
+                        + " removed successfully.");
                 return true;
             }
         }
@@ -73,34 +73,33 @@ public class Administrator extends User<Administrator> {
         return false;
     }
 
-    public void addInstructor(Instructor i, List<Instructor> instructors) {
-        instructors.add(i);
-        System.out.println("Instructor added: " + i.getName() + " with the ID: " + i.getId());
+    public void addInstructor(Instructor specificInstructor, List<Instructor> listOfInstructors) {
+        listOfInstructors.add(specificInstructor);
+        System.out.printf("Instructor added: %s with the ID: %s", specificInstructor.getName(),
+                specificInstructor.getId());
     }
 
-    public void addStudent(Student s, List<Student> students) {
-        students.add(s);
-        System.out.println("Student added: " + s.getName() + " with the ID: " + s.getId());
-
+    public void addStudent(Student specificStudent, List<Student> listOfStudents) {
+        listOfStudents.add(specificStudent);
+        System.out.printf("Student added: %s with the ID: %s", specificStudent.getName(), specificStudent.getId());
     }
 
     // Update user info.
 
-    public void updateStudent(String targetId, List<Student> students, String newName, String newId, String newPassword,
-            String newEmail,
-            String newPhoneNumber, User.Role newRole, String newAddress) {
+    public void updateStudent(String targetId, List<Student> listOfStudents, String newName, String newId,
+            String newPassword,
+            String newEmail, String newPhoneNumber, User.Role newRole, String newAddress) {
 
         Student updateStudentInfo = null;
-        for (Student s : students) {
-            if (s.getId().equals(targetId)) {
-                updateStudentInfo = s;
+        for (Student student : listOfStudents) {
+            if (student.getId().equals(targetId)) {
+                updateStudentInfo = student;
                 break;
             }
         }
         if (updateStudentInfo != null) {
             updateStudentInfo.setName(newName);
             updateStudentInfo.setPassword(newPassword);
-            // updateStudentInfo.setId(newId);
             updateStudentInfo.setEmail(newEmail);
             updateStudentInfo.setPhoneNumber(newPhoneNumber);
             updateStudentInfo.setRole(newRole);
@@ -110,15 +109,13 @@ public class Administrator extends User<Administrator> {
         }
     }
 
-    public void updateInstructor(String targetId, List<Instructor> instructors, String newName,
-            String newPassword,
-            String newEmail,
-            String newPhoneNumber, User.Role newRole, String newAddress) {
+    public void updateInstructor(String instructorTargetId, List<Instructor> listOfInstructors, String newName,
+            String newPassword, String newEmail, String newPhoneNumber, User.Role newRole, String newAddress) {
 
         Instructor updateInstructorInfo = null;
-        for (Instructor i : instructors) {
-            if (i.getId().equals(targetId)) {
-                updateInstructorInfo = i;
+        for (Instructor instructor : listOfInstructors) {
+            if (instructor.getId().equals(instructorTargetId)) {
+                updateInstructorInfo = instructor;
                 break;
             }
         }
@@ -130,60 +127,63 @@ public class Administrator extends User<Administrator> {
             updateInstructorInfo.setRole(newRole);
             updateInstructorInfo.setAddress(newAddress);
         } else {
-            System.out.println("Instructor with the ID " + targetId + " not found.");
+            System.out.println("Instructor with the ID " + instructorTargetId + " not found.");
         }
     }
 
     // Course related.
-    public void addCourse(List<Course> courses, Course c) {
-        if (courses.add(c)) {
-            System.out.println("Course added: (" + c.getCourseName() + ") (" + c.getCourseCode() + ") succesfully.");
+    public void addCourse(List<Course> listOfCourses, Course specificCourse) {
+        if (listOfCourses.add(specificCourse)) {
+            System.out.printf("Course added: (%s) (%s) succesfully.", specificCourse.getCourseName(),
+                    specificCourse.getCourseCode());
         } else {
-            System.out.println("Course already exists: " + c.getCourseName());
+            System.out.println("Course already exists: " + specificCourse.getCourseName());
         }
     }
 
-    public void assignInstructor(Course c, Instructor i) {
-        if (c.getInstructor() == null) {
-            c.setInstructor(i);
-            System.out.println("Instructor " + i.getName() + " is assigned to " + c.getCourseName());
-        } else if (c.getInstructor().equals(i)) {
-            System.out.println("Instructor " + i.getName() + " is already assigned to " + c.getCourseName());
+    public void assignInstructor(Course specificCourse, Instructor specificInstructor) {
+        if (specificCourse.getInstructor() == null) {
+            specificCourse.setInstructor(specificInstructor);
+            System.out.printf("Instructor %s is assigned to %s", specificInstructor.getName(),
+                    specificCourse.getCourseName());
+        } else if (specificCourse.getInstructor().equals(specificInstructor)) {
+            System.out.printf("Instructor %s is already assigned to %s", specificInstructor.getName(),
+                    specificCourse.getCourseName());
         } else {
             System.out.println("Course already has a different instructor assigned.");
         }
     }
 
-    public void closeCourse(Course c, List<Course> courses) {
-        if (courses.contains(c)) {
-            if (c.getEnrolledStudents().size() >= c.getCapacity()) {
-                System.out.println(c.getCourseName() + " is at full capacity.");
-                c.setEnrollmentStatus(EnrollmentStatusEnum.Closed);
-            } else if (c.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Closed) {
-                System.out.println(c.getCourseName() + " enrollment status is closed.");
+    public void closeCourse(Course specificCourse, List<Course> listOfCourses) {
+        if (listOfCourses.contains(specificCourse)) {
+            if (specificCourse.getEnrolledStudents().size() >= specificCourse.getCapacity()) {
+                System.out.println(specificCourse.getCourseName() + " is at full capacity.");
+                specificCourse.setEnrollmentStatus(EnrollmentStatusEnum.Closed);
+            } else if (specificCourse.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Closed) {
+                System.out.println(specificCourse.getCourseName() + " enrollment status is closed.");
             }
-        } else if (!courses.contains(c)) {
-            System.out.println(c.getCourseName() + " not found.");
+        } else if (!listOfCourses.contains(specificCourse)) {
+            System.out.println(specificCourse.getCourseName() + " not found.");
         } else {
-            System.out.println(c.getCourseName() + " still has available capacity.");
+            System.out.println(specificCourse.getCourseName() + " still has available capacity.");
         }
     }
 
-    public void viewStudentList(List<Student> students) {
-        if (students == null || students.isEmpty()) {
+    public void viewStudentList(List<Student> listOfStudents) {
+        if (listOfStudents == null || listOfStudents.isEmpty()) {
             System.out.println("No students are on record.");
         } else {
-            for (Student student : students) {
+            for (Student student : listOfStudents) {
                 System.out.println(student.toString());
             }
         }
     }
 
-    public void viewInstructorList(List<Instructor> instructors) {
-        if (instructors == null || instructors.isEmpty()) {
+    public void viewInstructorList(List<Instructor> listOfInstructors) {
+        if (listOfInstructors == null || listOfInstructors.isEmpty()) {
             System.out.println("No instructors are on record.");
         } else {
-            for (Instructor instructor : instructors) {
+            for (Instructor instructor : listOfInstructors) {
                 System.out.println(instructor.toString());
             }
         }

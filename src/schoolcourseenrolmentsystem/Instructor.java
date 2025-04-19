@@ -1,4 +1,5 @@
 package schoolcourseenrolmentsystem;
+
 import java.util.*;
 
 public class Instructor extends User<Instructor> {
@@ -13,11 +14,11 @@ public class Instructor extends User<Instructor> {
 
     // Methods
     @Override
-    public Instructor login(List<Instructor> instructors, String id, String password) {
-        for (Instructor i : instructors) {
-            if (i.getId().equals(id) && i.getPassword().equals(password)) {
-                System.out.println("Instructor " + i.getName() + " logged in.\n");
-                return i;
+    public Instructor login(List<Instructor> listOfInstructors, String id, String password) {
+        for (Instructor instructor : listOfInstructors) {
+            if (instructor.getId().equals(id) && instructor.getPassword().equals(password)) {
+                System.out.println("Instructor " + instructor.getName() + " logged in.\n");
+                return instructor;
             }
         }
         System.out.println("No instructor record was found with the ID and password provided.");
@@ -25,30 +26,30 @@ public class Instructor extends User<Instructor> {
     }
 
     @Override
-    public String logout(Instructor instructors) {
-        return ("Instructor " + instructors.getName() + " logged out.");
+    public String logout(Instructor instructor) {
+        return ("Instructor " + instructor.getName() + " logged out.");
     }
 
-    public void viewEnrolledStudents(Instructor instructor, List<Course> courses) {
+    public void viewEnrolledStudents(Instructor instructor, List<Course> listOfCourses) {
         boolean enrolledCourse = false;
         // Look through all the courses
-        for (Course c : courses) {
+        for (Course course : listOfCourses) {
             // Make sure that the instructor is actually assigned to the course
-            if (c.getInstructor() != null && c.getInstructor().getId().equals(instructor.getId())) {
+            if (course.getInstructor() != null && course.getInstructor().getId().equals(instructor.getId())) {
                 enrolledCourse = true;
                 // The instructor might teach multiple courses
-                System.out.println("\n(Course: " + c.getCourseName() + ") (Code: " + c.getCourseCode() + ").");
-                c.getEnrolledStudents();
+                System.out.printf("\n(Course: %s) (Code: %s)", course.getCourseName(), course.getCourseCode());
+                course.getEnrolledStudents();
 
                 // Make sure there are actually students enrolled in the course.
                 // Update the list.
-                List<Student> courseStudents = c.getEnrolledStudents();
+                List<Student> courseStudents = course.getEnrolledStudents();
                 if (courseStudents == null || courseStudents.isEmpty()) {
                     System.out.println("No students enrolled in this course.");
                 } else {
-                    for (Student s : courseStudents) {
-                        System.out.println("Student: " + s.getName() + ", ID: " + s.getId()
-                                + ", Email: " + s.getEmail() + ", Phone number: " + s.getPhoneNumber() + ".");
+                    for (Student student : courseStudents) {
+                        System.out.printf("Student: %s, ID: %s, Email: %s, Phone number: %s", student.getName(),
+                                student.getId(), student.getEmail(), student.getPhoneNumber());
                     }
                 }
             }
@@ -58,17 +59,18 @@ public class Instructor extends User<Instructor> {
         }
     }
 
-    public void gradeStudent(List<Assessment> grades, List<Course> courses) {
+    public void gradeStudent(List<Assessment> listOfGrades, List<Course> listOfCourses) {
         Scanner input = new Scanner(System.in);
         try {
             // Step 1: Show instructor's courses
             List<Course> instructorCourses = new ArrayList<>();
             System.out.println("\nCourses you're assigned to:");
-            for (Course c : courses) {
-                if (c.getInstructor() != null && c.getInstructor().getId().equals(this.getId())) {
-                    instructorCourses.add(c);
+            for (Course course : listOfCourses) {
+                if (course.getInstructor() != null && course.getInstructor().getId().equals(this.getId())) {
+                    instructorCourses.add(course);
                     System.out.println(
-                            (instructorCourses.size()) + ". " + c.getCourseName() + " (" + c.getCourseCode() + ")");
+                            (instructorCourses.size()) + ". " + course.getCourseName() + " (" + course.getCourseCode()
+                                    + ")");
                 }
             }
             if (instructorCourses.isEmpty()) {
@@ -92,7 +94,7 @@ public class Instructor extends User<Instructor> {
 
             System.out.println("\nStudents in this course:");
             for (int i = 0; i < enrolled.size(); i++) {
-                System.out.println((i + 1) + ". " + enrolled.get(i).getName() + " (ID: " + enrolled.get(i).getId() + ")");
+                System.out.printf((i + 1) + ".%s  (ID: %s)", enrolled.get(i).getName(), enrolled.get(i).getId());
             }
 
             int studentChoice = Helpers.getSafeIntInput("Select a student to grade: ");
@@ -136,7 +138,7 @@ public class Instructor extends User<Instructor> {
 
             // Step 5: Assign or update grade
             boolean updated = false;
-            for (Assessment g : grades) {
+            for (Assessment g : listOfGrades) {
                 if (g.getStudentId().equals(selectedStudent.getId())
                         && g.getCourseCode().equals(selectedCourse.getCourseCode())
                         && g.getExamType().equals(selectedExamType)) {
@@ -149,27 +151,28 @@ public class Instructor extends User<Instructor> {
             if (!updated) {
                 Assessment newAssessment = new Assessment(selectedStudent.getId(), selectedCourse.getCourseCode(),
                         selectedExamType, score, selectedExamType.toString());
-                grades.add(newAssessment);
+                listOfGrades.add(newAssessment);
                 System.out.println("Grade recorded successfully.");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage()); 
+            System.out.println(e.getMessage());
         }
     }
 
-    public void updateCourseInfo(String courseCode, List<Course> courses, String newSchedule, String newDescription) {
+    public void updateCourseInfo(String courseCode, List<Course> listOfCourses, String newSchedule,
+            String newDescription) {
         // We must make sure that the course actually even exists.
         Course courseNotFound = new Course(courseCode, courseCode, newSchedule, newDescription, null, null, 0, null, 0);
         // This following block is created for when the course actually exists.
-        if (!courses.contains(courseNotFound)) {
+        if (!listOfCourses.contains(courseNotFound)) {
             System.out.println("Course with code " + courseCode + " not found.");
             return;
         }
         // Now find the actual Course object
         Course courseToUpdate = null;
-        for (Course c : courses) {
-            if (c.getCourseCode().equals(courseCode)) {
-                courseToUpdate = c;
+        for (Course course : listOfCourses) {
+            if (course.getCourseCode().equals(courseCode)) {
+                courseToUpdate = course;
                 break;
             }
         }
@@ -184,16 +187,15 @@ public class Instructor extends User<Instructor> {
                 courseToUpdate.setSchedule(newSchedule);
                 courseToUpdate.setDescription(newDescription);
 
-                System.out.println("Instructor " + assignedInstructor.getName() + "'s"
-                        + " course information updated for " + courseToUpdate.getCourseName());
+                System.out.printf("Instructor  %s's course information updated for %s", assignedInstructor.getName(),
+                        courseToUpdate.getCourseName());
             } else if (assignedInstructor != null) {
-                System.out
-                        .println(assignedInstructor.getName() + " with the ID number: " + assignedInstructor.getId()
-                                + " is not assigned to " + courseToUpdate.getCourseName() + ".");
+                System.out.printf("%s with the ID number: %s is not assigned to %s.", assignedInstructor.getName(),
+                        assignedInstructor.getId(), courseToUpdate.getCourseName());
             }
             // You don't see it but its basically (assignedInstructor == null);
             else {
-                System.out.println("No instructor assigned to " + courseToUpdate.getCourseName() + ".");
+                System.out.printf("No instructor assigned to %s.", courseToUpdate.getCourseName());
             }
         }
     }
