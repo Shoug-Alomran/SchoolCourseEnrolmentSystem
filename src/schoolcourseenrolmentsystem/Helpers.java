@@ -319,7 +319,7 @@ public class Helpers {
 
             for (Course course : listOfCourses) {
                 if (!course.isFull() && course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open
-                        && !student.getEnrolledCourses().contains(course)) {
+                        && !student.getEnrolledCoursesList().contains(course)) {
                     // List the avaliable courses
                     System.out.println(index + ". (" + course.getCourseName() + ") (" + course.getCourseCode() + ")");
                     availableCourses.add(course);

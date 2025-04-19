@@ -21,7 +21,7 @@ public class Course {
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
-            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, List<Assessment> grades,
+            EnrollmentStatusEnum enrollmentStatus, Instructor instructor, int capacity, List<Assessment> listOfGrades,
             int creditHours) {
         setCourseName(courseName);
         setCourseCode(courseCode);
@@ -30,7 +30,7 @@ public class Course {
         setEnrollmentStatus(enrollmentStatus);
         setInstructor(instructor);
         setCapacity(capacity);
-        setAssesment(grades);
+        setAssesment(listOfGrades);
         setCreditHours(creditHours);
         // Make sure enrolledStudents is initialized when a Course is created to avoid
         // null.
@@ -39,8 +39,8 @@ public class Course {
     public Course() {
     }
 
-    public void setEnrolledStudents(List<Student> enrolledStudents) {
-        this.enrolledStudents = enrolledStudents;
+    public void setEnrolledStudents(List<Student> enrolledStudentList) {
+        this.enrolledStudents = enrolledStudentList;
     }
 
     // Setters & Getters
@@ -148,21 +148,21 @@ public class Course {
         return grades;
     }
 
-    public List<Assessment> setAssesment(List<Assessment> grades) {
-        if (grades == null) {
+    public List<Assessment> setAssesment(List<Assessment> listOfGrades) {
+        if (listOfGrades == null) {
             this.grades = null;
             return null;
         } else {
-            this.grades = grades;
-            return grades;
+            this.grades = listOfGrades;
+            return listOfGrades;
         }
     }
 
-    public void setGrades(List<Assessment> grades) {
-        if (grades == null) {
+    public void setGrades(List<Assessment> listOfGrades) {
+        if (listOfGrades == null) {
             this.grades = null;
         } else {
-            this.grades = grades;
+            this.grades = listOfGrades;
         }
     }
     // Methods

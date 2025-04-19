@@ -42,9 +42,9 @@ public abstract class User<T> {
         return ID;
     }
 
-    public void setId(String id) {
+    public void setId(String ID) {
         // we do validation in prior to calling this method to avoid bloating it
-        this.ID = id;
+        this.ID = ID;
     }
 
     public String getPassword() {
