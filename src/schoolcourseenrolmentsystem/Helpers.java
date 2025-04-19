@@ -685,8 +685,8 @@ public class Helpers {
             for (int i = 0; i < listOfCourses.size(); i++) {
                 /// The i+1 is for the indext of which the admin will select. The i is for
                 /// 'this' spesific course.
-                System.out.println((i + 1) + ". " + listOfCourses.get(i).getCourseName() + " (Code: "
-                        + listOfCourses.get(i).getCourseCode() + ")");
+                System.out.printf((i + 1) + ". %s (%s).", listOfCourses.get(i).getCourseName(),
+                        listOfCourses.get(i).getCourseCode());
             }
             System.out.print("Enter the number of the course to assign the instructor to: ");
             int courseIndex = input.nextInt() - 1;
@@ -755,7 +755,7 @@ public class Helpers {
         for (Course course : listOfCourses) {
             int count = course.getEnrolledStudents() != null ? course.getEnrolledStudents().size() : 0;
             totalEnrolled += count;
-            System.out.println("Course: " + course.getCourseName() + " (" + course.getCourseCode() + ") — Enrolled: " + count);
+            System.out.printf("Course: %s (%s) - Enrolled: %d", course.getCourseName(), count);
             if (course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open) {
                 openCoursesExist = true;
             }
@@ -779,8 +779,8 @@ public class Helpers {
             }
         }
         if (mostPopular != null) {
-            System.out.println("Most popular course: " + mostPopular.getCourseName()
-                    + " (" + mostPopular.getCourseCode() + ") — Enrolled: " + maxEnrolled);
+            System.out.printf("Most popular course: %s (%s) - Enrolled: %d.", mostPopular.getCourseName(),
+                    mostPopular.getCourseCode(), maxEnrolled);
         } else {
             System.out.println("No enrollments found.");
         }
