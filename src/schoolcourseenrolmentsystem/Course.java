@@ -16,7 +16,7 @@ public class Course {
     private List<Assessment> grades;
     private int creditHours;
 
-    // Fixes java.lang.StackOverflowError
+    // Fixes java.lang.StackOverflowError 
     private List<Student> enrolledStudents;
 
     // Constructor

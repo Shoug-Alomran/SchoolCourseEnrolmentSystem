@@ -179,11 +179,11 @@ public class Administrator extends User<Administrator> {
         }
     }
 
-    public void viewInstructorList(List<Instructor> listOfInstructors) {
-        if (listOfInstructors == null || listOfInstructors.isEmpty()) {
+    public void viewInstructorList(List<Instructor> instructors) {
+        if (instructors == null || instructors.isEmpty()) {
             System.out.println("No instructors are on record.");
         } else {
-            for (Instructor instructor : listOfInstructors) {
+            for (Instructor instructor : instructors) {
                 System.out.println(instructor.toString());
             }
         }

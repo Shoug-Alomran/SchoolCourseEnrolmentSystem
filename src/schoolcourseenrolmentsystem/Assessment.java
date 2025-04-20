@@ -143,7 +143,7 @@ public class Assessment {
             System.out.println("You are not enrolled in any courses.");
             return;
         }
-        System.out.println("Select a course:");
+        System.out.println("Select a course: ");
         for (int i = 0; i < listOfCourses.size(); i++) {
             System.out.printf((i + 1) + ".%s (%s).\n", listOfCourses.get(i).getCourseName(),
                     listOfCourses.get(i).getCourseCode());

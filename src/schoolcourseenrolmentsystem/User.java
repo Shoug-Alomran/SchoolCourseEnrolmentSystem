@@ -1,4 +1,5 @@
 package schoolcourseenrolmentsystem;
+
 import java.util.List;
 
 public abstract class User<T> {
@@ -43,7 +44,6 @@ public abstract class User<T> {
     }
 
     public void setId(String ID) {
-        // we do validation in prior to calling this method to avoid bloating it
         this.ID = ID;
     }
 

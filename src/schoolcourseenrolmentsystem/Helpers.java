@@ -12,7 +12,7 @@ public class Helpers {
     public static <T extends User<T>> T login(List<T> usersList, T tempUser) {
         T loggedInUser = null;
         try {
-            System.out.print("Please enter your ID: ");
+            System.out.print("\nPlease enter your ID: ");
             String id = input.next();
             input.nextLine(); // Buffer
 
@@ -40,7 +40,7 @@ public class Helpers {
         final int maxAttempts = 3;
 
         while (attempts < maxAttempts) {
-            System.out.print("Please enter your password: ");
+            System.out.print("\nPlease enter your password: ");
             String password = input.nextLine();
 
             loggedInUser = tempUser.login(usersList, tempID, password);
@@ -123,10 +123,8 @@ public class Helpers {
         while (true) {
             System.out.println("Select a role: \n1. STUDENT \n2. INSTRUCTOR \n3. ADMIN \nOption:");
 
-            int Option;
             try {
-                Option = input.nextInt();
-                input.nextLine(); // buffer
+                int Option = Helpers.getSafeIntInput("\nOption: ");
 
                 switch (Option) {
                     case 1:
@@ -183,11 +181,11 @@ public class Helpers {
         int choice = Helpers.getSafeIntInput("\nOption: ");
 
         if (choice == 1) {
-            System.out.print("Enter new " + fieldName + ": ");
+            System.out.print("\nEnter new " + fieldName + ": ");
             String newValue = input.nextLine();
             while (!validator.test(newValue)) {
                 System.out.println("Invalid " + fieldName + ". Please try again.");
-                System.out.print("Enter new " + fieldName + ": ");
+                System.out.print("\nEnter new " + fieldName + ": ");
                 newValue = input.nextLine();
             }
             return newValue;
@@ -209,6 +207,21 @@ public class Helpers {
             }
         }
         return inputValue;
+    }
+
+    public static String GenerateRandomID() {
+        String numbers = "0123456789";
+        int ID_Length = 10;
+        Random random = new Random();
+
+        StringBuilder id = new StringBuilder(ID_Length);
+
+        for (int i = 0; i < ID_Length; i++) {
+            int randomIndex = random.nextInt(numbers.length());
+            char randomChar = numbers.charAt(randomIndex);
+            id.append(randomChar);
+        }
+        return id.toString();
     }
 
     // MENUS
@@ -254,25 +267,9 @@ public class Helpers {
     // CASES
     // INSTRUCTORS CASES
 
-    public static String GenerateRandomID() {
-        String numbers = "0123456789";
-        int ID_Length = 10;
-        Random random = new Random();
-
-        StringBuilder id = new StringBuilder(ID_Length);
-
-        for (int i = 0; i < ID_Length; i++) {
-            int randomIndex = random.nextInt(numbers.length());
-            char randomChar = numbers.charAt(randomIndex);
-            id.append(randomChar);
-        }
-        return id.toString();
-    }
-
     public static void updateCourseInfo(Instructor instructor, List<Course> listOfCourses) {
         try {
-            System.out.println("\n---------Update Course Information---------");
-            System.out.print("\nEnter the course code  of the course you would like to update: ");
+            System.out.println("\n---------Update Course Information---------\nEnter the course code  of the course you would like to update: ");
             String courseCode = input.next();
             input.nextLine(); // Buffer
 
@@ -312,30 +309,36 @@ public class Helpers {
     public static void enroll_In_Course_Student(List<Course> listOfCourses, Student student) {
         try {
             System.out.println("\n---------Enroll In Course---------");
-            System.out.println("Courses avaliable to enroll in: ");
-            // Sub-List to the main
-            List<Course> availableCourses = new ArrayList<>();
-            int index = 1;
 
+            // Filter available courses
+            List<Course> availableCourses = new ArrayList<>();
             for (Course course : listOfCourses) {
-                if (!course.isFull() && course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open
-                        && !student.getEnrolledCoursesList().contains(course)) {
-                    // List the avaliable courses
-                    System.out.println(index + ". (" + course.getCourseName() + ") (" + course.getCourseCode() + ")");
+                if (!course.isFull() &&
+                        course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Open &&
+                        !student.getEnrolledCoursesList().contains(course)) {
                     availableCourses.add(course);
-                    index++;
                 }
             }
+
+            // Display results
             if (availableCourses.isEmpty()) {
                 System.out.println("No available courses to enroll in.");
             } else {
-                System.out.print("Enter the number of the course to enroll in: ");
+                System.out.println("Courses available to enroll in:");
+                for (int i = 0; i < availableCourses.size(); i++) {
+                    Course course = availableCourses.get(i);
+                    System.out.printf("%d. %s (%s)\n",(i + 1), course.getCourseName(), course.getCourseCode());
+                }
+
+                System.out.print("\nEnter the number of the course you would like to enroll in: ");
                 int selectedCourse = input.nextInt();
+                input.nextLine(); // Consume newline
+
                 if (selectedCourse >= 1 && selectedCourse <= availableCourses.size()) {
-                    Course updateIndex = availableCourses.get(selectedCourse - 1);
-                    student.enroll_In_Course(updateIndex);
+                    Course chosenCourse = availableCourses.get(selectedCourse - 1);
+                    student.enroll_In_Course(chosenCourse);
                 } else {
-                    System.out.println("Unable to enroll in" + selectedCourse + ".");
+                    System.out.println("Invalid selection: " + selectedCourse);
                 }
             }
         } catch (Exception e) {
@@ -407,8 +410,8 @@ public class Helpers {
             while (true) {
                 studentID = GenerateRandomID();
                 boolean exists = false;
-                for (Student s : listOfStudents) {
-                    if (s.getId().equals(studentID)) {
+                for (Student student : listOfStudents) {
+                    if (student.getId().equals(studentID)) {
                         exists = true;
                         break;
                     }
@@ -507,7 +510,7 @@ public class Helpers {
             List<Instructor> listOfInstructors) {
         try {
             System.out.println("\n---------Create Course---------");
-            System.out.println("\nEnter the course's information that you would like to create. \nEnter course name: ");
+            System.out.print("\nEnter the course's information that you would like to create. \nEnter course name: ");
             String courseName = input.nextLine();
 
             System.out.print("\nEnter course code: ");
@@ -602,12 +605,12 @@ public class Helpers {
                 User.Role updateRole = Helpers.updateRolePrompt(studentToUpdate.getRole());
 
                 // Option to update credit limit
-                System.out.printf("Do you want to update %s's credit limit? \n1. Yes \n2. No",
+                System.out.printf("\nDo you want to update %s's credit limit?\n1. Yes\n2. No",
                         studentToUpdate.getName());
                 int creditLimitChoice = input.nextInt();
 
                 if (creditLimitChoice == 1) {
-                    System.out.print("Enter new credit limit: ");
+                    System.out.print("\nEnter new credit limit: ");
                     int updatedStudentcreditLimit = input.nextInt();
                     studentToUpdate.setCreditLimit(updatedStudentcreditLimit);
                 } else if (creditLimitChoice == 2) {
@@ -685,10 +688,10 @@ public class Helpers {
             for (int i = 0; i < listOfCourses.size(); i++) {
                 /// The i+1 is for the indext of which the admin will select. The i is for
                 /// 'this' spesific course.
-                System.out.printf((i + 1) + ". %s (%s).", listOfCourses.get(i).getCourseName(),
+                System.out.printf("%d. %s (%s).\n",(i + 1), listOfCourses.get(i).getCourseName(),
                         listOfCourses.get(i).getCourseCode());
             }
-            System.out.print("Enter the number of the course to assign the instructor to: ");
+            System.out.print("\nEnter the number of the course to assign the instructor to: ");
             int courseIndex = input.nextInt() - 1;
             input.nextLine(); // Buffer
 
@@ -697,7 +700,7 @@ public class Helpers {
                 System.out.println("Invalid course selection.");
                 return;
             }
-            System.out.print("Enter the ID of the instructor to assign: ");
+            System.out.print("\nEnter the ID of the instructor to assign: ");
             String instructorID2 = input.next();
             input.nextLine(); // Buffer
 
@@ -779,7 +782,7 @@ public class Helpers {
             }
         }
         if (mostPopular != null) {
-            System.out.printf("Most popular course: %s (%s) - Enrolled: %d.", mostPopular.getCourseName(),
+            System.out.printf("\nMost popular course: %s (%s) - Enrolled: %d.", mostPopular.getCourseName(),
                     mostPopular.getCourseCode(), maxEnrolled);
         } else {
             System.out.println("No enrollments found.");

@@ -45,7 +45,7 @@ public class SchoolCourseEnrolmentSystem {
                         boolean studentExit = false;
                         while (!studentExit) {
                             Helpers.showStudentMenu();
-                            int studentChoice = Helpers.getSafeIntInput("Enter your choice: ");
+                            int studentChoice = Helpers.getSafeIntInput("Option: ");
 
                             switch (studentChoice) {
                                 case 1:
@@ -122,7 +122,7 @@ public class SchoolCourseEnrolmentSystem {
                     case "admin":
                         Administrator temp = new Administrator();
                         Administrator loggedInAdministrator = Helpers.login(Administrators, temp);
-
+                        // 12we4rdtfghvnbma, 3940916830
                         if (loggedInAdministrator == null) {
                             continue;
                         }
