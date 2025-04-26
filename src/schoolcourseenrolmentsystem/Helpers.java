@@ -269,7 +269,8 @@ public class Helpers {
 
     public static void updateCourseInfo(Instructor instructor, List<Course> listOfCourses) {
         try {
-            System.out.println("\n---------Update Course Information---------\nEnter the course code  of the course you would like to update: ");
+            System.out.println(
+                    "\n---------Update Course Information---------\nEnter the course code  of the course you would like to update: ");
             String courseCode = input.next();
             input.nextLine(); // Buffer
 
@@ -327,7 +328,7 @@ public class Helpers {
                 System.out.println("Courses available to enroll in:");
                 for (int i = 0; i < availableCourses.size(); i++) {
                     Course course = availableCourses.get(i);
-                    System.out.printf("%d. %s (%s)\n",(i + 1), course.getCourseName(), course.getCourseCode());
+                    System.out.printf("%d. %s (%s)\n", (i + 1), course.getCourseName(), course.getCourseCode());
                 }
 
                 System.out.print("\nEnter the number of the course you would like to enroll in: ");
@@ -510,7 +511,7 @@ public class Helpers {
             List<Instructor> listOfInstructors) {
         try {
             System.out.println("\n---------Create Course---------");
-            System.out.print("\nEnter the course's information that you would like to create. \nEnter course name: ");
+            System.out.print("\nEnter the course's information that you would like to create.\nEnter course name: ");
             String courseName = input.nextLine();
 
             System.out.print("\nEnter course code: ");
@@ -527,7 +528,7 @@ public class Helpers {
             Course newCourse = new Course(courseName, courseCode, null, null, null, null,
                     courseCapacity, null, courseCreditHours);
 
-            System.out.println("Would you like to assign instructor now? \n1. Assign now. \n2. Assign later.");
+            System.out.println("\nWould you like to assign instructor now? \n1. Assign now. \n2. Assign later.");
             int assignChoice = Helpers.getSafeIntInput("\nOption: ");
 
             if (assignChoice == 1) {
@@ -536,7 +537,7 @@ public class Helpers {
 
                 // Validate instructor list is not empty.
                 if (listOfInstructors.isEmpty()) {
-                    System.out.println("No instructors available. Please add an instructor before creating a course.");
+                    System.out.println("\nNo instructors available. Please add an instructor before creating a course.");
                     return; // Stop the method early
                 }
                 Instructor selectedInstructor = null;
@@ -549,7 +550,7 @@ public class Helpers {
                 administrator.assignInstructor(newCourse, selectedInstructor);
 
                 if (selectedInstructor == null) {
-                    System.out.println("Instructor with ID " + assignInstructorID + " not found.");
+                    System.out.println("\nInstructor with ID " + assignInstructorID + " not found.");
                 }
             }
             if (assignChoice == 2) {
@@ -557,7 +558,7 @@ public class Helpers {
             }
 
             // Assign course status
-            System.out.println("Enter course status: \n1. Open \n2.Closed");
+            System.out.println("\nEnter course status: \n1. Open \n2.Closed");
             int courseStatus = Helpers.getSafeIntInput("Option: ");
 
             if (courseStatus == 1) {
@@ -688,7 +689,7 @@ public class Helpers {
             for (int i = 0; i < listOfCourses.size(); i++) {
                 /// The i+1 is for the indext of which the admin will select. The i is for
                 /// 'this' spesific course.
-                System.out.printf("%d. %s (%s).\n",(i + 1), listOfCourses.get(i).getCourseName(),
+                System.out.printf("%d. %s (%s).\n", (i + 1), listOfCourses.get(i).getCourseName(),
                         listOfCourses.get(i).getCourseCode());
             }
             System.out.print("\nEnter the number of the course to assign the instructor to: ");
