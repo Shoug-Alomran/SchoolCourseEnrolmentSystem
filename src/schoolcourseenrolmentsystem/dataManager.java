@@ -34,7 +34,7 @@ public class dataManager {
 
     }
 
-    // Get singleton instance
+   
     public static synchronized dataManager getInstance() {
         if (instance == null) {
             instance = new dataManager();
