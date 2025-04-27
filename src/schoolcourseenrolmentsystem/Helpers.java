@@ -26,6 +26,7 @@ public class Helpers {
             }
             if (!idExists) {
                 System.out.println("No user found with the entered ID.");
+                
             }
             loggedInUser = validatePasswordWithRetries(usersList, tempUser, id);
             return loggedInUser;
@@ -150,12 +151,11 @@ public class Helpers {
             boolean valid = false;
             while (!valid) {
                 System.out.print(prompt);
-                number = input.nextInt();
-                input.nextLine(); // Buffer
+                number = Integer.parseInt(input.nextLine());
                 valid = true;
             }
             return number;
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.out.println("Invalid input. Please enter a number.");
             input.nextLine(); // Clear the invalid input
             return getSafeIntInput(prompt); // Retry
@@ -226,6 +226,7 @@ public class Helpers {
 
     // MENUS
     public static void showStudentMenu() {
+        System.out.println("");
         System.out.println("\n---------Student Menu---------");
         System.out.println("1. View avaliable courses.");
         System.out.println("2. Enroll in course.");
@@ -238,6 +239,7 @@ public class Helpers {
     }
 
     public static void showInstructorMenu() {
+        System.out.println("");
         System.out.println("\n---------Instructor Menu---------");
         System.out.println("1. View enrolled students.");
         System.out.println("2. Grade assignments.");
@@ -247,6 +249,7 @@ public class Helpers {
     }
 
     public static void showAdminMenu() {
+        System.out.println("");
         System.out.println("\n---------Administrator Menu---------");
         System.out.println("1.  Add Students.");
         System.out.println("2.  Remove Students.");
@@ -267,10 +270,11 @@ public class Helpers {
     // CASES
     // INSTRUCTORS CASES
 
+    // INSTRUCTOR CASES
     public static void updateCourseInfo(Instructor instructor, List<Course> listOfCourses) {
         try {
             System.out.println(
-                    "\n---------Update Course Information---------\nEnter the course code  of the course you would like to update: ");
+                    "\n---------Update Course Information---------\nEnter the course code of the course you would like to update: ");
             String courseCode = input.next();
             input.nextLine(); // Buffer
 
@@ -511,7 +515,7 @@ public class Helpers {
             List<Instructor> listOfInstructors) {
         try {
             System.out.println("\n---------Create Course---------");
-            System.out.print("\nEnter the course's information that you would like to create.\nEnter course name: ");
+            System.out.print("\nEnter the course's information that you would like to create.\n\nEnter course name: ");
             String courseName = input.nextLine();
 
             System.out.print("\nEnter course code: ");
@@ -537,7 +541,8 @@ public class Helpers {
 
                 // Validate instructor list is not empty.
                 if (listOfInstructors.isEmpty()) {
-                    System.out.println("\nNo instructors available. Please add an instructor before creating a course.");
+                    System.out
+                            .println("\nNo instructors available. Please add an instructor before creating a course.");
                     return; // Stop the method early
                 }
                 Instructor selectedInstructor = null;

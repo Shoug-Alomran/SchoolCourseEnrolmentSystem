@@ -75,7 +75,9 @@ public class dataManager {
                     String phoneNumber = parts[4];
                     String address = parts[5];
                     int creditLimit = Integer.parseInt(parts[6]);
+
                     List<Course> enrolledCourses = new ArrayList<>();
+
                     if (parts.length > 7 && !parts[7].isEmpty()) {
                         String[] courseCodes = parts[7].split(",");
                         for (String code : courseCodes) {
@@ -428,7 +430,7 @@ public class dataManager {
     }
 
     public List<Instructor> getAllInstructors() {
-        return new ArrayList<>(instructors);
+        return instructors;
     }
 
     // Methods for Administrators
@@ -456,7 +458,7 @@ public class dataManager {
     }
 
     public List<Administrator> getAllAdministrators() {
-        return new ArrayList<>(administrators);
+        return administrators;
     }
 
     // Methods for Courses
@@ -503,7 +505,7 @@ public class dataManager {
     }
 
     public List<Course> getAllCourses() {
-        return new ArrayList<>(courses);
+        return courses;
     }
 
     // Methods for Assessments
@@ -545,7 +547,7 @@ public class dataManager {
     }
 
     public List<Assessment> getAllAssessments() {
-        return new ArrayList<>(grades);
+        return grades;
     }
 
     // Validation methods

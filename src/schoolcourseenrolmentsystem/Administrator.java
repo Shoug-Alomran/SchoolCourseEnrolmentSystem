@@ -171,7 +171,7 @@ public class Administrator extends User<Administrator> {
 
     public void viewStudentList(List<Student> listOfStudents) {
         if (listOfStudents == null || listOfStudents.isEmpty()) {
-            System.out.println("No students are on record.");
+            System.out.println("\nNo students are on record.");
         } else {
             for (Student student : listOfStudents) {
                 System.out.println(student.toString());
@@ -181,7 +181,7 @@ public class Administrator extends User<Administrator> {
 
     public void viewInstructorList(List<Instructor> instructors) {
         if (instructors == null || instructors.isEmpty()) {
-            System.out.println("No instructors are on record.");
+            System.out.println("\nNo instructors are on record.");
         } else {
             for (Instructor instructor : instructors) {
                 System.out.println(instructor.toString());

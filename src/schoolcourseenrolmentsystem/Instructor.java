@@ -48,7 +48,7 @@ public class Instructor extends User<Instructor> {
                     System.out.println("No students enrolled in this course.");
                 } else {
                     for (Student student : courseStudents) {
-                        System.out.printf("Student: %s, ID: %s, Email: %s, Phone number: %s", student.getName(),
+                        System.out.printf("\n-Student: %s, ID: %s, Email: %s, Phone number: %s", student.getName(),
                                 student.getId(), student.getEmail(), student.getPhoneNumber());
                     }
                 }
@@ -77,7 +77,6 @@ public class Instructor extends User<Instructor> {
                 System.out.println("You're not assigned to any courses.");
                 return;
             }
-
             int courseChoice = Helpers.getSafeIntInput("Select a course to grade: ");
             if (courseChoice < 1 || courseChoice > instructorCourses.size()) {
                 System.out.println("Invalid selection.");
@@ -97,7 +96,7 @@ public class Instructor extends User<Instructor> {
                 System.out.printf((i + 1) + ".%s  (ID: %s)", enrolled.get(i).getName(), enrolled.get(i).getId());
             }
 
-            int studentChoice = Helpers.getSafeIntInput("Select a student to grade: ");
+            int studentChoice = Helpers.getSafeIntInput("\nSelect a student to grade: ");
             if (studentChoice < 1 || studentChoice > enrolled.size()) {
                 System.out.println("Invalid student selection.");
                 return;
@@ -162,12 +161,14 @@ public class Instructor extends User<Instructor> {
     public void updateCourseInfo(String courseCode, List<Course> listOfCourses, String newSchedule,
             String newDescription) {
         // We must make sure that the course actually even exists.
-        Course courseNotFound = new Course(courseCode, courseCode, newSchedule, newDescription, null, null, 0, null, 0);
-        // This following block is created for when the course actually exists.
-        if (!listOfCourses.contains(courseNotFound)) {
-            System.out.println("Course with code " + courseCode + " not found.");
-            return;
-        }
+        // Course courseNotFound = new Course(courseCode, courseCode, newSchedule, newDescription, null, null, null, null, getCreditHours());
+        // courseNotFound.setCapacity(courseNotFound.getCapacity());
+        // //Course courseNotFound2= new Course();
+        // // This following block is created for when the course actually exists.
+        // if (!listOfCourses.contains(courseNotFound)) {
+        //     System.out.println("Course with code " + courseCode + " not found.");
+        //     return;
+        // }
         // Now find the actual Course object
         Course courseToUpdate = null;
         for (Course course : listOfCourses) {
@@ -187,7 +188,7 @@ public class Instructor extends User<Instructor> {
                 courseToUpdate.setSchedule(newSchedule);
                 courseToUpdate.setDescription(newDescription);
 
-                System.out.printf("Instructor  %s's course information updated for %s", assignedInstructor.getName(),
+                System.out.printf("Instructor %s's course information updated for %s", assignedInstructor.getName(),
                         courseToUpdate.getCourseName());
             } else if (assignedInstructor != null) {
                 System.out.printf("%s with the ID number: %s is not assigned to %s.", assignedInstructor.getName(),
@@ -212,7 +213,7 @@ public class Instructor extends User<Instructor> {
 
     @Override
     public String toString() {
-        return String.format("ID: %s Name: %s", this.getId(), this.getName());
+        return String.format("-ID: %s Name: %s", this.getId(), this.getName());
     }
 
 }

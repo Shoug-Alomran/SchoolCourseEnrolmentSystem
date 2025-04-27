@@ -17,9 +17,9 @@ public class Student extends User<Student> {
         setCreditLimit(creditLimit);
         // If the list is null, create a new one. Fixes NullPointerException.
         if (enrolledCourses != null) {
-        this.enrolledCourses = enrolledCourses;
+            this.enrolledCourses = enrolledCourses;
         } else {
-        this.enrolledCourses = new ArrayList<>();
+            this.enrolledCourses = new ArrayList<>();
         }
     }
 
@@ -76,7 +76,7 @@ public class Student extends User<Student> {
             System.out.printf("\nYou are already enrolled in (%s) (%s).", course.getCourseName(),
                     course.getCourseCode());
         } else if (course.isFull()) {
-            System.out.println("Cannot enroll in " + course.getCourseName() + " — course is full.");
+            System.out.println("\nCannot enroll in " + course.getCourseName() + " — course is full.");
         } // Check if the enrollment status is open or not
         else if (course.getEnrollmentStatus() == Course.EnrollmentStatusEnum.Closed) {
             System.out.println("\nEnrollment status is closed.");
@@ -114,6 +114,7 @@ public class Student extends User<Student> {
             // (condition) ? (value if true) : (value if false);
             int enrolledHours = (student.getEnrolledCoursesList() != null) ? student.enrolledInHours() : 0;
             System.out.println("Remaining credit limit is: " + (student.getCreditLimit() - enrolledHours) + " hours.");
+            break;
         }
     }
 
@@ -145,7 +146,7 @@ public class Student extends User<Student> {
         System.out.println(
                 "\nWhat would you like to view?\n1. View a specific exam score.\n2. View all grades in a course.\n3. View total average in a course.");
 
-        int choice = Helpers.getSafeIntInput("Option: ");
+        int choice = Helpers.getSafeIntInput("\nOption: ");
         Assessment temp = new Assessment(null, null, null, 0.0, null);
 
         if (choice == 1) {
@@ -156,15 +157,15 @@ public class Student extends User<Student> {
             List<Course> courses = this.getEnrolledCoursesList();
 
             if (courses.isEmpty()) {
-                System.out.println("You are not enrolled in any courses.");
+                System.out.println("\nYou are not enrolled in any courses.");
                 return;
             }
-            System.out.println("Select a course:");
+            System.out.println("\nSelect a course:");
             for (int i = 0; i < courses.size(); i++) {
                 System.out.printf((i + 1) + ".%s  ( %s )", courses.get(i).getCourseName(),
                         courses.get(i).getCourseCode());
             }
-            int courseChoice = Helpers.getSafeIntInput("Option: ");
+            int courseChoice = Helpers.getSafeIntInput("\nOption: ");
             if (courseChoice < 1 || courseChoice > courses.size()) {
                 System.out.println("Invalid course selection.");
                 return;
@@ -205,6 +206,6 @@ public class Student extends User<Student> {
 
     @Override
     public String toString() {
-        return String.format("Student data:\nID: %s Name: %s", this.getId(), this.getName());
+        return String.format("-ID: %s Name: %s", this.getId(), this.getName());
     }
 }
