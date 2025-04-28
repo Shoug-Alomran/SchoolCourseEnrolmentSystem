@@ -24,7 +24,7 @@ public class SchoolCourseEnrolmentSystem {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
-        Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Default12345", "S.Alomran@gmail.com",
+        Administrator defaultAdmin = new Administrator("Shoug", "1234567890", "Default12345", "S.Alomran@gmail.com",
                 "0531110904", User.Role.ADMIN, "Qirawan district");
         administrators.add(defaultAdmin);
         // Grades gradeManager = new Grades(null, null, null, 0);
