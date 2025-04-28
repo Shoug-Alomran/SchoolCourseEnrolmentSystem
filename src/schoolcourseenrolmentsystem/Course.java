@@ -1,8 +1,10 @@
 package schoolcourseenrolmentsystem;
+
 import java.util.*;
 
 public class Course {
     // Similar to final but with 2+ options.
+    // Enum to represent course enrollment status
     public enum EnrollmentStatusEnum {
         Closed,
         Open
@@ -16,8 +18,8 @@ public class Course {
     private List<Assessment> grades;
     private int creditHours;
 
-    // Fixes java.lang.StackOverflowError 
-    private List<Student> enrolledStudents;
+    // Fixes java.lang.StackOverflowError
+    private List<Student> enrolledStudents; // List of students currently enrolled
 
     // Constructor
     public Course(String courseName, String courseCode, String schedule, String description,
@@ -30,20 +32,21 @@ public class Course {
         setEnrollmentStatus(enrollmentStatus);
         setInstructor(instructor);
         setCapacity(capacity);
-        setAssesment(listOfGrades);
+        setAssessment(listOfGrades);
         setCreditHours(creditHours);
-        // Make sure enrolledStudents is initialized when a Course is created to avoid
-        // null.
+        // Important: initialize enrolledStudents list to avoid null pointer exceptions
         this.enrolledStudents = new ArrayList<>();
     }
+
+    // Default (empty) constructor
     public Course() {
     }
 
+    // ======================= Setters and Getters =======================
     public void setEnrolledStudents(List<Student> enrolledStudentList) {
         this.enrolledStudents = enrolledStudentList;
     }
 
-    // Setters & Getters
     public EnrollmentStatusEnum getEnrollmentStatus() {
         return enrollmentStatus;
     }
@@ -58,8 +61,8 @@ public class Course {
 
     public void setCourseName(String courseName) {
         if (courseName == null || courseName.isEmpty()) {
-          System.out.println("Course name cannot be null or empty.");
-          return;
+            System.out.println("Course name cannot be null or empty.");
+            return;
         } else {
             this.courseName = courseName;
         }
@@ -88,8 +91,8 @@ public class Course {
 
     public void setCourseCode(String courseCode) {
         if (courseCode == null || courseCode.isEmpty()) {
-       System.out.println("Course code cannot be null or empty.");
-       return;
+            System.out.println("Course code cannot be null or empty.");
+            return;
         } else {
             this.courseCode = courseCode;
         }
@@ -100,6 +103,7 @@ public class Course {
     }
 
     public void setSchedule(String schedule) {
+        // Schedule is allowed to be null because instructors can update it later.
         if (schedule == null || schedule.isEmpty()) {
             this.schedule = null;
         } else {
@@ -112,6 +116,7 @@ public class Course {
     }
 
     public void setDescription(String description) {
+        // Description is allowed to be null because instructors can update it later.
         if (description == null || description.isEmpty()) {
             this.description = null;
         } else {
@@ -148,7 +153,7 @@ public class Course {
         return grades;
     }
 
-    public List<Assessment> setAssesment(List<Assessment> listOfGrades) {
+    public List<Assessment> setAssessment(List<Assessment> listOfGrades) {
         if (listOfGrades == null) {
             this.grades = null;
             return null;
@@ -165,8 +170,9 @@ public class Course {
             this.grades = listOfGrades;
         }
     }
-    // Methods
-    // Check if the course is full
+
+    // ======================= Methods =======================
+    // Check if the course has reached its capacity
     public boolean isFull() {
         return enrolledStudents != null && this.getEnrolledStudents().size() >= capacity;
     }

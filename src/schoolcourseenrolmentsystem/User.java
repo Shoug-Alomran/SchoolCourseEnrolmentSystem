@@ -29,7 +29,7 @@ public abstract class User<T> {
         setAddress(address);
     }
 
-    // Setters & Getters
+    //======================= Setters and Getters =======================
     // we do validation in prior to calling this method to avoid bloating it
     public String getName() {
         return name;
@@ -80,7 +80,7 @@ public abstract class User<T> {
         this.address = address;
     }
 
-    // Custom Methods
+    //======================= Methods =======================
     public Role getRole() {
         return role;
     }

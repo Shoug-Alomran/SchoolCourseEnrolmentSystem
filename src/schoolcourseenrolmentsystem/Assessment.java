@@ -3,9 +3,11 @@ package schoolcourseenrolmentsystem;
 import java.util.*;
 
 public class Assessment {
-
+    // Defines the types of exams/assessments available (quizzes, midterms, final
+    // exam, project).
     public enum ExamType {
         Quiz_1, Quiz_2, Quiz_3, Quiz_4, Midterm_1, Midterm_2, Final, Project
+
     }
 
     // Attributes
@@ -24,7 +26,7 @@ public class Assessment {
         setAssessmentName(assessmentName);
     }
 
-    // Setters & Getters
+    //======================= Setters and Getters =======================
     public String getStudentId() {
         return studentId;
     }
@@ -98,13 +100,11 @@ public class Assessment {
         for (int i = 0; i < courses.size(); i++) {
             System.out.printf((i + 1) + ".%s (%s).", courses.get(i).getCourseName(), courses.get(i).getCourseCode());
         }
-
-        int courseChoice = Helpers.getSafeIntInput("Choice: ");
-        if (courseChoice < 1 || courseChoice > courses.size()) {
+        int courseChoice = Helpers.getSafeIntInput("Option: ");
+        if (courseChoice < 1 || courseChoice > courses.size()) { //Option can't be less than 1 or more than listed courses.
             System.out.println("Invalid course selection.");
             return;
         }
-
         String courseCode = courses.get(courseChoice - 1).getCourseCode();
         boolean found = false;
 

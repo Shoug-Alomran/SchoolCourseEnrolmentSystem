@@ -34,7 +34,6 @@ public class dataManager {
 
     }
 
-   
     public static synchronized dataManager getInstance() {
         if (instance == null) {
             instance = new dataManager();

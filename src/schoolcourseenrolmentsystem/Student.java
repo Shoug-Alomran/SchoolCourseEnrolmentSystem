@@ -22,12 +22,11 @@ public class Student extends User<Student> {
             this.enrolledCourses = new ArrayList<>();
         }
     }
-
+    //======================= Setters and Getters =======================
     public List<Course> getEnrolledCoursesList() {
         return enrolledCourses;
     }
 
-    // Setter & Getter
     public int getCreditLimit() {
         return creditLimit;
     }
@@ -41,7 +40,7 @@ public class Student extends User<Student> {
         this.creditLimit = creditLimit;
     }
 
-    // Methods
+    //======================= Methods =======================
 
     @Override
     public Student login(List<Student> listOfStudents, String id, String password) {

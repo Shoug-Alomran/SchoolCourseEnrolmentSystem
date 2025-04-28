@@ -12,7 +12,7 @@ public class Instructor extends User<Instructor> {
         super(name, id, password, email, phoneNumber, Role.INSTRUCTOR, address);
     }
 
-    // Methods
+    // ======================= Methods =======================
     @Override
     public Instructor login(List<Instructor> listOfInstructors, String id, String password) {
         for (Instructor instructor : listOfInstructors) {
@@ -160,15 +160,7 @@ public class Instructor extends User<Instructor> {
 
     public void updateCourseInfo(String courseCode, List<Course> listOfCourses, String newSchedule,
             String newDescription) {
-        // We must make sure that the course actually even exists.
-        // Course courseNotFound = new Course(courseCode, courseCode, newSchedule, newDescription, null, null, null, null, getCreditHours());
-        // courseNotFound.setCapacity(courseNotFound.getCapacity());
-        // //Course courseNotFound2= new Course();
-        // // This following block is created for when the course actually exists.
-        // if (!listOfCourses.contains(courseNotFound)) {
-        //     System.out.println("Course with code " + courseCode + " not found.");
-        //     return;
-        // }
+        
         // Now find the actual Course object
         Course courseToUpdate = null;
         for (Course course : listOfCourses) {

@@ -1,4 +1,0 @@
-Computer Programming 102|CS102|(SUN-WEN, 1-2pm)|Java|Open|5993436875|30|4|0568462069
-Digital Logic 175|CS175|||Closed||30|3|
-English Writing 101|ENG101|||Open||30|3|
-Physics 105|PHY105|||Closed||30|4|

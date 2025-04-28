@@ -151,7 +151,9 @@ public class Helpers {
             boolean valid = false;
             while (!valid) {
                 System.out.print(prompt);
-                number = Integer.parseInt(input.nextLine());
+                //number = Integer.parseInt(input.nextLine());
+                number= input.nextInt();
+                input.nextLine();
                 valid = true;
             }
             return number;
@@ -268,7 +270,6 @@ public class Helpers {
     }
 
     // CASES
-    // INSTRUCTORS CASES
 
     // INSTRUCTOR CASES
     public static void updateCourseInfo(Instructor instructor, List<Course> listOfCourses) {
