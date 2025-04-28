@@ -22,7 +22,7 @@ public class SchoolCourseEnrolmentSystem {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
-        Administrator defaultAdmin = new Administrator("Shoug", "1127357489", "Defualt123", "S.Alomran@gmail.com",
+        Administrator defaultAdmin = new Administrator("Shoug", "1234567890", "Defualt123", "S.Alomran@gmail.com",
                 "0531110904", "Administrator", "Qirawan district");
         administrators.add(defaultAdmin);
 
