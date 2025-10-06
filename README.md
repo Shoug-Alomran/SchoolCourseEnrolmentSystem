@@ -1,91 +1,87 @@
 # SchoolCourseEnrolmentSystem
-# -----------------------------------------------------------
-# A Java-based console application that simulates a simplified
-# university course management system. It provides students,
-# instructors, and administrators with role-specific functionality
-# to manage courses, users, and assessments.
-#
-# Developed as part of the CS102 course at Prince Sultan University.
-# -----------------------------------------------------------
+
+The **SchoolCourseEnrolmentSystem** is a Java-based console application designed to simulate a simplified course management system within a university setting.  
+It enables key academic roles — Students, Instructors, and Administrators — to interact with a shared course database through role-specific features.
+
+---
 
 ## Features
-# -----------------------------------------------------------
-# Students:
-#   - View available courses
-#   - Enroll in or drop courses
-#   - Track credit limits
-#   - View enrolled courses
-#   - View grades (quizzes, midterms, finals, projects)
-#   - Update personal information
-#
-# Instructors:
-#   - Login and manage assigned courses
-#   - View enrolled students
-#   - Assign or update student grades
-#   - Edit course schedule and description
-#   - Update personal profile
-#
-# Administrators:
-#   - Add / remove / update students and instructors
-#   - Add and manage courses
-#   - Assign instructors to courses
-#   - Open / close courses for enrollment
-#   - View system statistics and generate reports
-# -----------------------------------------------------------
 
-## Project Structure
-# -----------------------------------------------------------
-# src/
-# ├── Administrator.java
-# ├── Assessment.java
-# ├── Course.java
-# ├── Helpers.java
-# ├── Instructor.java
-# ├── SchoolCourseEnrolmentSystem.java   ← Main entry point
-# ├── Student.java
-# ├── User.java
-# └── dataManager/
-#
-# Core Classes:
-#   - User<T>: Generic abstract base class
-#   - Student / Instructor / Administrator: extend User with role-specific logic
-#   - Course: represents course details, capacity, status
-#   - Assessment: handles student performance data
-#
-# Utility:
-#   - Helpers: input validation, login, UI menus, shared operations
-#
-# Data Management:
-#   - dataManager: CRUD operations + persistent storage (text files)
-#     - students.txt, instructors.txt, administrators.txt, courses.txt, assessments.txt
-#
-# Main:
-#   - SchoolCourseEnrolmentSystem.java handles initialization,
-#     authentication, role routing, and data persistence.
-# -----------------------------------------------------------
+### Student
+- Login and profile management  
+- View available courses  
+- Enroll in and drop courses  
+- View enrolled courses and credit limits  
+- View exam scores and averages
 
-## Technologies Used
-# -----------------------------------------------------------
-# Language:       Java
-# Paradigm:       Object-Oriented Programming
-# Environment:    Console-based application
-# Persistence:    Text file storage
-# -----------------------------------------------------------
+### Instructor
+- Login and update personal information  
+- View enrolled students in assigned courses  
+- Assign and update grades  
+- Edit course schedule and description
+
+### Administrator
+- Login and manage users (students, instructors)  
+- Add, remove, and update courses and users  
+- Assign instructors to courses  
+- View statistics and generate reports
+
+### System-Wide
+- Role-based menus  
+- Input validation and error handling  
+- ID auto-generation  
+- Data persistence through text files
+
+---
+
+## Classes Overview
+
+### Core Entity Classes
+- **User<T>** — Abstract base class defining shared attributes and login/logout methods.  
+- **Student** — Handles enrollment, credit limits, and grades.  
+- **Instructor** — Manages students, grading, and course updates.  
+- **Administrator** — Manages users, courses, and statistics.  
+- **Course** — Represents courses with attributes like code, name, capacity, and enrolled students.  
+- **Assessment / ExamType** — Manages grades for quizzes, midterms, finals, and projects.
+
+### Utility Classes
+- **Helpers** — Input validation, login workflows, menu display, statistics, and operational helpers.
+
+### Data Management
+- **dataManager** — Handles persistent storage and loading of users, courses, and assessments through text files.
+
+### Main Application
+- **SchoolCourseEnrolmentSystem** — Initializes data, handles authentication, and directs users to their role workflows.
+
+---
 
 ## Workflows
-# -----------------------------------------------------------
-# Student:
-#   Login → View courses → Enroll/Drop → Manage credits/grades → Logout
-#
-# Instructor:
-#   Login → View students → Grade assessments → Edit course info → Logout
-#
-# Administrator:
-#   Login → Manage users & courses → View stats/reports → Logout
-# -----------------------------------------------------------
 
-## Exception Handling
-# -----------------------------------------------------------
-# The entire main loop is wrapped in try-catch to gracefully
-# handle unexpected errors. The system won't crash on invalid input.
-# -----------------------------------------------------------
+### Student Workflow
+1. Login using ID and password  
+2. Access menu to view/enroll/drop courses, check credits, view grades, or update profile
+
+### Instructor Workflow
+1. Login using ID and password  
+2. View students in courses, assign grades, update course info or personal profile
+
+### Administrator Workflow
+1. Login using ID and password  
+2. Manage users and courses, assign instructors, generate reports and view statistics
+
+---
+
+## Future Improvements
+
+- Add a GUI for better user experience  
+- Encrypt stored passwords  
+- Implement unit testing  
+- Use a database (e.g., SQLite) for persistence  
+- Export reports in CSV or PDF format
+
+---
+
+## Author
+
+**Shoug Alomran**  
+223410392@psu.edu.sa
